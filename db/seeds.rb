@@ -6,6 +6,11 @@
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
 
+require "nokogiri"
+# require "open-uri"
+file = "meguro.html"
+doc = Nokogiri::HTML.parse(File.open(file), nil, "shift-JIS")
+
 Movie.destroy_all
 Cinema.destroy_all
 puts "Movies & Cinemas deleted"
@@ -63,3 +68,48 @@ cinema_2.save
     puts "Failed to create showing - Errors: #{showing.errors.full_messages.join(', ')}"
 end
 end
+
+
+# def scrape(keyword)
+#   attr_reader :search_results
+
+# html_content = file
+# doc = Nokogiri::HTML.parse(html_content)
+@search_results = []
+doc.search('.time_title').each do |element|
+  @search_results << element.text.strip
+#  @search_results[element.text.strip.split.first(6).join(" ")] = false
+end
+
+
+require 'net/http'
+require 'json'
+
+api_key = '760197870fd2de6c1d130ec6f6bcf159'
+japanese_title = 'ノスフェラトゥ'
+
+# Encode the Japanese title for URL
+encoded_title = URI.encode_www_form_component(japanese_title)
+
+url = URI("https://api.themoviedb.org/3/search/movie?api_key=#{api_key}&query=#{encoded_title}&language=en-gb")
+
+response = Net::HTTP.get(url)
+movie_data = JSON.parse(response)
+
+if movie_data['results'].any?
+  title = movie_data['results'][0]['title']
+  original_title = movie_data['results'][0]['original_title']
+  overview = movie_data['results'][0]['overview']
+  release_date = movie_data['results'][0]['release_date']
+  director = movie_data['results'][0]['director']
+
+  puts "Title: #{title}"
+  puts "Original Title: #{original_title}"
+  puts "Overview: #{overview}"
+  puts "Release Date: #{release_date}"
+  puts "Directed by: #{director}"
+else
+  puts "Movie not found"
+end
+
+puts response
