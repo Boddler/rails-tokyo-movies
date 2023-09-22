@@ -23,7 +23,7 @@ require 'date'
 movie_1 = Movie.new(
   name: "Fargo",
   language: "English",
-  minutes: 120
+  runtime: 120
 )
 
 movie_1.save
@@ -31,7 +31,7 @@ movie_1.save
 movie_2 = Movie.new(
   name: "Bait",
   language: "Welsh",
-  minutes:  115
+  runtime:  115
 )
 
 movie_2.save
@@ -84,13 +84,16 @@ doc.search('.time_title').each do |element|
 #  @search_results[element.text.strip.split.first(6).join(" ")] = false
 end
 
-
+puts @search_results.uniq.size
+puts @search_results.size
 require 'net/http'
 require 'json'
 
-japanese_title = 'ノスフェラトゥ'
+not_found = []
 
-encoded_title = URI.encode_www_form_component(japanese_title)
+@search_results.uniq.each { |scraped_title|
+
+encoded_title = URI.encode_www_form_component(scraped_title)
 
 url = URI("https://api.themoviedb.org/3/search/movie?api_key=#{api_key}&query=#{encoded_title}&language=en-gb")
 
@@ -99,18 +102,31 @@ movie_data = JSON.parse(response)
 
 if movie_data['results'].any?
   title = movie_data['results'][0]['title']
-  original_title = movie_data['results'][0]['original_title']
   overview = movie_data['results'][0]['overview']
-  release_date = movie_data['results'][0]['release_date']
-  director = movie_data['results'][0]['director']
+  language = movie_data['results'][0]['original_language']
+  id = movie_data['results'][0]['id']
+  credits_url = URI("https://api.themoviedb.org/3/movie/#{movie_data['results'][0]['id']}/credits?api_key=#{api_key}")
+  credits_response = Net::HTTP.get(credits_url)
+  credits_data = JSON.parse(credits_response)
 
-  puts "Title: #{title}"
-  puts "Original Title: #{original_title}"
-  puts "Overview: #{overview}"
-  puts "Release Date: #{release_date}"
-  puts "Directed by: #{director}"
+  runtime_url = URI("https://api.themoviedb.org/3/movie/#{id}?&append_to_response=videos&api_key=#{api_key}")
+  runtime_response = Net::HTTP.get(runtime_url)
+  detailed_data = JSON.parse(runtime_response)
+
+  runtime = detailed_data['runtime']
+  puts runtime
+  puts id
+
+  director = credits_data['crew'].find { |person| person['job'] == 'Director' }['name']
+
+  new_movie = Movie.new(director: director, runtime: 1, name: title, description: overview, language: language)
+  if new_movie.save
+    puts "#{title} saved successfully"
+  else
+    puts "Error when saving-----------------------------------------------------------------------"
+  end
 else
+  not_found << scraped_title
   puts "Movie not found"
 end
-
-puts movie_data
+}
