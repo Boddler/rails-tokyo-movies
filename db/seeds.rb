@@ -6,6 +6,9 @@
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
 
+require 'dotenv/load'
+api_key = ENV['TMDB_API_KEY']
+
 require "nokogiri"
 # require "open-uri"
 file = "meguro.html"
@@ -85,7 +88,6 @@ end
 require 'net/http'
 require 'json'
 
-api_key = '760197870fd2de6c1d130ec6f6bcf159'
 japanese_title = 'ノスフェラトゥ'
 
 # Encode the Japanese title for URL
