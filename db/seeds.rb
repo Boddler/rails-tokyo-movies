@@ -85,10 +85,9 @@ end
 require 'net/http'
 require 'json'
 
-api_key = '760197870fd2de6c1d130ec6f6bcf159'
-japanese_title = 'ノスフェラトゥ'
+api_key = 'TBD'
+japanese_title = '少年、機関車に乗る'
 
-# Encode the Japanese title for URL
 encoded_title = URI.encode_www_form_component(japanese_title)
 
 url = URI("https://api.themoviedb.org/3/search/movie?api_key=#{api_key}&query=#{encoded_title}&language=en-gb")
@@ -112,4 +111,4 @@ else
   puts "Movie not found"
 end
 
-puts response
+puts movie_data
