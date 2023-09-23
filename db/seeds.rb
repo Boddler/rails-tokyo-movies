@@ -20,21 +20,21 @@ puts "Movies & Cinemas deleted"
 
 require 'date'
 
-movie_1 = Movie.new(
-  name: "Fargo",
-  language: "English",
-  runtime: 120
-)
+# movie_1 = Movie.new(
+#   name: "Fargo",
+#   language: "English",
+#   runtime: 120
+# )
 
-movie_1.save
+# movie_1.save
 
-movie_2 = Movie.new(
-  name: "Bait",
-  language: "Welsh",
-  runtime:  115
-)
+# movie_2 = Movie.new(
+#   name: "Bait",
+#   language: "Welsh",
+#   runtime:  115
+# )
 
-movie_2.save
+# movie_2.save
 
 cinema_1 = Cinema.new(
   name: "Meguro Cinema",
@@ -54,23 +54,23 @@ cinema_2 = Cinema.new(
 
 cinema_2.save
 
-20.times do
-  movie = Movie.all.sample
-  cinema = Cinema.all.sample
-  date = rand(10.weeks).seconds.from_now
+# 20.times do
+#   movie = Movie.all.sample
+#   cinema = Cinema.all.sample
+#   date = rand(10.weeks).seconds.from_now
 
-  showing = Showing.new(
-    movie_id: movie.id,
-    cinema_id: cinema.id,
-    datetime: date
-  )
+#   showing = Showing.new(
+#     movie_id: movie.id,
+#     cinema_id: cinema.id,
+#     datetime: date
+#   )
 
-  if showing.save
-    puts "Showing created"
-  else
-    puts "Failed to create showing - Errors: #{showing.errors.full_messages.join(', ')}"
-end
-end
+#   if showing.save
+#     puts "Showing created"
+#   else
+#     puts "Failed to create showing - Errors: #{showing.errors.full_messages.join(', ')}"
+# end
+# end
 
 
 # def scrape(keyword)
@@ -84,8 +84,8 @@ doc.search('.time_title').each do |element|
 #  @search_results[element.text.strip.split.first(6).join(" ")] = false
 end
 
-puts @search_results.uniq.size
-puts @search_results.size
+puts "#{@search_results.uniq.size} unique movies found"
+puts "#{@search_results.size} total movies found"
 require 'net/http'
 require 'json'
 
@@ -104,6 +104,7 @@ if movie_data['results'].any?
   title = movie_data['results'][0]['title']
   overview = movie_data['results'][0]['overview']
   language = movie_data['results'][0]['original_language']
+  poster = movie_data['results'][0]['poster_path']
   id = movie_data['results'][0]['id']
   credits_url = URI("https://api.themoviedb.org/3/movie/#{movie_data['results'][0]['id']}/credits?api_key=#{api_key}")
   credits_response = Net::HTTP.get(credits_url)
@@ -114,12 +115,10 @@ if movie_data['results'].any?
   detailed_data = JSON.parse(runtime_response)
 
   runtime = detailed_data['runtime']
-  puts runtime
-  puts id
 
   director = credits_data['crew'].find { |person| person['job'] == 'Director' }['name']
 
-  new_movie = Movie.new(director: director, runtime: 1, name: title, description: overview, language: language)
+  new_movie = Movie.new(director: director, runtime: runtime, name: title, description: overview, language: language, poster: "https://image.tmdb.org/t/p/w185/#{poster}")
   if new_movie.save
     puts "#{title} saved successfully"
   else
@@ -130,3 +129,6 @@ else
   puts "Movie not found"
 end
 }
+
+not_found.each { |x| puts "#{x} not found" }
+puts "#{not_found.size} movies not found in total"

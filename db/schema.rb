@@ -29,6 +29,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_20_061227) do
     t.integer "runtime"
     t.text "description"
     t.string "director"
+    t.string "poster"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
