@@ -81,7 +81,6 @@ cinema_2.save
 @search_results = []
 doc.search('.time_title').each do |element|
   @search_results << element.text.strip
-#  @search_results[element.text.strip.split.first(6).join(" ")] = false
 end
 
 puts "#{@search_results.uniq.size} unique movies found"
@@ -114,11 +113,10 @@ if movie_data['results'].any?
   runtime_response = Net::HTTP.get(runtime_url)
   detailed_data = JSON.parse(runtime_response)
 
-  runtime = detailed_data['runtime']
-
+    runtime = detailed_data['runtime']
   director = credits_data['crew'].find { |person| person['job'] == 'Director' }['name']
 
-  new_movie = Movie.new(director: director, runtime: runtime, name: title, description: overview, language: language, poster: "https://image.tmdb.org/t/p/w185/#{poster}")
+  new_movie = Movie.new(director: director, runtime: runtime, name: title, description: overview, web_title: scraped_title, language: language, poster: "https://image.tmdb.org/t/p/w185/#{poster}")
   if new_movie.save
     puts "#{title} saved successfully"
   else
@@ -131,4 +129,4 @@ end
 }
 
 not_found.each { |x| puts "#{x} not found" }
-puts "#{not_found.size} movies not found in total"
+puts not_found.size > 0 ? "#{not_found.size} movies not found in total" : "All movies found"
