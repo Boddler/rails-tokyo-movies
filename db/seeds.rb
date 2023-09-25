@@ -1,25 +1,19 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Examples:
-#
-#   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
-#   Character.create(name: "Luke", movie: movies.first)
-
+require 'net/http'
+require 'json'
 require 'dotenv/load'
+require 'date'
+
 api_key = ENV['TMDB_API_KEY']
 
 require 'nokogiri'
 # require 'open-uri'
+
 file = 'meguro.html'
 doc = Nokogiri::HTML.parse(File.open(file), nil, 'shift-JIS')
 
 Movie.destroy_all
 Cinema.destroy_all
 puts 'Movies & Cinemas deleted'
-
-require 'date'
-
 
 cinema_1 = Cinema.new(
   name: 'Meguro Cinema',
@@ -39,27 +33,6 @@ cinema_2 = Cinema.new(
 
 cinema_2.save
 
-# 20.times do
-#   movie = Movie.all.sample
-#   cinema = Cinema.all.sample
-#   date = rand(10.weeks).seconds.from_now
-
-#   showing = Showing.new(
-#     movie_id: movie.id,
-#     cinema_id: cinema.id,
-#     datetime: date
-#   )
-
-#   if showing.save
-#     puts "Showing created"
-#   else
-#     puts "Failed to create showing - Errors: #{showing.errors.full_messages.join(', ')}"
-# end
-# end
-
-# def scrape(keyword)
-#   attr_reader :search_results
-
 # html_content = file
 # doc = Nokogiri::HTML.parse(html_content)
 @search_results = []
@@ -69,12 +42,14 @@ end
 
 puts "#{@search_results.uniq.size} unique movies found"
 puts "#{@search_results.size} total movies found"
-require 'net/http'
-require 'json'
 
 not_found = []
 
-@search_results.uniq.each { |scraped_title|
+def movie_api_call(list)
+  api_key = ENV['TMDB_API_KEY']
+
+list.uniq.each { |scraped_title|
+cast = []
 
   encoded_title = URI.encode_www_form_component(scraped_title)
   url = URI("https://api.themoviedb.org/3/search/movie?api_key=#{api_key}&query=#{encoded_title}&language=en-gb")
@@ -96,15 +71,21 @@ not_found = []
     detailed_data = JSON.parse(runtime_response)
     runtime = detailed_data['runtime']
     director = credits_data['crew'].find { |person| person['job'] == 'Director' }['name']
+    cast << credits_data['cast'][0]['name'] if credits_data['cast'][0] && credits_data['cast'][0]['name']
+    cast << credits_data['cast'][1]['name'] if credits_data['cast'][1] && credits_data['cast'][1]['name']
+    cast << credits_data['cast'][2]['name'] if credits_data['cast'][2] && credits_data['cast'][2]['name']
 
     new_movie = Movie.new(director: director, runtime: runtime, name: title, description: overview,
-      web_title: scraped_title, language: language, poster: "https://image.tmdb.org/t/p/w185/#{poster}")
+      web_title: scraped_title, cast: cast, language: language, poster: "https://image.tmdb.org/t/p/w185/#{poster}")
     puts new_movie.save ? "#{title} saved successfully" : 'Error when saving---------------------------------------'
   else
     not_found << scraped_title
     puts 'Movie not found'
   end
 }
+end
+
+movie_api_call(@search_results)
 
 not_found.each { |x| puts "#{x} not found" }
 puts not_found.size.positive? ? "#{not_found.size} movies not found in total" : "All movies found"
