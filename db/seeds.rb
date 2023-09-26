@@ -42,9 +42,9 @@ end
 
 puts "#{@search_results.uniq.size} unique movies found"
 puts "#{@search_results.size} total movies found"
+@not_found = []
 
 def movie_api_call(list)
-  not_found = []
   api_key = ENV["TMDB_API_KEY"]
 
   list.uniq.each { |scraped_title|
@@ -78,7 +78,7 @@ def movie_api_call(list)
                             web_title: scraped_title, cast: cast, language: language, poster: "https://image.tmdb.org/t/p/w185/#{poster}")
       puts new_movie.save ? "#{title} saved successfully" : "Error when saving---------------------------------------"
     else
-      not_found << scraped_title
+      @not_found << scraped_title
       puts "Movie not found"
     end
   }
@@ -86,5 +86,5 @@ end
 
 movie_api_call(@search_results)
 
-not_found.each { |x| puts "#{x} not found" }
-puts not_found.size.positive? ? "#{not_found.size} movies not found in total" : "All movies found"
+@not_found.each { |x| puts "#{x} not found" }
+puts @not_found.size.positive? ? "#{@not_found.size} movies not found in total" : "All movies found"
