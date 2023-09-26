@@ -8,7 +8,7 @@ api_key = ENV["TMDB_API_KEY"]
 require "nokogiri"
 # require 'open-uri'
 
-file = "meguro.html"
+file = "meguro2.html"
 doc = Nokogiri::HTML.parse(File.open(file), nil, "shift-JIS")
 
 Movie.destroy_all
@@ -36,6 +36,8 @@ cinema_2.save
 # html_content = file
 # doc = Nokogiri::HTML.parse(html_content)
 @search_results = []
+
+# ?Meguro Cinema Scrape
 doc.search(".time_title").each do |element|
   @search_results << element.text.strip
 end
