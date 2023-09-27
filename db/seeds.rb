@@ -75,6 +75,8 @@ def movie_api_call(list)
       cast << credits_data["cast"][0]["name"] if credits_data["cast"][0] && credits_data["cast"][0]["name"]
       cast << credits_data["cast"][1]["name"] if credits_data["cast"][1] && credits_data["cast"][1]["name"]
       cast << credits_data["cast"][2]["name"] if credits_data["cast"][2] && credits_data["cast"][2]["name"]
+      cast << credits_data["cast"][3]["name"] if credits_data["cast"][3] && credits_data["cast"][3]["name"]
+      cast << credits_data["cast"][4]["name"] if credits_data["cast"][4] && credits_data["cast"][4]["name"]
 
       new_movie = Movie.new(director: director, runtime: runtime, name: title, description: overview,
                             web_title: scraped_title, cast: cast, language: language, poster: "https://image.tmdb.org/t/p/w185/#{poster}")
