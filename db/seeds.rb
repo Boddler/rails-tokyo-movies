@@ -80,7 +80,7 @@ def movie_api_call(list)
 
       new_movie = Movie.new(director: director, runtime: runtime, name: title, description: overview,
                             web_title: scraped_title, cast: cast, language: language, poster: "https://image.tmdb.org/t/p/w185/#{poster}")
-      puts new_movie.save ? "#{title} saved successfully" : "Error when saving---------------------------------------"
+      puts new_movie.save ? "#{title}" + (title.length > 39 ? " " : " " * (40 - title.length)) + "saved successfully" : "Error when saving-----------------------"
     else
       @not_found << scraped_title
       puts "Movie not found"
