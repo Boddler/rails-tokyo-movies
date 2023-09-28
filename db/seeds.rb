@@ -2,11 +2,10 @@ require "net/http"
 require "json"
 require "dotenv/load"
 require "date"
+require "nokogiri"
+require "open-uri"
 
 api_key = ENV["TMDB_API_KEY"]
-
-require "nokogiri"
-# require 'open-uri'
 
 file = "meguro2.html"
 doc = Nokogiri::HTML.parse(File.open(file), nil, "shift-JIS")
@@ -33,13 +32,18 @@ cinema_2 = Cinema.new(
 
 cinema_2.save
 
-# html_content = file
-# doc = Nokogiri::HTML.parse(html_content)
 @search_results = []
+@movie_times = []
 
-# ?Meguro Cinema Scrape
+# Meguro Cinema Movie List Scrape
 doc.search(".time_title").each do |element|
   @search_results << element.text.strip
+end
+
+# Working on this section in parsing.rb
+# Meguro Cinema Movie Times Scraps
+doc.search("#timetable").each do |element|
+  @movie_times << element.text.strip
 end
 
 puts "#{@search_results.uniq.size} unique movies found"
@@ -92,3 +96,4 @@ movie_api_call(@search_results)
 
 @not_found.each { |x| puts "#{x} not found" }
 puts @not_found.size.positive? ? "#{@not_found.size} movies not found in total" : "All movies found"
+@movie_times.each { |x| puts x }
