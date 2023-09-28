@@ -8,16 +8,31 @@ api_key = ENV["TMDB_API_KEY"]
 require "nokogiri"
 # require 'open-uri'
 
+def date(date_string)
+  # Extract start and end dates using regular expressions
+  matches = date_string.scan(/(\d{1,2})月(\d{1,2})日[〜・](\d{1,2})月(\d{1,2})日/)
+
+  # Generate an array of formatted dates
+  start_month = matches[0][0].to_i
+  start_day = matches[0][1].to_i
+  end_month = matches[0][2].to_i
+  end_day = matches[0][3].to_i
+
+  date_range = (start_day..end_day).map do |day|
+    "#{format("%02d", start_month)}月#{format("%02d", day)}日(#{Date.new(Date.today.year, start_month, day).strftime("%a")})"
+  end
+end
+
 file = "meguro2.html"
 doc = Nokogiri::HTML.parse(File.open(file), nil, "shift-JIS")
 result = []
 timetable = doc.css("#timetable")
 
 @movie_times = []
-doc.search("#timetable").each do |row|
+doc.search("#timetable").each do |line|
   # date << element unless element.text.strip.empty?
-  dates = row.css("p").text.strip
-  timetable.css(".time_box tr").each do |row|
+  dates = line.css("p").text.strip
+  line.css(".time_box tr").each do |row|
     title = row.css(".time_title").text.strip
     times = row.css(".time_type2").map { |el| el.text.strip }
     # .text.strip unless element.text.strip.empty?
@@ -26,7 +41,7 @@ doc.search("#timetable").each do |row|
       start_time = time.match(/\d{2}:\d{2}/)
 
       if start_time
-        result << { name: title, time: start_time[0], start_date: dates }
+        result << { name: title, time: start_time[0], dates: date(dates) }
       end
     end
   end
