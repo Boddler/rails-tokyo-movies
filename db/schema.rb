@@ -39,7 +39,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_20_061227) do
   create_table "showings", force: :cascade do |t|
     t.bigint "movie_id"
     t.bigint "cinema_id"
-    t.datetime "datetime"
+    t.date "date"
+    t.time "times", default: [], array: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["cinema_id"], name: "index_showings_on_cinema_id"

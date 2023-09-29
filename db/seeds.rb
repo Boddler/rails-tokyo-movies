@@ -4,6 +4,7 @@ require "dotenv/load"
 require "date"
 require "nokogiri"
 require "open-uri"
+# require "../cnm_meguro"
 
 api_key = ENV["TMDB_API_KEY"]
 
@@ -20,7 +21,6 @@ cinema_1 = Cinema.new(
   url: "http://www.okura-movie.co.jp/meguro_cinema/now_showing.html",
   description: "A small, single screen cinema showing old and new movies.",
 )
-
 cinema_1.save
 
 cinema_2 = Cinema.new(
@@ -29,7 +29,6 @@ cinema_2 = Cinema.new(
   url: "https://kac-cinema.jp/",
   description: "A cinema focused on European movies.",
 )
-
 cinema_2.save
 
 @search_results = []
@@ -96,4 +95,4 @@ movie_api_call(@search_results)
 
 @not_found.each { |x| puts "#{x} not found" }
 puts @not_found.size.positive? ? "#{@not_found.size} movies not found in total" : "All movies found"
-@movie_times.each { |x| puts x }
+# @movie_times.each { |x| puts x }

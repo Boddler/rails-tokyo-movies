@@ -3,7 +3,8 @@ class CreateShowings < ActiveRecord::Migration[7.0]
     create_table :showings do |t|
       t.references :movie, foreign_key: true
       t.references :cinema, foreign_key: true
-      t.datetime :datetime
+      t.date :date
+      t.time :times, array: true, default: []
       t.timestamps
     end
   end
