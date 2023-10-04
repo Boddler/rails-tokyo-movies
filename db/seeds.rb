@@ -8,7 +8,7 @@ require "open-uri"
 
 api_key = ENV["TMDB_API_KEY"]
 
-file = "meguro2.html"
+file = "meguro4.html"
 doc = Nokogiri::HTML.parse(File.open(file), nil, "shift-JIS")
 
 Movie.destroy_all
@@ -51,7 +51,7 @@ puts "#{@search_results.size} total movies found"
 
 def movie_api_call(list)
   api_key = ENV["TMDB_API_KEY"]
-
+  list.map! { |str| str.gsub(/4Kレストア版/, "") }
   list.uniq.each { |scraped_title|
     cast = []
 
@@ -65,6 +65,7 @@ def movie_api_call(list)
       overview = movie_data["results"][0]["overview"]
       language = movie_data["results"][0]["original_language"]
       poster = movie_data["results"][0]["poster_path"]
+      year = movie_data["results"][0]["release_date"]
       id = movie_data["results"][0]["id"]
       credits_url = URI("https://api.themoviedb.org/3/movie/#{movie_data["results"][0]["id"]}/credits?api_key=#{api_key}")
       credits_response = Net::HTTP.get(credits_url)
@@ -75,14 +76,13 @@ def movie_api_call(list)
       detailed_data = JSON.parse(runtime_response)
       runtime = detailed_data["runtime"]
       director = credits_data["crew"].find { |person| person["job"] == "Director" }["name"]
-      cast << credits_data["cast"][0]["name"] if credits_data["cast"][0] && credits_data["cast"][0]["name"]
-      cast << credits_data["cast"][1]["name"] if credits_data["cast"][1] && credits_data["cast"][1]["name"]
-      cast << credits_data["cast"][2]["name"] if credits_data["cast"][2] && credits_data["cast"][2]["name"]
-      cast << credits_data["cast"][3]["name"] if credits_data["cast"][3] && credits_data["cast"][3]["name"]
-      cast << credits_data["cast"][4]["name"] if credits_data["cast"][4] && credits_data["cast"][4]["name"]
-
+      x = 0
+      10.times do
+        cast << credits_data["cast"][x]["name"] if credits_data["cast"][x] && credits_data["cast"][x]["name"]
+        x += 1
+      end
       new_movie = Movie.new(director: director, runtime: runtime, name: title, description: overview,
-                            web_title: scraped_title, cast: cast, language: language, poster: "https://image.tmdb.org/t/p/w185/#{poster}")
+                            web_title: scraped_title, year: year, cast: cast, language: language, poster: "https://image.tmdb.org/t/p/w185/#{poster}")
       puts new_movie.save ? "#{title}" + (title.length > 39 ? " " : " " * (40 - title.length)) + "saved successfully" : "Error when saving-----------------------"
     else
       @not_found << scraped_title
