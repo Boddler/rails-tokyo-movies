@@ -1,12 +1,86 @@
+// .navbar-lewagon {
+//   justify-content: space-between;
+//   background: white;
+// }
+
+// .navbar-lewagon .navbar-collapse {
+//   flex-grow: 0;
+// }
+
+// .navbar-lewagon .navbar-brand img {
+//   width: 40px;
+// }
+
+
+.navbar-brand img {
+  border-radius: 20%;
+  transition: background-image 0.3s;
+}
+
+.navbar-brand:hover {
+  background-image: url('hover-image.jpg');
+}
+
 .navbar-lewagon {
-  justify-content: space-between;
-  background: white;
+  position: sticky;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background-color: black;
 }
 
 .navbar-lewagon .navbar-collapse {
   flex-grow: 0;
+
 }
 
 .navbar-lewagon .navbar-brand img {
   width: 40px;
+}
+
+.navbar-lewagon a {
+  color: white;
+}
+
+.dropdown-menu a {
+  color: grey;
+
+  &:hover {
+    color: black;
+    @extend .fw-bold;
+  }
+}
+
+.nav-link {
+  position: relative;
+  display: inline-block;
+  padding-bottom: 3px;
+  /* Create space for the line */
+  color: #333;
+  /* Set the default text color */
+  transition: color 0.3s;
+  /* Smooth color transition on hover */
+}
+
+.nav-link::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: #fca311;
+  transition: width 0.3s;
+  /* Animation duration */
+}
+
+.nav-link:hover {
+  color: #fca311;
+  /* Change text color on hover */
+}
+
+.nav-link:hover::before {
+  width: 100%;
+  /* Expand the line width on hover */
 }
