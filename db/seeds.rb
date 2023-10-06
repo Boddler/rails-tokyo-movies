@@ -51,6 +51,8 @@ puts "#{@search_results.size} total movies found"
 
 def movie_api_call(list)
   api_key = ENV["TMDB_API_KEY"]
+  languages_JSON = ENV["LANGUAGES"]
+  languages = JSON.parse(languages_JSON)
   list.map! { |str| str.gsub(/4Kレストア版/, "") }
   list.uniq.each { |scraped_title|
     cast = []
@@ -63,7 +65,7 @@ def movie_api_call(list)
     if movie_data["results"].any?
       title = movie_data["results"][0]["title"]
       overview = movie_data["results"][0]["overview"]
-      language = movie_data["results"][0]["original_language"]
+      language = languages.fetch(movie_data["results"][0]["original_language"], movie_data["results"][0]["original_language"])
       poster = movie_data["results"][0]["poster_path"]
       year = movie_data["results"][0]["release_date"]
       id = movie_data["results"][0]["id"]
