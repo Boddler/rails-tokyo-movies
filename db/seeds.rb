@@ -69,6 +69,7 @@ def movie_api_call(list)
       poster = movie_data["results"][0]["poster_path"]
       year = movie_data["results"][0]["release_date"]
       id = movie_data["results"][0]["id"]
+      popularity = movie_data["results"][0]["popularity"]
       credits_url = URI("https://api.themoviedb.org/3/movie/#{movie_data["results"][0]["id"]}/credits?api_key=#{api_key}")
       credits_response = Net::HTTP.get(credits_url)
       credits_data = JSON.parse(credits_response)
@@ -83,7 +84,7 @@ def movie_api_call(list)
         cast << credits_data["cast"][x]["name"] if credits_data["cast"][x] && credits_data["cast"][x]["name"]
         x += 1
       end
-      new_movie = Movie.new(director: director, runtime: runtime, name: title, description: overview,
+      new_movie = Movie.new(director: director, popularity: popularity, runtime: runtime, name: title, description: overview,
                             web_title: scraped_title, year: year, cast: cast, language: language, poster: "https://image.tmdb.org/t/p/w185/#{poster}")
       puts new_movie.save ? "#{title}" + (title.length > 39 ? " " : " " * (40 - title.length)) + "saved successfully" : "Error when saving-----------------------"
     else

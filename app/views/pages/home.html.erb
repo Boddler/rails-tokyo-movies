@@ -1,4 +1,26 @@
 <%= render 'shared/banner' %>
 <div class="container">
-  <h1>Pages#home</h1>
+  <div class="main-section">
+    <div class="top-picks">
+      <div>
+        <h1>Top Picks</h1>
+      </div>
+      <div>
+        <% @movies.select { |movie| movie.year < 1990 }.sort_by { |movie| -movie.popularity }.each do |movie|%>
+          <div>
+            <div class="card-movie" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url(<%= "#{movie.poster}" %>)">
+            </div>
+            <%= "#{movie.name} <span class='small-text'>(#{movie.language})</span>".html_safe %>
+            <br>
+          </div>
+        <% end %>
+      </div>
+    </div>
+    <div class="search-side">
+      <div>search bar?
+      </div>
+      <div>results?
+      </div>
+    </div>
+  </div>
 </div>

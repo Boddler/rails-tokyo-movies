@@ -1,0 +1,33 @@
+.main-section {
+  margin: 15px;
+  display: flex;
+
+}
+
+.container {
+  background-color: black;
+  color: white;
+  border-radius: 5px,
+}
+
+.top-picks {
+  background-color: rgb(50, 50, 50);
+  margin: 28px;
+  border-radius: 5px;
+  padding: 16px;
+  flex-grow: 1; /* This will take up 1/3 of the space */
+}
+
+.search-side {
+  background-color: rgb(50, 50, 50);
+  margin: 28px;
+  border-radius: 5px;
+  padding: 16px;
+  flex-grow: 2; /* This will take up 1/3 of the space */
+}
+
+.small-text {
+  font-size: 12px;
+  font-style: italic;
+
+}

@@ -9,6 +9,7 @@ class CreateMovies < ActiveRecord::Migration[7.0]
       t.string :director
       t.string :poster
       t.integer :year
+      t.float :popularity
       t.string :cast, array: true, default: []
       t.timestamps
     end
