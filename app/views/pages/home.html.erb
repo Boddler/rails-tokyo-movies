@@ -5,15 +5,19 @@
       <div>
         <h1>Top Picks</h1>
       </div>
-      <div>
-        <% @movies.select { |movie| movie.year < 1990 }.sort_by { |movie| -movie.popularity }.each do |movie|%>
-          <div>
-            <div class="card-movie" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url(<%= "#{movie.poster}" %>)">
+      <div class="movie-holder">
+        <div>
+          <% @movies.select { |movie| movie.year < 1990 }.sort_by { |movie| -movie.popularity }.each do |movie|%>
+            <div>
+              <div class="card-movie" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url(<%= "#{movie.poster}" %>)">
+              </div>
+              <div>
+                <%= "#{movie.name} <span class='small-text'>(#{movie.language})</span>".html_safe %>
+              </div>
+              <br>
             </div>
-            <%= "#{movie.name} <span class='small-text'>(#{movie.language})</span>".html_safe %>
-            <br>
-          </div>
-        <% end %>
+          <% end %>
+        </div >
       </div>
     </div>
     <div class="search-side">
