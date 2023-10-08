@@ -5,26 +5,29 @@
       <div>
         <h1>Top Picks</h1>
       </div>
-      <div class="movie-holder">
-        <div>
-          <% @movies.select { |movie| movie.year < 1990 }.sort_by { |movie| -movie.popularity }.each do |movie|%>
-            <div>
-              <div class="card-movie" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url(<%= "#{movie.poster}" %>)">
-              </div>
-              <div>
-                <%= "#{movie.name} <span class='small-text'>(#{movie.language})</span>".html_safe %>
-              </div>
+      <div>
+        <% @movies.select { |movie| movie.year < 1990 }.sort_by { |movie| -movie.popularity }.each do |movie|%>
+          <div class="movie-card">
+            <div class="movie-poster" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url(<%= "#{movie.poster}" %>)">
+            </div>
+            <div class="movie-card-text">
+              <h2>
+                <%= "#{movie.name} - #{movie.year}<br> <span class='small-text'>(#{movie.language})</span>".html_safe %></h2>
               <br>
+              <h4><%= "Director: #{movie.director}"%>
+              </div>
+              <div class="language-tag">
+                <%= "#{movie.language}"%>
+              </div>
             </div>
           <% end %>
-        </div >
+        </div>
       </div>
-    </div>
-    <div class="search-side">
-      <div>search bar?
-      </div>
-      <div>results?
+      <div class="search-side">
+        <div>search bar?
+        </div>
+        <div>results?
+        </div>
       </div>
     </div>
   </div>
-</div>
