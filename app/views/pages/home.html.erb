@@ -11,23 +11,24 @@
             <div class="movie-poster" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url(<%= "#{movie.poster}" %>)">
             </div>
             <div class="movie-card-text">
-              <h2>
-                <%= "#{movie.name} (#{movie.year})"%></h2>
-              <h4><%= "Director: #{movie.director}"%>
-                <h6><%= "Cast: #{movie.cast[0]}, #{movie.cast[1]}, #{movie.cast[2]}"%>
-                </div>
-                <div class="language-tag">
-                  <%= "#{movie.language}"%>
-                </div>
-              </div>
-            <% end %>
+              <h4>
+                <%= "#{movie.name}"%></h4>
+              <p><%="#{movie.year}"%></p>
+              <p><%= "Director: #{movie.director}"%></p>
+              <p><%= "Cast: #{movie.cast[0]}, #{movie.cast[1]}, #{movie.cast[2]}"%></p>
+            </div>
+            <div class="language-tag">
+              <%= "#{movie.language}"%>
+            </div>
           </div>
-        </div>
-        <div class="search-side">
-          <div>search bar?
-          </div>
-          <div>results?
-          </div>
-        </div>
+        <% end %>
       </div>
     </div>
+    <div class="search-side">
+      <div>search bar?
+      </div>
+      <div>results?
+      </div>
+    </div>
+  </div>
+</div>
