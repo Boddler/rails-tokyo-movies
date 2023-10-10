@@ -12,22 +12,22 @@
             </div>
             <div class="movie-card-text">
               <h2>
-                <%= "#{movie.name} - #{movie.year}<br> <span class='small-text'>(#{movie.language})</span>".html_safe %></h2>
-              <br>
+                <%= "#{movie.name} (#{movie.year})"%></h2>
               <h4><%= "Director: #{movie.director}"%>
+                <h6><%= "Cast: #{movie.cast[0]}, #{movie.cast[1]}, #{movie.cast[2]}"%>
+                </div>
+                <div class="language-tag">
+                  <%= "#{movie.language}"%>
+                </div>
               </div>
-              <div class="language-tag">
-                <%= "#{movie.language}"%>
-              </div>
-            </div>
-          <% end %>
+            <% end %>
+          </div>
         </div>
-      </div>
-      <div class="search-side">
-        <div>search bar?
-        </div>
-        <div>results?
+        <div class="search-side">
+          <div>search bar?
+          </div>
+          <div>results?
+          </div>
         </div>
       </div>
     </div>
-  </div>

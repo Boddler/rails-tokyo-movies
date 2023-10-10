@@ -35,7 +35,7 @@ def date(date_string)
   return date_range
 end
 
-file = "meguro4.html"
+file = "meguro5.html"
 doc = Nokogiri::HTML.parse(File.open(file), nil, "shift-JIS")
 result = []
 timetable = doc.css("#timetable")

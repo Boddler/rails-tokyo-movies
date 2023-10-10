@@ -3,16 +3,7 @@
   background-position: center -70px;
   padding: 150px 0;
   height: 600px;
-}
-
-.banner h1 {
-  margin-bottom: 15px;
-  margin-left: 900px;
-  margin-top: -130px;
-  color: white;
-  text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
-  font-size: 46px;
-  font-weight: bold;
+  display: flex;
 }
 
 .banner-text {
@@ -21,17 +12,41 @@
   color: white;
   opacity: .8;
   text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
-  position: relative;
+  align-self: flex-start;
+  margin-left: auto;
   display: inline-block; /* Ensures the pseudo-element width matches the text */
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
 }
 
-.banner-text::after {
-  content: ""; /* Create a pseudo-element for the underline */
-  position: absolute;
-  left: 0;
-  bottom: -2px;
-  width: 80%; /* Set the width to match the width of the text */
-  height: 2px;
-  background-color: #fca311; /* Set the color to #fca311 */
-  opacity: 0.8;
+// .banner-text::after {
+//   content: ""; /* Create a pseudo-element for the underline */
+//   position: absolute;
+//   left: 0;
+//   bottom: -2px;
+//   width: 80%; /* Set the width to match the width of the text */
+//   height: 2px;
+//   background-color: #fca311; /* Set the color to #fca311 */
+//   opacity: 0.8;
+// }
+
+.banner-headline {
+  color: white;
+  margin-bottom: 15px;
+  margin-left: 900px;
+  margin-top: -130px;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+  font-size: 46px;
+  width: 360px;
+  font-weight: bold;
+  padding: 8px;
+  // border:solid;
+  // border: white;
+  background: grey;
+  text-align: center;
+  height: flex-end;
+  border: solid;
+  border-color: red;
+  border-radius: 5px;
+  box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+  align-self: flex-start;
 }

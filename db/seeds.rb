@@ -8,7 +8,7 @@ require "open-uri"
 
 api_key = ENV["TMDB_API_KEY"]
 
-file = "meguro4.html"
+file = "meguro5.html"
 doc = Nokogiri::HTML.parse(File.open(file), nil, "shift-JIS")
 
 Movie.destroy_all
