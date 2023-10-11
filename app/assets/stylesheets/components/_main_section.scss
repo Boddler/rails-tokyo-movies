@@ -52,6 +52,7 @@
   position: relative;
 }
 .movie-card-text {
+  // margin-top: 10px;
   margin: 4px;
   border-radius: 5px;
 }
@@ -69,4 +70,6 @@
   position: absolute;
   top: 2px;
   right: 2px;
+  padding-left: 4px;
+  padding-right: 4px;
 }
