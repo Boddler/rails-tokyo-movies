@@ -37,23 +37,26 @@ result = []
 
 doc.search("#timetable").each do |line|
   dates = line.css("p").text.strip
-  fixed_dates = date(dates)
-  lengthened_dates = fixed_dates.map do |date_string|
-    Date.strptime(date_string, "%m月%d日(%a)")
-  end
   line.css(".time_box tr").each do |row|
     title = row.css(".time_title").text.strip
     times = row.css(".time_type2").map { |el| el.text.strip }
     times.each do |time|
       start_time = time.match(/\d{2}:\d{2}/)
-
       if start_time && dates.size > 1
-        result << { name: title, time: start_time[0], dates: lengthened_dates }
+        result << { name: title, time: start_time[0], dates: date(dates) }
       end
     end
   end
 end
 
-puts result.select { |movie| movie[:name] == "ノッキン･オン･ヘブンズ･ドア" }
-puts result
+puts result.select { |movie| movie[:name] == "エゴイスト" }
+# puts result
 puts "There are #{result.size} entries"
+
+# To change the dates to Date objects
+# fixed_dates = date(dates)
+# lengthened_dates = fixed_dates.map do |date_string|
+#   Date.strptime(date_string, "%m月%d日(%a)")
+# end
+
+# result << { name: title, time: start_time[0], dates: lengthened_dates }
