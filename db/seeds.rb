@@ -4,7 +4,7 @@ require "dotenv/load"
 require "date"
 require "nokogiri"
 require "open-uri"
-# require "../cnm_meguro"
+# require_relative "../cnm_meguro"
 
 api_key = ENV["TMDB_API_KEY"]
 

@@ -36,6 +36,7 @@
   width: 120px;
   border-radius: 5px;
   border: solid;
+  border-color: yellow;
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center center;
@@ -53,8 +54,18 @@
 }
 .movie-card-text {
   // margin-top: 10px;
+  // display: flex;
   margin: 4px;
   border-radius: 5px;
+}
+
+.movie-card-heading {
+  display: flex;
+  justify-content: space-between;
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+  background-color: rgb(70, 70, 70);
+  border-radius: 5px;
+  padding: 4px;
 }
 
 .language-tag {
@@ -65,11 +76,9 @@
   border-radius: 5px;
   // margin-right: 8px;
   // padding: 4px;
-  // align-self: flex-start;
+  align-self: flex-start;
   // margin-left: auto;
-  position: absolute;
-  top: 2px;
-  right: 2px;
+
   padding-left: 4px;
   padding-right: 4px;
 }
