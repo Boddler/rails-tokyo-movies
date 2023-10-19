@@ -31,7 +31,7 @@ def date(date_string)
   return date_range
 end
 
-file = "meguro5.html"
+file = "meguro6.html"
 doc = Nokogiri::HTML.parse(File.open(file), nil, "shift-JIS")
 result = []
 
@@ -43,13 +43,14 @@ doc.search("#timetable").each do |line|
     times.each do |time|
       start_time = time.match(/\d{2}:\d{2}/)
       if start_time && dates.size > 1
+        # result << { name: title, time: start_time[0], dates: 1 }
         result << { name: title, time: start_time[0], dates: date(dates) }
       end
     end
   end
 end
 
-puts result.select { |movie| movie[:name] == "エゴイスト" }
+puts result.select { |movie| movie[:name] == "プリシラ" }
 # puts result
 puts "There are #{result.size} entries"
 

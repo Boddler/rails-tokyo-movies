@@ -1,4 +1,4 @@
-Only one director is found
+Only one director is found (some movies have 2+ directors...)
 If numerous movies share a title it might find the wrong one
 
 
