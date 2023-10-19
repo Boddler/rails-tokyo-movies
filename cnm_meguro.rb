@@ -8,27 +8,23 @@ require "date"
 
 require "nokogiri"
 
+require "date"
+
 def date(date_string)
   return [] if date_string.nil? || date_string.empty?
 
-  matches = date_string.scan(/(\d{1,2})月(\d{1,2})日/)
+  date_ranges = date_string.scan(/(\d{1,2})月(\d{1,2})日/)
 
-  return [] if matches.empty?
+  return [] if date_ranges.empty?
 
-  start_month = matches[0][0].to_i
-  start_day = matches[0][1].to_i
+  date_ranges.flat_map do |matches|
+    start_month = matches[0].to_i
+    start_day = matches[1].to_i
 
-  if matches.size > 1
-    end_month = matches[1][0].to_i
-    end_day = matches[1][1].to_i
-
-    date_range = (start_day..end_day).map do |day|
+    (start_day..start_day).map do |day|
       "#{format("%02d", start_month)}月#{format("%02d", day)}日(#{Date.new(Date.today.year, start_month, day).strftime("%a")})"
     end
-  else
-    date_range = ["#{format("%02d", start_month)}月#{format("%02d", start_day)}日(#{Date.new(Date.today.year, start_month, start_day).strftime("%a")})"]
   end
-  return date_range
 end
 
 file = "meguro6.html"
@@ -41,7 +37,7 @@ doc.search("#timetable").each do |line|
     title = row.css(".time_title").text.strip
     times = row.css(".time_type2").map { |el| el.text.strip }
     times.each do |time|
-      start_time = time.match(/\d{2}:\d{2}/)
+      start_time = time.match(/(0?[0-9]|1[0-9]|2[0-3]):[0-5][0-9]/)
       if start_time && dates.size > 1
         # result << { name: title, time: start_time[0], dates: 1 }
         result << { name: title, time: start_time[0], dates: date(dates) }
@@ -50,8 +46,8 @@ doc.search("#timetable").each do |line|
   end
 end
 
-puts result.select { |movie| movie[:name] == "プリシラ" }
-# puts result
+# puts result.select { |movie| movie[:name] == "プリシラ" }
+puts result.sort_by { |movie| movie[:name] }
 puts "There are #{result.size} entries"
 
 # To change the dates to Date objects

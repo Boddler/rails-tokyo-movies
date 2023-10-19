@@ -11,3 +11,13 @@ cinema show page
 movie show page
 movie index?
 cinema index?
+
+
+
+
+
+Fixed! Doesn't seem to handle dots as expected - dates are
+   included that shouldn't be (Petra Von Kant, Von Braun...)
+Fixed! Wrong time pulled on ヴァチカン - seems to be the end time
+Fixed! Date detector doesn't work with dates that have two dots
+   in them (Priscilla, Idaho...)
