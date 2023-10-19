@@ -39,12 +39,21 @@ doc.search("#timetable").each do |line|
     times.each do |time|
       start_time = time.match(/(0?[0-9]|1[0-9]|2[0-3]):[0-5][0-9]/)
       if start_time && dates.size > 1
-        # result << { name: title, time: start_time[0], dates: 1 }
-        result << { name: title, time: start_time[0], dates: date(dates) }
+        date(dates).each do |date|
+          matching_hash = result.find { |hash| hash[:name] == title && hash[:date].include?(date) }
+          if matching_hash
+            matching_hash[:times] ||= []
+            matching_hash[:times] << start_time[0]
+          else
+            result << { name: title, times: [start_time[0]], date: date(date) }
+          end
+        end
       end
     end
   end
 end
+
+# end
 
 # puts result.select { |movie| movie[:name] == "プリシラ" }
 puts result.sort_by { |movie| movie[:name] }

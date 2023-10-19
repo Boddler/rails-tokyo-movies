@@ -12,8 +12,9 @@ movie show page
 movie index?
 cinema index?
 
-
-
+Issues
+Doesn't recognise date ranges with ~
+  Eg 10月25日(水) ～ 10月28日(土)
 
 
 Fixed! Doesn't seem to handle dots as expected - dates are
