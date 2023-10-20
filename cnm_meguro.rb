@@ -9,10 +9,9 @@ require "date"
 require "nokogiri"
 
 def date(date_string)
-  p date_string.include?("～")
-  if date_string.include?("～")
+  p date_string.include?("〜")
+  if date_string.include?("〜")
     date_ranges = date_string.scan(/(\d{1,2})月(\d{1,2})日/)
-    p date_ranges
     start_date = Date.new(Date.today.year, dates[0][0].to_i, dates[0][1].to_i)
 
     end_date = Date.new(Date.today.year, dates[-1][0].to_i, dates[-1][1].to_i)
@@ -38,8 +37,8 @@ doc = Nokogiri::HTML.parse(File.open(file), nil, "shift-JIS")
 result = []
 
 doc.search("#timetable").each do |line|
-  dates = date(line.css("p").text.strip)
-  p dates
+  # p (line.css("p")).text
+  dates = date(line.css("p").text)
   line.css(".time_box tr").each do |row|
     title = row.css(".time_title").text.strip
     times = row.css(".time_type2").map { |el| el.text.strip }
