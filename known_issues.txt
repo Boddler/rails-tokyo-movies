@@ -13,10 +13,10 @@ movie index?
 cinema index?
 
 Issues
-    Date detector doesn't work with dates that have two dots
+Check all times and dates and then I think we're good
+
+Fixed! Date detector doesn't work with dates that have two dots
    in them (Priscilla, Idaho...)
-
-
 Fixed! Doesn't recognise date ranges with ~
   Eg 10月25日(水) ～ 10月28日(土)
   10月29日(日) ～ 10月31日(火)

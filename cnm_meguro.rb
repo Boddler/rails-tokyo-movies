@@ -12,9 +12,9 @@ def date(date_string)
   p date_string.include?("〜")
   if date_string.include?("〜")
     date_ranges = date_string.scan(/(\d{1,2})月(\d{1,2})日/)
-    start_date = Date.new(Date.today.year, dates[0][0].to_i, dates[0][1].to_i)
+    start_date = Date.new(Date.today.year, date_ranges[0][0].to_i, date_ranges[0][1].to_i)
 
-    end_date = Date.new(Date.today.year, dates[-1][0].to_i, dates[-1][1].to_i)
+    end_date = Date.new(Date.today.year, date_ranges[-1][0].to_i, date_ranges[-1][1].to_i)
 
     (start_date..end_date).map do |date|
       "#{date.month}月#{date.day}日(#{date.strftime("%a")})"
