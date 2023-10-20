@@ -8,21 +8,27 @@ require "date"
 
 require "nokogiri"
 
-require "date"
-
 def date(date_string)
-  return [] if date_string.nil? || date_string.empty?
+  p date_string.include?("～")
+  if date_string.include?("～")
+    date_ranges = date_string.scan(/(\d{1,2})月(\d{1,2})日/)
+    p date_ranges
+    start_date = Date.new(Date.today.year, dates[0][0].to_i, dates[0][1].to_i)
 
-  date_ranges = date_string.scan(/(\d{1,2})月(\d{1,2})日/)
+    end_date = Date.new(Date.today.year, dates[-1][0].to_i, dates[-1][1].to_i)
 
-  return [] if date_ranges.empty?
+    (start_date..end_date).map do |date|
+      "#{date.month}月#{date.day}日(#{date.strftime("%a")})"
+    end
+  else
+    date_ranges = date_string.scan(/(\d{1,2})月(\d{1,2})日/)
+    return [] if date_ranges.empty?
 
-  date_ranges.flat_map do |matches|
-    start_month = matches[0].to_i
-    start_day = matches[1].to_i
+    date_ranges.map do |matches|
+      start_month = matches[0].to_i
+      start_day = matches[1].to_i
 
-    (start_day..start_day).map do |day|
-      "#{format("%02d", start_month)}月#{format("%02d", day)}日(#{Date.new(Date.today.year, start_month, day).strftime("%a")})"
+      "#{start_month}月#{start_day}日(#{Date.new(Date.today.year, start_month, start_day).strftime("%a")})"
     end
   end
 end
@@ -32,20 +38,21 @@ doc = Nokogiri::HTML.parse(File.open(file), nil, "shift-JIS")
 result = []
 
 doc.search("#timetable").each do |line|
-  dates = line.css("p").text.strip
+  dates = date(line.css("p").text.strip)
+  p dates
   line.css(".time_box tr").each do |row|
     title = row.css(".time_title").text.strip
     times = row.css(".time_type2").map { |el| el.text.strip }
     times.each do |time|
       start_time = time.match(/(0?[0-9]|1[0-9]|2[0-3]):[0-5][0-9]/)
       if start_time && dates.size > 1
-        date(dates).each do |date|
+        dates.each do |date|
           matching_hash = result.find { |hash| hash[:name] == title && hash[:date].include?(date) }
           if matching_hash
             matching_hash[:times] ||= []
             matching_hash[:times] << start_time[0]
           else
-            result << { name: title, times: [start_time[0]], date: date(date) }
+            result << { name: title, times: [start_time[0]], date: date }
           end
         end
       end

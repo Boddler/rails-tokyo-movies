@@ -13,12 +13,13 @@ movie index?
 cinema index?
 
 Issues
-Doesn't recognise date ranges with ~
+    Date detector doesn't work with dates that have two dots
+   in them (Priscilla, Idaho...)
+
+
+Fixed! Doesn't recognise date ranges with ~
   Eg 10月25日(水) ～ 10月28日(土)
-
-
+  10月29日(日) ～ 10月31日(火)
 Fixed! Doesn't seem to handle dots as expected - dates are
    included that shouldn't be (Petra Von Kant, Von Braun...)
 Fixed! Wrong time pulled on ヴァチカン - seems to be the end time
-Fixed! Date detector doesn't work with dates that have two dots
-   in them (Priscilla, Idaho...)
