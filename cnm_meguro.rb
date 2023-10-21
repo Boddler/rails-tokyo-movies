@@ -22,9 +22,7 @@ def date(date_string)
 
     date_ranges.map do |matches|
       start_month = matches[0].to_i
-      p start_month
       start_day = matches[1].to_i
-      p start_day
       "#{start_month}月#{start_day}日(#{Date.new(Date.today.year, start_month, start_day).strftime("%a")})"
     end
   end
@@ -38,11 +36,10 @@ doc.search("#timetable").each do |line|
   dates = date(line.css("p").text)
   line.css(".time_box tr").each do |row|
     title = row.css(".time_title").text.strip
-    puts title
     times = row.css(".time_type2").map { |el| el.text.strip }
     times.each do |time|
       start_time = time.match(/(0?[0-9]|1[0-9]|2[0-3]):[0-5][0-9]/)
-      if start_time && dates.size > 1
+      if start_time && dates.size > 0
         dates.each do |date|
           matching_hash = result.find { |hash| hash[:name] == title && hash[:date].include?(date) }
           if matching_hash
@@ -60,8 +57,8 @@ end
 # end
 
 # puts result.select { |movie| movie[:name] == "プリシラ" }
-# puts result.sort_by { |movie| movie[:name] }
-puts result
+puts result.sort_by { |movie| movie[:name] }
+# puts result
 puts "There are #{result.size} entries"
 
 # To change the dates to Date objects

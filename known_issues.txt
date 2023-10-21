@@ -13,7 +13,7 @@ movie index?
 cinema index?
 
 Issues
-Check all times and dates and then I think we're good
+Non known
 
 Fixed! Date detector doesn't work with dates that have two dots
    in them (Priscilla, Idaho...)
