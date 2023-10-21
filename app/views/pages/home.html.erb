@@ -2,7 +2,7 @@
 <div class="container">
   <div class="main-section">
     <div class="top-picks">
-        <h1>Top Picks</h1>
+      <h1>Top Picks</h1>
       <div>
         <% @movies.select { |movie| movie.year < 1990 }.sort_by { |movie| -movie.popularity }.each do |movie| %>
           <div class="movie-card">
@@ -10,19 +10,21 @@
             </div>
             <div class="movie-card-text">
               <div class="movie-card-heading">
-              <div><h4>
-                <%= "#{movie.name}" %></h4></div>
-            <div class="language-tag">
-              <%= "#{movie.language}" %>
+                <div>
+                  <h4>
+                    <%= "#{movie.name}" %></h4>
+                </div>
+                <div class="language-tag">
+                  <%= "#{movie.language}" %>
+                </div>
+                <% # </div> %>
+              </div>
+              <div>
+                <p><%= "#{movie.year}" %></p>
+                <p><%= "Director: #{movie.director}" %></p>
+                <p><%= "Cast: #{movie.cast[0]}, #{movie.cast[1]}, #{movie.cast[2]}" %></p>
+              </div>
             </div>
-            <% # </div> %>
-            </div>
-            <div>
-              <p><%= "#{movie.year}" %></p>
-              <p><%= "Director: #{movie.director}" %></p>
-              <p><%= "Cast: #{movie.cast[0]}, #{movie.cast[1]}, #{movie.cast[2]}" %></p>
-            </div>
-  </div>
           </div>
         <% end %>
       </div>
