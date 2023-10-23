@@ -42,6 +42,17 @@
   background-position: center center;
   margin: 16px;
 }
+.movie-poster-show {
+  height: 540px;
+  width: 360px;
+  border-radius: 5px;
+  border: solid;
+  border-color: yellow;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center center;
+  margin: 16px;
+}
 
 .movie-card {
   box-shadow: 0 0 15px rgba(0,0,0,0.2);

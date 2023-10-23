@@ -1,8 +1,14 @@
 <div class="main-section">
-  <div class="search-side">
-    <div>search bar?
-    </div>
-    <div>results?
-    </div>
+  <div class="movie-poster-show" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url(<%= "#{@movie.poster}" %>)">
   </div>
+  <div class="search-side">
+    <div>
+      <%= @movie.name%></br>
+    <%= @movie.year%></br>
+  <%= @movie.description%>
+</div>
+<%= @movie.year%>
+<div>
+</div>
+</div>
 </div>
