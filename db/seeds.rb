@@ -84,8 +84,13 @@ def movie_api_call(list)
         cast << credits_data["cast"][x]["name"] if credits_data["cast"][x] && credits_data["cast"][x]["name"]
         x += 1
       end
+      background_url = URI("https://api.themoviedb.org/3/movie/#{id}/images?api_key=#{api_key}")
+      background_response = Net::HTTP.get(background_url)
+      background_data = JSON.parse(background_response)
+      background = (background_data["backdrops"][0].nil? ? "https://www.themoviedb.org/t/p/original/bm2pU9rfFOhuHrzMciV6NlfcSeO.jpg" : background_data["backdrops"][0])
       new_movie = Movie.new(director: director, popularity: popularity, runtime: runtime, name: title, description: overview,
-                            web_title: scraped_title, year: year, cast: cast, language: language, poster: "https://image.tmdb.org/t/p/w185/#{poster}")
+                            web_title: scraped_title, year: year, cast: cast, language: language, poster: "https://image.tmdb.org/t/p/w185/#{poster}",
+                            background: background)
       puts new_movie.save ? "#{title}" + (title.length > 39 ? " " : " " * (40 - title.length)) + "saved successfully" : "Error when saving-----------------------"
     else
       @not_found << scraped_title
