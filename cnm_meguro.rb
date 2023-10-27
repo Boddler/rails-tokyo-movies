@@ -56,6 +56,11 @@ end
 
 # end
 
+# result.each do |date|
+#   movie = Movie.all.find(date[:name])
+#   showing = Showing.new(date: date[:date], time: date[:times], movie_id: movie, cinema_id: Cinema.all.first)
+# end
+
 # puts result.select { |movie| movie[:name] == "プリシラ" }
 puts result.sort_by { |movie| movie[:name] }
 # puts result

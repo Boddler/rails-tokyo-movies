@@ -32,16 +32,24 @@
 }
 
 .movie-poster {
-  height: 180px;
   width: 120px;
+  height: auto;
   border-radius: 5px;
   border: solid;
   border-color: yellow;
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center center;
   margin: 16px;
+  position: relative;
+  overflow: hidden; /* Ensure image doesn't overflow */
 }
+
+.movie-poster img {
+  width: 100%; /* Fill the container */
+  height: auto; /* Allow the height to adjust proportionally */
+  display: block; /* Remove extra space reserved for descenders */
+}
+
+
+
 .movie-poster-show {
   height: 540px;
   width: 360px;

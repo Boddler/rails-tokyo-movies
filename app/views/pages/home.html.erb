@@ -7,7 +7,8 @@
         <% @movies.select { |movie| movie.year < 1990 }.sort_by { |movie| -movie.popularity }.each do |movie| %>
           <div class="movie-card">
             <a href="/movies/<%= movie.id %>">
-              <div class="movie-poster" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url(<%= "#{movie.poster}" %>)">
+              <div class="movie-poster">
+                <img src="<%= "#{movie.poster}" %>" alt="Movie Poster">
               </div>
             </a>
             <div class="movie-card-text">
