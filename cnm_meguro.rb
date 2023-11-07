@@ -28,7 +28,7 @@ def date(date_string)
   end
 end
 
-file = "meguro7.html"
+file = "meguro6.html"
 doc = Nokogiri::HTML.parse(File.open(file), nil, "shift-JIS")
 result = []
 
@@ -59,12 +59,14 @@ end
 # result.each do |date|
 #   movie = Movie.all.find(date[:name])
 #   showing = Showing.new(date: date[:date], time: date[:times], movie_id: movie, cinema_id: Cinema.all.first)
+#   showing.save
 # end
 
 # puts result.select { |movie| movie[:name] == "プリシラ" }
 puts result.sort_by { |movie| movie[:name] }
 # puts result
 puts "There are #{result.size} entries"
+puts Movie.all.first
 
 # To change the dates to Date objects
 # fixed_dates = date(dates)
