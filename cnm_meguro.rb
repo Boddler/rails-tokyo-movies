@@ -66,7 +66,7 @@ end
 puts result.sort_by { |movie| movie[:name] }
 # puts result
 puts "There are #{result.size} entries"
-puts Movie.all.first
+# puts Movie.all.first
 
 # To change the dates to Date objects
 # fixed_dates = date(dates)

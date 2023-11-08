@@ -11,25 +11,25 @@ api_key = ENV["TMDB_API_KEY"]
 file = "meguro6.html"
 doc = Nokogiri::HTML.parse(File.open(file), nil, "shift-JIS")
 
-# Movie.destroy_all
-# Cinema.destroy_all
-# puts "Movies & Cinemas deleted"
+Movie.destroy_all
+Cinema.destroy_all
+puts "Movies & Cinemas deleted"
 
-# cinema_1 = Cinema.new(
-#   name: "Meguro Cinema",
-#   location: "〒141-0021 東京都品川区上大崎２丁目２４−１５ 朝日建物株式会社 目黒西口ビル B1",
-#   url: "http://www.okura-movie.co.jp/meguro_cinema/now_showing.html",
-#   description: "A small, single screen cinema showing old and new movies.",
-# )
-# cinema_1.save
+cinema_1 = Cinema.new(
+  name: "Meguro Cinema",
+  location: "〒141-0021 東京都品川区上大崎２丁目２４−１５ 朝日建物株式会社 目黒西口ビル B1",
+  url: "http://www.okura-movie.co.jp/meguro_cinema/now_showing.html",
+  description: "A small, single screen cinema showing old and new movies.",
+)
+cinema_1.save
 
-# cinema_2 = Cinema.new(
-#   name: "Kawasaki Art Centre",
-#   location: "〒215-0004 神奈川県川崎市麻生区万福寺６丁目７−１",
-#   url: "https://kac-cinema.jp/",
-#   description: "A cinema focused on European movies.",
-# )
-# cinema_2.save
+cinema_2 = Cinema.new(
+  name: "Kawasaki Art Centre",
+  location: "〒215-0004 神奈川県川崎市麻生区万福寺６丁目７−１",
+  url: "https://kac-cinema.jp/",
+  description: "A cinema focused on European movies.",
+)
+cinema_2.save
 
 @search_results = []
 @movie_times = []
@@ -93,58 +93,8 @@ def movie_api_call(list)
   }
 end
 
-# movie_api_call(@search_results)
+movie_api_call(@search_results)
 
 @not_found.each { |x| puts "#{x} not found" }
 puts @not_found.size.positive? ? "#{@not_found.size} movies not found in total" : "All movies found"
 # @movie_times.each { |x| puts x }
-
-def date(date_string)
-  if date_string.include?("〜")
-    date_ranges = date_string.scan(/(\d{1,2})月(\d{1,2})日/)
-    start_date = Date.new(Date.today.year, date_ranges[0][0].to_i, date_ranges[0][1].to_i)
-    end_date = Date.new(Date.today.year, date_ranges[-1][0].to_i, date_ranges[-1][1].to_i)
-    (start_date..end_date).map do |date|
-      "#{date.month}月#{date.day}日(#{date.strftime("%a")})"
-    end
-  else
-    date_ranges = date_string.scan(/(\d{1,2})月(\d{1,2})日/)
-    return [] if date_ranges.empty?
-
-    date_ranges.map do |matches|
-      start_month = matches[0].to_i
-      start_day = matches[1].to_i
-      "#{start_month}月#{start_day}日(#{Date.new(Date.today.year, start_month, start_day).strftime("%a")})"
-    end
-  end
-end
-
-result = []
-
-doc.search("#timetable").each do |line|
-  dates = date(line.css("p").text)
-  line.css(".time_box tr").each do |row|
-    title = row.css(".time_title").text.strip
-    times = row.css(".time_type2").map { |el| el.text.strip }
-    times.each do |time|
-      start_time = time.match(/(0?[0-9]|1[0-9]|2[0-3]):[0-5][0-9]/)
-      if start_time && dates.size > 0
-        dates.each do |date|
-          matching_hash = result.find { |hash| hash[:name] == title && hash[:date].include?(date) }
-          if matching_hash
-            matching_hash[:times] ||= []
-            matching_hash[:times] << start_time[0]
-          else
-            result << { name: title, times: [start_time[0]], date: date }
-          end
-        end
-      end
-    end
-  end
-end
-
-result.each do |date|
-  movie = Movie.all.find { |movie| movie.web_title == date[:name] }
-  showing = Showing.new(date: date[:date], times: date[:times], movie_id: movie, cinema_id: Cinema.all.first)
-  showing.save
-end
