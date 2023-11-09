@@ -12,8 +12,11 @@ file = "meguro6.html"
 doc = Nokogiri::HTML.parse(File.open(file), nil, "shift-JIS")
 
 # Movie.destroy_all
+# puts "Movies deleted"
 # Cinema.destroy_all
-# puts "Movies & Cinemas deleted"
+# puts "Cinemas deleted"
+Showing.destroy_all
+puts "Showings deleted"
 
 # cinema_1 = Cinema.new(
 #   name: "Meguro Cinema",
@@ -104,9 +107,7 @@ def date(date_string)
     date_ranges = date_string.scan(/(\d{1,2})月(\d{1,2})日/)
     start_date = Date.new(Date.today.year, date_ranges[0][0].to_i, date_ranges[0][1].to_i)
     end_date = Date.new(Date.today.year, date_ranges[-1][0].to_i, date_ranges[-1][1].to_i)
-    (start_date..end_date).map do |date|
-      "#{date.month}月#{date.day}日(#{date.strftime("%a")})"
-    end
+    (start_date..end_date).to_a
   else
     date_ranges = date_string.scan(/(\d{1,2})月(\d{1,2})日/)
     return [] if date_ranges.empty?
@@ -114,7 +115,7 @@ def date(date_string)
     date_ranges.map do |matches|
       start_month = matches[0].to_i
       start_day = matches[1].to_i
-      "#{start_month}月#{start_day}日(#{Date.new(Date.today.year, start_month, start_day).strftime("%a")})"
+      Date.new(Date.today.year, start_month, start_day)
     end
   end
 end
@@ -130,7 +131,7 @@ doc.search("#timetable").each do |line|
       start_time = time.match(/(0?[0-9]|1[0-9]|2[0-3]):[0-5][0-9]/)
       if start_time && dates.size > 0
         dates.each do |date|
-          matching_hash = result.find { |hash| hash[:name] == title && hash[:date].include?(date) }
+          matching_hash = result.find { |hash| hash[:name] == title && hash[:date] == date }
           if matching_hash
             matching_hash[:times] ||= []
             matching_hash[:times] << start_time[0]
@@ -145,6 +146,16 @@ end
 
 result.each do |date|
   movie = Movie.all.find { |movie| movie.web_title == date[:name] }
-  showing = Showing.new(date: date[:date], times: date[:times], movie_id: movie, cinema_id: Cinema.all.first)
-  showing.save
+  if movie
+    showing = Showing.new(date: date[:date], times: date[:times], movie_id: movie.id, cinema_id: Cinema.all.first.id)
+    if showing.save
+      p showing
+      puts "#{movie.name} saved successfully"
+    else
+      puts "#{movie} not saved"
+      puts "Errors: #{movie.errors.full_messages}"
+    end
+  else
+    puts "No movie found"
+  end
 end
