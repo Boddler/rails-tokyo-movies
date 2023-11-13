@@ -1,0 +1,42 @@
+.movie-showing {
+  color: red;
+  border: solid;
+  border-radius: 5px;
+  // border: green;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+
+}
+
+.showing-cinema-name {
+  border: solid;
+  text-align: center;
+  color: white;
+  font-size: 24px;
+  border-radius: 5px;
+  margin: 8px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
+
+.showing-time-info {
+  display: flex;
+  align: center;
+}
+
+.showing-date {
+  text-align: center;
+  font-size: 16px;
+  border: solid;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+  padding: 8px;
+  margin: 4px;
+}
+
+.showing-time {
+  text-align: left;
+  font-size: 16px;
+  text-align: center;
+  border: solid;
+  padding: 8px;
+  margin: 4px;
+}
