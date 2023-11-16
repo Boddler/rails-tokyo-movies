@@ -5,27 +5,27 @@
     </div>
     <div class="search-side">
       <div>
-        <h2><%= @movie.name%></br></h2>
+        <h2><%= @movie.name %></br></h2>
       <%= @movie.year %></br>
     <%= @movie.description %>
   </div>
-  <% @cinemas.uniq.each do |cinema|%>
+  <% @cinemas.uniq.each do |cinema| %>
     <div class="movie-showing">
       <div class="showing-cinema-name">
         <%= cinema.name %>
       </div>
       <div>
-        <% @showings.where(cinema_id: cinema).each do |day| %>
+        <% @showings.where(cinema_id: cinema).sort_by { |movie| movie.date }.each do |day| %>
           <div class="showing-time-info">
-            <div class="showing-date"><%= day.date%>
+            <div class="showing-date"><%= day.date %>
             </div>
-            <% day.times.each do |time|%>
+            <% day.times.each do |time| %>
               <div class="showing-time">
                 <%= time %>
               </div>
             <% end %>
           </div>
-        <%end%>
+        <% end %>
       </div>
     </div>
   <% end %>

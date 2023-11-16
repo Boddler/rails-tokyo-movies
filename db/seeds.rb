@@ -11,28 +11,28 @@ api_key = ENV["TMDB_API_KEY"]
 file = "meguro6.html"
 doc = Nokogiri::HTML.parse(File.open(file), nil, "shift-JIS")
 
-# Movie.destroy_all
-# puts "Movies deleted"
-# Cinema.destroy_all
-# puts "Cinemas deleted"
+Movie.destroy_all
+puts "Movies deleted"
+Cinema.destroy_all
+puts "Cinemas deleted"
 Showing.destroy_all
 puts "Showings deleted"
 
-# cinema_1 = Cinema.new(
-#   name: "Meguro Cinema",
-#   location: "〒141-0021 東京都品川区上大崎２丁目２４−１５ 朝日建物株式会社 目黒西口ビル B1",
-#   url: "http://www.okura-movie.co.jp/meguro_cinema/now_showing.html",
-#   description: "A small, single screen cinema showing old and new movies.",
-# )
-# cinema_1.save
+cinema_1 = Cinema.new(
+  name: "Meguro Cinema",
+  location: "〒141-0021 東京都品川区上大崎２丁目２４−１５ 朝日建物株式会社 目黒西口ビル B1",
+  url: "http://www.okura-movie.co.jp/meguro_cinema/now_showing.html",
+  description: "A small, single screen cinema showing old and new movies.",
+)
+cinema_1.save
 
-# cinema_2 = Cinema.new(
-#   name: "Kawasaki Art Centre",
-#   location: "〒215-0004 神奈川県川崎市麻生区万福寺６丁目７−１",
-#   url: "https://kac-cinema.jp/",
-#   description: "A cinema focused on European movies.",
-# )
-# cinema_2.save
+cinema_2 = Cinema.new(
+  name: "Kawasaki Art Centre",
+  location: "〒215-0004 神奈川県川崎市麻生区万福寺６丁目７−１",
+  url: "https://kac-cinema.jp/",
+  description: "A cinema focused on European movies.",
+)
+cinema_2.save
 
 @search_results = []
 @movie_times = []
@@ -96,7 +96,7 @@ def movie_api_call(list)
   }
 end
 
-# movie_api_call(@search_results)
+movie_api_call(@search_results)
 
 @not_found.each { |x| puts "#{x} not found" }
 puts @not_found.size.positive? ? "#{@not_found.size} movies not found in total" : "All movies found"
