@@ -3,10 +3,9 @@
   display: flex;
 }
 
-.container {
+.container-fluid {
   background-color: black;
-  color: white;
-  border-radius: 5px;
+  color: #688dab;
 }
 
 .top-picks {
@@ -23,6 +22,7 @@
   border-radius: 5px;
   padding: 16px;
   width: 56%;
+  color: #688dab;
 }
 
 .small-text {

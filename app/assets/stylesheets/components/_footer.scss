@@ -7,7 +7,7 @@
   padding: 60px 0;
   background: black; /* Changed background color to black */
   text-align: left;
-  color: white; /* Changed regular text color to white */
+  color: #688dab; /* Changed regular text color to white */
 }
 
 .footer-top h3 {
@@ -22,13 +22,13 @@
 }
 
 .footer-about p a {
-  color: #aaa;
+  color: #688dab;
   border-bottom: 1px dashed #666;
 }
 
 .footer-about p a:hover,
 .footer-about p a:focus {
-  color: white; /* Changed link text color to white */
+  color: #688dab; /* Changed link text color to white */
   border-color: #aaa;
 }
 
@@ -39,17 +39,17 @@
 .footer-contact i {
   padding-right: 10px;
   font-size: 18px;
-  color: #666;
+  color: #688dab;
 }
 
 .footer-contact p a {
-  color: #aaa;
+  color: #688dab;
   border-bottom: 1px dashed #666;
 }
 
 .footer-contact p a:hover,
 .footer-contact p a:focus {
-  color: white; /* Changed link text color to white */
+  color: #688dab; /* Changed link text color to white */
   border-color: #aaa;
 }
 
@@ -57,7 +57,7 @@
   display: inline-block;
   margin-right: 20px;
   margin-bottom: 8px;
-  color: #777;
+  color: #688dab;
   border: 0;
 }
 
@@ -76,12 +76,12 @@
   padding: 15px 0;
   background: black; /* Changed background color to black */
   text-align: left;
-  color: white; /* Changed regular text color to white */
+  color:#688dab; /* Changed regular text color to white */
 }
 /* Rest of the CSS code remains the same */
 
 .footer-bottom { padding: 15px 0; background: #444; text-align: left; color: #aaa; }
 
 /* Footer link color */
-.footer-bottom a { color: white; border: 0; }
+.footer-bottom a { color: #688dab; border: 0; }
 .footer-bottom a:hover, .footer-bottom a:focus { color: #FF914D; border: 0; }
