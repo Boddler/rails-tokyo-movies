@@ -131,6 +131,7 @@ doc.search("#timetable").each do |line|
       start_time = time.match(/(0?[0-9]|1[0-9]|2[0-3]):[0-5][0-9]/)
       if start_time && dates.size > 0
         dates.each do |date|
+          title =  title.gsub(/4Kレストア版/, "")
           matching_hash = result.find { |hash| hash[:name] == title && hash[:date] == date }
           if matching_hash
             matching_hash[:times] ||= []

@@ -13,7 +13,7 @@ def date(date_string)
     date_ranges = date_string.scan(/(\d{1,2})月(\d{1,2})日/)
     start_date = Date.new(Date.today.year, date_ranges[0][0].to_i, date_ranges[0][1].to_i)
     end_date = Date.new(Date.today.year, date_ranges[-1][0].to_i, date_ranges[-1][1].to_i)
-    [start_date..end_date]
+    (start_date..end_date).to_a
     # (start_date..end_date).map do |date|
     # "#{date.month}月#{date.day}日(#{date.strftime("%a")})"
     # end
@@ -41,7 +41,8 @@ doc.search("#timetable").each do |line|
     times.each do |time|
       start_time = time.match(/(0?[0-9]|1[0-9]|2[0-3]):[0-5][0-9]/)
       if start_time && dates.to_a.size > 0
-        dates.each do |date|
+        dates.to_a.each do |date|
+          p date
           matching_hash = result.find { |hash| hash[:name] == title && hash[:date] == date }
           if matching_hash
             matching_hash[:times] ||= []
@@ -64,7 +65,7 @@ end
 # end
 
 # puts result.select { |movie| movie[:name] == "プリシラ" }
-puts result.sort_by { |movie| movie[:name] }
+# puts result.sort_by { |movie| movie[:name] }
 # puts result
 puts "There are #{result.size} entries"
 # puts Movie.all.first
