@@ -4,7 +4,7 @@
   border-radius: 5px;
   // border: green;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-
+  margin-top: 24px;
 }
 
 .showing-cinema-name {
@@ -30,6 +30,7 @@
   border-bottom-left-radius: 15px;
   padding: 8px;
   margin: 4px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
 }
 
 .showing-time {
@@ -39,4 +40,16 @@
   border: solid;
   padding: 8px;
   margin: 4px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
+.showing-time-final {
+  text-align: left;
+  font-size: 16px;
+  text-align: center;
+  border: solid;
+  padding: 8px;
+  margin: 4px;
+  border-top-right-radius: 15px;
+  border-bottom-right-radius: 15px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
 }

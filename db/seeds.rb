@@ -84,7 +84,8 @@ def movie_api_call(list)
       background_url = URI("https://api.themoviedb.org/3/movie/#{id}/images?api_key=#{api_key}")
       background_response = Net::HTTP.get(background_url)
       background_data = JSON.parse(background_response)
-      background = (background_data["backdrops"][0].nil? ? "https://www.themoviedb.org/t/p/original/bm2pU9rfFOhuHrzMciV6NlfcSeO.jpg" : background_data["backdrops"][0])
+      # background = (background_data["backdrops"][0].nil? ? "https://www.themoviedb.org/t/p/original/bm2pU9rfFOhuHrzMciV6NlfcSeO.jpg" : background_data["backdrops"][0])
+      background = (background_data["backdrops"][0].nil? ? nil : background_data["backdrops"][0])
       new_movie = Movie.new(director: director, popularity: popularity, runtime: runtime, name: title, description: overview,
                             web_title: scraped_title, year: year, cast: cast, language: language, poster: "https://image.tmdb.org/t/p/w185/#{poster}",
                             background: background)
@@ -131,7 +132,7 @@ doc.search("#timetable").each do |line|
       start_time = time.match(/(0?[0-9]|1[0-9]|2[0-3]):[0-5][0-9]/)
       if start_time && dates.size > 0
         dates.each do |date|
-          title =  title.gsub(/4Kレストア版/, "")
+          title = title.gsub(/4Kレストア版/, "")
           matching_hash = result.find { |hash| hash[:name] == title && hash[:date] == date }
           if matching_hash
             matching_hash[:times] ||= []

@@ -29,7 +29,7 @@ def date(date_string)
   end
 end
 
-file = "meguro6.html"
+file = "meguro9.html"
 doc = Nokogiri::HTML.parse(File.open(file), nil, "shift-JIS")
 result = []
 
