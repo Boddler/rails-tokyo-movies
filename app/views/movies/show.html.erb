@@ -4,9 +4,12 @@
     </div>
     <div class="search-side">
       <div>
-        <h2><%= @movie.name %></br></h2>
-      <%= @movie.year %></br>
-    <%= @movie.description %>
+        <div class="showing-movie-name">
+          <%= @movie.name %>
+        </div>
+        <%= "Year: #{@movie.year}" %></br>
+      <%= "Director: #{@movie.director}" %></br>
+    <%= "Overview: #{@movie.description}" %>
   </div>
   <% @cinemas.uniq.each do |cinema| %>
     <div class="movie-showing">
