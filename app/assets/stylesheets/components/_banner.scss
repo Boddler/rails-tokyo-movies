@@ -18,17 +18,6 @@
   text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
 }
 
-// .banner-text::after {
-//   content: ""; /* Create a pseudo-element for the underline */
-//   position: absolute;
-//   left: 0;
-//   bottom: -2px;
-//   width: 80%; /* Set the width to match the width of the text */
-//   height: 2px;
-//   background-color: #fca311; /* Set the color to #fca311 */
-//   opacity: 0.8;
-// }
-
 .banner-headline {
   color: white;
   margin-bottom: 15px;
@@ -39,8 +28,6 @@
   width: 360px;
   font-weight: bold;
   padding: 8px;
-  // border:solid;
-  // border: white;
   background: grey;
   text-align: center;
   height: flex-end;
