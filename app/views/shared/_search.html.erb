@@ -1,4 +1,4 @@
-<div data-controller="search"">
+<div data-controller="search" data-movies="<%= raw @movies.to_json %>">
   <form
 data-action="submit->search#search"
     >
