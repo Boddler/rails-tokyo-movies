@@ -1,15 +1,16 @@
-<div data-controller="search" data-movies="<%= raw @movies.to_json %>">
-  <form
-data-action="submit->search#search"
-    >
+<div data-controller="search" data-search-movies="<%= movies%>">
+  <form data-action="submit->search#search">
     <div class="col-8 mb-2">
       <input
-    type="text"
-    class="form-control"
-    placeholder="Input movie name..."
-    data-search-target="input">
+        type="text"
+        class="form-control"
+        placeholder="Input movie name..."
+        data-search-target="input"
+      >
       </div>
-    </div>
-    <div class="col-1">
-      <input type="submit" class="btn btn-info">
-    </div>
+      <div class="col-1">
+        <input type="submit" class="btn btn-secondary">
+      </div>
+    </form>
+  </div>
+  <%# <% raise %> %>

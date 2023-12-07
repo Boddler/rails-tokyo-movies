@@ -5,8 +5,11 @@ export default class extends Controller {
 static targets = ["input", "results"];
 
 connect() {
+  console.log("Class:", typeof("movies"));
   this.movies = JSON.parse(this.data.get("movies"));
-  console.log(this.movies)
+  console.log("Class:", typeof(this.movies));
+  console.log("Movies array:", this.movies);
+  console.log("Connected to search controller.");
 }
 
 
