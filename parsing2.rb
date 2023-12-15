@@ -43,7 +43,9 @@ def movie_api_call(list)
   api_key = ENV["TMDB_API_KEY"]
   languages_JSON = ENV["LANGUAGES"]
   languages = JSON.parse(languages_JSON)
-  list.map! { |str| str.gsub(/4Kレストア版/, "") }
+  # list.map! { |str| str.gsub(/4Kレストア版/, "") }
+  list.map! { |str| str.gsub(/4K.*/, "") }
+  list.map! { |str| str.gsub(/2K.*/, "") }
   list.uniq.each { |scraped_title|
     cast = []
 
@@ -157,5 +159,5 @@ end
 # end
 
 result.each do |movie|
-  p movie
+  # p movie
 end
