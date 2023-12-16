@@ -6,10 +6,10 @@ If numerous movies share a title it might find the wrong one
 navbar options
 FAQ
 footer fleshing out? - after other things?
-showings need to fixed
 cinema show page
-movie index?
-cinema index?
+movie index
+cinema index
+cinema show - add modals for the movie info
 filter - add cinemas & languages
 
 Issues
