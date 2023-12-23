@@ -91,6 +91,7 @@ def movie_api_call(list)
       puts "Movie not found"
     end
   }
+  UserMailer.with(@not_found).unfound.deliver_now
 end
 
 movie_api_call(@search_results)
