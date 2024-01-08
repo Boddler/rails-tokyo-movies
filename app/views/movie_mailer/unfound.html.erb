@@ -5,6 +5,9 @@
   </head>
   <body>
     <h1>Movies not in the TMDB</h1>
-    Put info here....
+    <% @not_found.each do |encoded_movie| %>
+      <% decoded_movie = Base64.decode64(encoded_movie) %>
+      <%= decoded_movie.html_safe %> <!-- Use html_safe to display raw HTML -->
+    <% end %>
   </body>
 </html>

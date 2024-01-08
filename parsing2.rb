@@ -4,7 +4,10 @@ require "dotenv/load"
 require "date"
 require "nokogiri"
 require "open-uri"
+require_relative "config/environment"
 # require_relative "../cnm_meguro"
+require_relative "app/mailers/application_mailer"
+require_relative "app/mailers/movie_mailer"
 
 api_key = ENV["TMDB_API_KEY"]
 
@@ -91,7 +94,8 @@ def movie_api_call(list)
       puts "Movie not found"
     end
   }
-  UserMailer.with(@not_found).unfound.deliver_now
+  # MovieMailer.with(@not_found).unfound.deliver_now
+  MovieMailer.with(not_found: @not_found).unfound(@not_found).deliver_now
 end
 
 movie_api_call(@search_results)
