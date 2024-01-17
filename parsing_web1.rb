@@ -90,10 +90,10 @@ def movie_api_call(list)
       #                       web_title: scraped_title, year: year, cast: cast, language: language, poster: "https://image.tmdb.org/t/p/w185/#{poster}",
       #                       background: background)
       # puts new_movie.save ? "#{title}" + (title.length > 39 ? " " : " " * (40 - title.length)) + "saved successfully" : "Error when saving-----------------------"
-      puts title
+      # puts title
     else
       @not_found << scraped_title
-      puts "Movie not found"
+      # puts "#{scraped_title} not found"
     end
   }
   # MovieMailer.with(@not_found).unfound.deliver_now
@@ -102,8 +102,8 @@ end
 
 movie_api_call(@search_results)
 
-@not_found.each { |x| puts "#{x} not found" }
 puts @not_found.size.positive? ? "#{@not_found.size} movies not found in total" : "All movies found"
+@not_found.each { |x| puts "#{x} not found" }
 # @movie_times.each { |x| puts x }
 
 def date(date_string)
