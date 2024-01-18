@@ -5,32 +5,13 @@ require "date"
 require "nokogiri"
 require "open-uri"
 require_relative "config/environment"
-# require_relative "../cnm_meguro"
 require_relative "app/mailers/application_mailer"
 require_relative "app/mailers/movie_mailer"
 
 api_key = ENV["TMDB_API_KEY"]
 
 html_content = URI.open("http://www.okura-movie.co.jp/meguro_cinema/now_showing.html")
-# file = "20231208.html"
 doc = Nokogiri::HTML.parse(html_content, nil, "shift-JIS")
-# doc = Nokogiri::HTML.parse(File.open(file), nil, "shift-JIS")
-
-# cinema_1 = Cinema.new(
-#   name: "Meguro Cinema",
-#   location: "〒141-0021 東京都品川区上大崎２丁目２４−１５ 朝日建物株式会社 目黒西口ビル B1",
-#   url: "http://www.okura-movie.co.jp/meguro_cinema/now_showing.html",
-#   description: "A small, single screen cinema showing old and new movies.",
-# )
-# cinema_1.save
-
-# cinema_2 = Cinema.new(
-#   name: "Kawasaki Art Centre",
-#   location: "〒215-0004 神奈川県川崎市麻生区万福寺６丁目７−１",
-#   url: "https://kac-cinema.jp/",
-#   description: "A cinema focused on European movies.",
-# )
-# cinema_2.save
 
 @search_results = []
 @movie_times = []
@@ -84,19 +65,11 @@ def movie_api_call(list)
       background_url = URI("https://api.themoviedb.org/3/movie/#{id}/images?api_key=#{api_key}")
       background_response = Net::HTTP.get(background_url)
       background_data = JSON.parse(background_response)
-      # background = (background_data["backdrops"][0].nil? ? "https://www.themoviedb.org/t/p/original/bm2pU9rfFOhuHrzMciV6NlfcSeO.jpg" : background_data["backdrops"][0])
       background = (background_data["backdrops"][0].nil? ? nil : background_data["backdrops"][0])
-      # new_movie = Movie.new(director: director, popularity: popularity, runtime: runtime, name: title, description: overview,
-      #                       web_title: scraped_title, year: year, cast: cast, language: language, poster: "https://image.tmdb.org/t/p/w185/#{poster}",
-      #                       background: background)
-      # puts new_movie.save ? "#{title}" + (title.length > 39 ? " " : " " * (40 - title.length)) + "saved successfully" : "Error when saving-----------------------"
-      # puts title
     else
       @not_found << scraped_title
-      # puts "#{scraped_title} not found"
     end
   }
-  # MovieMailer.with(@not_found).unfound.deliver_now
   MovieMailer.with(not_found: @not_found).unfound(@not_found).deliver_now
 end
 
@@ -147,24 +120,4 @@ doc.search("#timetable").each do |line|
       end
     end
   end
-end
-
-# result.each do |date|
-#   movie = Movie.all.find { |movie| movie.web_title == date[:name] }
-#   if movie
-#     showing = Showing.new(date: date[:date], times: date[:times], movie_id: movie.id, cinema_id: Cinema.all.first.id)
-#     if showing.save
-#       p showing
-#       puts "#{movie.name} saved successfully"
-#     else
-#       puts "#{movie} not saved"
-#       puts "Errors: #{movie.errors.full_messages}"
-#     end
-#   else
-#     puts "No movie found"
-#   end
-# end
-
-result.each do |movie|
-  # p movie
 end

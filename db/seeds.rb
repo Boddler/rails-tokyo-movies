@@ -8,8 +8,11 @@ require "open-uri"
 
 api_key = ENV["TMDB_API_KEY"]
 
-file = "meguro6.html"
-doc = Nokogiri::HTML.parse(File.open(file), nil, "shift-JIS")
+# file = "meguro6.html"
+# doc = Nokogiri::HTML.parse(File.open(file), nil, "shift-JIS")
+
+html_content = URI.open("http://www.okura-movie.co.jp/meguro_cinema/now_showing.html")
+doc = Nokogiri::HTML.parse(html_content, nil, "shift-JIS")
 
 Movie.destroy_all
 puts "Movies deleted"
