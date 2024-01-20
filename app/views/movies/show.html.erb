@@ -9,34 +9,39 @@
         </div>
         <%= "Year: #{@movie.year}" %></br>
       <%= "Director: #{@movie.director}" %></br>
-    <%= "Overview: #{@movie.description}" %>
-  </div>
-  <% @cinemas.uniq.each do |cinema| %>
-    <div class="movie-showing">
-      <div class="showing-cinema-name">
-        <%= cinema.name %>
-      </div>
-      <div>
-        <% @showings.where(cinema_id: cinema).sort_by { |movie| movie.date }.each do |day| %>
-          <div class="showing-time-info">
-            <div class="showing-date"><%= day.date %>
-            </div>
-            <% day.times.each_with_index do |time, index| %>
-              <% if index == (day.times.to_a.size - 1) %>
-                <div class="showing-time-final">
-                  <%= time %>
-                </div>
-              <% else %>
-                <div class="showing-time">
-                  <%= time %>
-                </div>
-              <% end %>
-            <% end %>
-          </div>
-        <% end %>
-      </div>
+    <%= "Cast:"%></br>
+  <% @movie.cast[0..5].each do |cast| %>
+    <%= "#{cast}" %></br>
+<%end%>
+</br>
+<%= "Overview: #{@movie.description}" %>
+</div>
+<% @cinemas.uniq.each do |cinema| %>
+  <div class="movie-showing">
+    <div class="showing-cinema-name">
+      <%= cinema.name %>
     </div>
-  <% end %>
+    <div>
+      <% @showings.where(cinema_id: cinema).sort_by { |movie| movie.date }.each do |day| %>
+        <div class="showing-time-info">
+          <div class="showing-date"><%= day.date %>
+          </div>
+          <% day.times.each_with_index do |time, index| %>
+            <% if index == (day.times.to_a.size - 1) %>
+              <div class="showing-time-final">
+                <%= time %>
+              </div>
+            <% else %>
+              <div class="showing-time">
+                <%= time %>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>
 </div>
 </div>
 <%= render "shared/banner" %>

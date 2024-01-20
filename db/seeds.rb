@@ -53,7 +53,8 @@ def movie_api_call(list)
   api_key = ENV["TMDB_API_KEY"]
   languages_JSON = ENV["LANGUAGES"]
   languages = JSON.parse(languages_JSON)
-  list.map! { |str| str.gsub(/4Kレストア版/, "") }
+  list.map! { |str| str.sub(/4K.*/, "") }
+  # list.map! { |str| str.gsub(/4Kレストア版/, "") }
   list.uniq.each { |scraped_title|
     cast = []
 
@@ -92,7 +93,7 @@ def movie_api_call(list)
       new_movie = Movie.new(director: director, popularity: popularity, runtime: runtime, name: title, description: overview,
                             web_title: scraped_title, year: year, cast: cast, language: language, poster: "https://image.tmdb.org/t/p/w185/#{poster}",
                             background: background)
-      puts new_movie.save ? "#{title}" + (title.length > 39 ? " " : " " * (40 - title.length)) + "saved successfully" : "Error when saving-----------------------"
+      puts new_movie.save ? "#{title}" + (title.length > 69 ? " " : " " * (70 - title.length)) + "saved successfully" : "Error when saving-----------------------"
     else
       @not_found << scraped_title
       puts "Movie not found"
@@ -135,7 +136,7 @@ doc.search("#timetable").each do |line|
       start_time = time.match(/(0?[0-9]|1[0-9]|2[0-3]):[0-5][0-9]/)
       if start_time && dates.size > 0
         dates.each do |date|
-          title = title.gsub(/4Kレストア版/, "")
+          title = title.sub(/4K.*/, "")
           matching_hash = result.find { |hash| hash[:name] == title && hash[:date] == date }
           if matching_hash
             matching_hash[:times] ||= []
@@ -153,13 +154,7 @@ result.each do |date|
   movie = Movie.all.find { |movie| movie.web_title == date[:name] }
   if movie
     showing = Showing.new(date: date[:date], times: date[:times], movie_id: movie.id, cinema_id: Cinema.all.first.id)
-    if showing.save
-      p showing
-      puts "#{movie.name} saved successfully"
-    else
-      puts "#{movie} not saved"
-      puts "Errors: #{movie.errors.full_messages}"
-    end
+    puts "Errors: #{movie.errors.full_messages}" unless showing.save
   else
     puts "No movie found"
   end
