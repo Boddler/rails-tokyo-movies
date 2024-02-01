@@ -8,10 +8,11 @@
           <%= @movie.name %>
         </div>
         <%= "Year: #{@movie.year}" %></br>
-      <%= "Director: #{@movie.director}" %></br>
-    <%= "Cast:"%></br>
-  <% @movie.cast[0..5].each do |cast| %>
-    <%= "#{cast}" %></br>
+      <%= "Language: #{@movie.language}" %></br>
+    <%= "Director: #{@movie.director}" %></br>
+  <%= "Cast:"%></br>
+<% @movie.cast[0..5].each do |cast| %>
+  <%= "#{cast}" %></br>
 <%end%>
 </br>
 <%= "Overview: #{@movie.description}" %>
