@@ -54,6 +54,7 @@ def movie_api_call(list)
   languages_JSON = ENV["LANGUAGES"]
   languages = JSON.parse(languages_JSON)
   list.map! { |str| str.sub(/4K.*/, "") }
+  list.map! { |str| str.sub(/デジタルリマスター.*/, "") }
   # list.map! { |str| str.gsub(/4Kレストア版/, "") }
   list.uniq.each { |scraped_title|
     cast = []
@@ -61,17 +62,19 @@ def movie_api_call(list)
     encoded_title = URI.encode_www_form_component(scraped_title)
     url = URI("https://api.themoviedb.org/3/search/movie?api_key=#{api_key}&query=#{encoded_title}&language=en-gb")
     response = Net::HTTP.get(url)
-    movie_data = JSON.parse(response)
+    movie_json = JSON.parse(response)
+    movie_data = movie_json["results"]
+    movie_data = movie_data.sort_by { |movie| -movie["vote_count"].to_f }
 
-    if movie_data["results"].any?
-      title = movie_data["results"][0]["title"]
-      overview = movie_data["results"][0]["overview"]
-      language = languages.fetch(movie_data["results"][0]["original_language"], movie_data["results"][0]["original_language"])
-      poster = movie_data["results"][0]["poster_path"]
-      year = movie_data["results"][0]["release_date"]
-      id = movie_data["results"][0]["id"]
-      popularity = movie_data["results"][0]["popularity"]
-      credits_url = URI("https://api.themoviedb.org/3/movie/#{movie_data["results"][0]["id"]}/credits?api_key=#{api_key}")
+    if movie_data.any?
+      title = movie_data[0]["title"]
+      overview = movie_data[0]["overview"]
+      language = languages.fetch(movie_data[0]["original_language"], movie_data[0]["original_language"])
+      poster = movie_data[0]["poster_path"]
+      year = movie_data[0]["release_date"]
+      id = movie_data[0]["id"]
+      popularity = movie_data[0]["popularity"]
+      credits_url = URI("https://api.themoviedb.org/3/movie/#{movie_data[0]["id"]}/credits?api_key=#{api_key}")
       credits_response = Net::HTTP.get(credits_url)
       credits_data = JSON.parse(credits_response)
 
@@ -79,7 +82,7 @@ def movie_api_call(list)
       runtime_response = Net::HTTP.get(runtime_url)
       detailed_data = JSON.parse(runtime_response)
       runtime = detailed_data["runtime"]
-      director = credits_data["crew"].find { |person| person["job"] == "Director" }["name"]
+      director = (credits_data["crew"].find { |person| person["job"] == "Director" }.nil? ? "Unknown" : credits_data["crew"].find { |person| person["job"] == "Director" }["name"])
       x = 0
       10.times do
         cast << credits_data["cast"][x]["name"] if credits_data["cast"][x] && credits_data["cast"][x]["name"]
@@ -137,6 +140,7 @@ doc.search("#timetable").each do |line|
       if start_time && dates.size > 0
         dates.each do |date|
           title = title.sub(/4K.*/, "")
+          title = title.sub(/デジタルリマスター.*/, "")
           matching_hash = result.find { |hash| hash[:name] == title && hash[:date] == date }
           if matching_hash
             matching_hash[:times] ||= []
