@@ -144,7 +144,7 @@ doc.search("#timetable").each do |line|
           matching_hash = result.find { |hash| hash[:name] == title && hash[:date] == date }
           if matching_hash
             matching_hash[:times] ||= []
-            matching_hash[:times] << start_time[0]
+            matching_hash[:times] << start_time[0] unless matching_hash[:times].include?(start_time[0])
           else
             result << { name: title, times: [start_time[0]], date: date }
           end
