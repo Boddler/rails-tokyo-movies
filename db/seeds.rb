@@ -4,12 +4,6 @@ require "dotenv/load"
 require "date"
 require "nokogiri"
 require "open-uri"
-# require_relative "../cnm_meguro"
-
-api_key = ENV["TMDB_API_KEY"]
-
-# file = "meguro6.html"
-# doc = Nokogiri::HTML.parse(File.open(file), nil, "shift-JIS")
 
 html_content = URI.open("http://www.okura-movie.co.jp/meguro_cinema/now_showing.html")
 doc = Nokogiri::HTML.parse(html_content, nil, "shift-JIS")
@@ -21,21 +15,21 @@ puts "Cinemas deleted"
 Showing.destroy_all
 puts "Showings deleted"
 
-cinema_1 = Cinema.new(
+cinema1 = Cinema.new(
   name: "Meguro Cinema",
   location: "〒141-0021 東京都品川区上大崎２丁目２４−１５ 朝日建物株式会社 目黒西口ビル B1",
   url: "http://www.okura-movie.co.jp/meguro_cinema/now_showing.html",
   description: "A small, single screen cinema showing old and new movies.",
 )
-cinema_1.save
+cinema1.save
 
-cinema_2 = Cinema.new(
+cinema2 = Cinema.new(
   name: "Kawasaki Art Centre",
   location: "〒215-0004 神奈川県川崎市麻生区万福寺６丁目７−１",
   url: "https://kac-cinema.jp/",
   description: "A cinema focused on European movies.",
 )
-cinema_2.save
+cinema2.save
 
 @search_results = []
 @movie_times = []
@@ -51,11 +45,11 @@ puts "#{@search_results.size} total movies found"
 
 def movie_api_call(list)
   api_key = ENV["TMDB_API_KEY"]
-  languages_JSON = ENV["LANGUAGES"]
-  languages = JSON.parse(languages_JSON)
+  languages_json = ENV["LANGUAGES"]
+  languages = JSON.parse(languages_json)
   list.map! { |str| str.sub(/4K.*/, "") }
   list.map! { |str| str.sub(/デジタルリマスター.*/, "") }
-  # list.map! { |str| str.gsub(/4Kレストア版/, "") }
+  list.map! { |str| str.sub(/＋.*/, "") }
   list.uniq.each { |scraped_title|
     cast = []
 
@@ -137,10 +131,11 @@ doc.search("#timetable").each do |line|
     times = row.css(".time_type2").map { |el| el.text.strip }
     times.each do |time|
       start_time = time.match(/(0?[0-9]|1[0-9]|2[0-3]):[0-5][0-9]/)
-      if start_time && dates.size > 0
+      if start_time && dates.size.positive?
         dates.each do |date|
           title = title.sub(/4K.*/, "")
           title = title.sub(/デジタルリマスター.*/, "")
+          title = title.sub(/＋.*/, "")
           matching_hash = result.find { |hash| hash[:name] == title && hash[:date] == date }
           if matching_hash
             matching_hash[:times] ||= []
@@ -155,11 +150,9 @@ doc.search("#timetable").each do |line|
 end
 
 result.each do |date|
-  movie = Movie.all.find { |movie| movie.web_title == date[:name] }
+  movie = Movie.all.find { |film| film.web_title == date[:name] }
   if movie
     showing = Showing.new(date: date[:date], times: date[:times], movie_id: movie.id, cinema_id: Cinema.all.first.id)
     puts "Errors: #{movie.errors.full_messages}" unless showing.save
-  else
-    puts "No movie found"
   end
 end
