@@ -19,9 +19,11 @@
 </div>
 <% @cinemas.uniq.each do |cinema| %>
   <div class="movie-showing">
-    <div class="showing-cinema-name">
-      <%= cinema.name %>
-    </div>
+    <%= link_to cinema_path(cinema.id) do %>
+      <div class="showing-cinema-name">
+        <%= cinema.name %>
+      </div>
+    <% end %>
     <div>
       <% @showings.where(cinema_id: cinema).sort_by { |movie| movie.date }.each do |day| %>
         <div class="showing-time-info">

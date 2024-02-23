@@ -17,6 +17,14 @@
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
 }
 
+.movie-showing a {
+  text-decoration: none;
+}
+.movie-showing a :hover {
+  color: yellowgreen;
+  font-weight: bold;
+}
+
 .showing-time-info {
   display: flex;
   // align: center;
