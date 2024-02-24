@@ -26,11 +26,13 @@
   color: #688dab;
 }
 
-.small-text {
-  font-size: 12px;
-  font-style: italic;
+// .small-text {
+//   font-size: 12px;
+//   font-style: italic;
 
-}
+// }
+
+// I don't think the above is used
 
 .movie-poster {
   width: 120px;
@@ -48,8 +50,6 @@
   height: auto; /* Allow the height to adjust proportionally */
   display: block; /* Remove extra space reserved for descenders */
 }
-
-
 
 .movie-poster-show {
   height: 540px;
@@ -98,7 +98,6 @@
   // padding: 4px;
   align-self: flex-start;
   // margin-left: auto;
-
   padding-left: 4px;
   padding-right: 4px;
 }

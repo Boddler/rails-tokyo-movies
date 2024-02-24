@@ -27,6 +27,8 @@
   border-color: #aaa;
 }
 
+// I don't think the above works
+
 .footer-contact p {
   word-wrap: break-word;
 }
@@ -48,6 +50,8 @@
   border-color: #aaa;
 }
 
+// I don't think the above works
+
 .footer-social a {
   display: inline-block;
   margin-right: 20px;
@@ -56,16 +60,22 @@
   border: 0;
 }
 
+// I don't think the above is used
+
 .footer-social a:hover,
 .footer-social a:focus {
   color: #FF914D; /* Changed link text color to orange (#FF914D) */
   border: 0;
 }
 
+// I don't think the above is used
+
 .footer-social i {
   font-size: 24px;
   vertical-align: middle;
 }
+
+// I don't think the above is used
 
 .footer-bottom {
   padding: 15px 0;
@@ -73,10 +83,18 @@
   text-align: left;
   color:#688dab; /* Changed regular text color to white */
 }
+
+// I don't think the above is used
+
 /* Rest of the CSS code remains the same */
 
 .footer-bottom { padding: 15px 0; background: #444; text-align: left; color: #aaa; }
 
+// I don't think the above is used
+
 /* Footer link color */
 .footer-bottom a { color: #688dab; border: 0; }
 .footer-bottom a:hover, .footer-bottom a:focus { color: #FF914D; border: 0; }
+
+
+// I don't think the above is used
