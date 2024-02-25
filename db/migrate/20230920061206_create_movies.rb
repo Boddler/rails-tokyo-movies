@@ -8,7 +8,7 @@ class CreateMovies < ActiveRecord::Migration[7.0]
       t.text :description
       t.string :director
       t.string :poster
-      t.string :background
+      t.string :backgrounds, array: true, default: []
       t.integer :year
       t.float :popularity
       t.string :cast, array: true, default: []

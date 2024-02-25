@@ -31,7 +31,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_20_061227) do
     t.text "description"
     t.string "director"
     t.string "poster"
-    t.string "background"
+    t.string "backgrounds", default: [], array: true
     t.integer "year"
     t.float "popularity"
     t.string "cast", default: [], array: true

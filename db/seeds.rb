@@ -39,14 +39,13 @@ doc.search(".time_title").each do |element|
   @search_results << element.text.strip
 end
 
-puts "#{@search_results.uniq.size} unique movies found"
 puts "#{@search_results.size} total movies found"
+puts "#{@search_results.uniq.size} unique movies found"
 @not_found = []
 
 def movie_api_call(list)
   api_key = ENV["TMDB_API_KEY"]
-  languages_json = ENV["LANGUAGES"]
-  languages = JSON.parse(languages_json)
+  languages = JSON.parse(ENV["LANGUAGES"])
   list.map! { |str| str.sub(/4K.*/, "") }
   list.map! { |str| str.sub(/デジタルリマスター.*/, "") }
   list.map! { |str| str.sub(/＋.*/, "") }
@@ -77,6 +76,7 @@ def movie_api_call(list)
       detailed_data = JSON.parse(runtime_response)
       runtime = detailed_data["runtime"]
       director = (credits_data["crew"].find { |person| person["job"] == "Director" }.nil? ? "Unknown" : credits_data["crew"].find { |person| person["job"] == "Director" }["name"])
+
       x = 0
       10.times do
         cast << credits_data["cast"][x]["name"] if credits_data["cast"][x] && credits_data["cast"][x]["name"]
@@ -86,10 +86,10 @@ def movie_api_call(list)
       background_response = Net::HTTP.get(background_url)
       background_data = JSON.parse(background_response)
       # background = (background_data["backdrops"][0].nil? ? "https://www.themoviedb.org/t/p/original/bm2pU9rfFOhuHrzMciV6NlfcSeO.jpg" : background_data["backdrops"][0])
-      background = (background_data["backdrops"][0].nil? ? nil : background_data["backdrops"][0])
+      background = (background_data["backdrops"].nil? ? nil : background_data["backdrops"])
       new_movie = Movie.new(director: director, popularity: popularity, runtime: runtime, name: title, description: overview,
                             web_title: scraped_title, year: year, cast: cast, language: language, poster: "https://image.tmdb.org/t/p/w185/#{poster}",
-                            background: background)
+                            backgrounds: background)
       puts new_movie.save ? "#{title}" + (title.length > 69 ? " " : " " * (70 - title.length)) + "saved successfully" : "Error when saving-----------------------"
     else
       @not_found << scraped_title

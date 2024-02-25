@@ -1,5 +1,5 @@
-<% if @movie && @movie.background %>
-  <% background_data = JSON.parse(@movie.background.gsub("=>", ":").gsub(/\bnil\b/, "null")) %>
+<% if @movie && @movie.backgrounds[0] %>
+  <% background_data = JSON.parse(@movie.backgrounds[0].gsub("=>", ":").gsub(/\bnil\b/, "null")) %>
   <div class="banner" style="background-image: linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.4)),
     url(https://www.themoviedb.org/t/p/original/<%= background_data["file_path"] %>);">
   </div>
