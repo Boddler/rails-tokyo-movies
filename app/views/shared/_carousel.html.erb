@@ -1,13 +1,13 @@
-<div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+<div id="carouselExampleControls" class="carousel slide" data-ride="carousel" data-turbolinks="false">
   <div class="carousel-inner">
     <% counter = 0 %>
-<% @movie.backgrounds.each_with_index do |image, index| %>
-  <% poster = JSON.parse(image.gsub("=>", ":").gsub(/\bnil\b/, "null")) %>
-    <% counter += 1 %>
-    <div class="carousel-item <%= index == 0 ? "active" : "" %>">
-      <img class="d-block w-100" src="https://www.themoviedb.org/t/p/original/<%= poster["file_path"] %>" alt="Slide <%= counter %>">
-    </div>
-<% end %>
+    <% @movie.backgrounds.each_with_index do |image, index| %>
+      <% poster = JSON.parse(image.gsub("=>", ":").gsub(/\bnil\b/, "null")) %>
+      <% counter += 1 %>
+      <div class="carousel-item <%= index == 0 ? "active" : "" %>">
+        <img class="d-block w-100" src="https://www.themoviedb.org/t/p/original/<%= poster["file_path"] %>" alt="Slide <%= counter %>">
+      </div>
+    <% end %>
   </div>
   <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
