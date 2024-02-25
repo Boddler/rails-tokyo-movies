@@ -10,10 +10,10 @@
         <%= "Year: #{@movie.year}" %></br>
       <%= "Language: #{@movie.language}" %></br>
     <%= "Director: #{@movie.director}" %></br>
-  <%= "Cast:"%></br>
+  <%= "Cast:" %></br>
 <% @movie.cast[0..5].each do |cast| %>
   <%= "#{cast}" %></br>
-<%end%>
+<% end %>
 </br>
 <%= "Overview: #{@movie.description}" %>
 </div>
@@ -47,5 +47,5 @@
 <% end %>
 </div>
 </div>
-<%= render "shared/banner" %>
+<%= render "shared/carousel" %>
 </div>
