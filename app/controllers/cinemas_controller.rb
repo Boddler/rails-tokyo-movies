@@ -5,7 +5,7 @@ class CinemasController < ApplicationController
 
   def show
     @cinema = Cinema.find(params[:id])
-    @showings = Showing.all.where(cinema_id: @cinema)
-    @movies = @showings.map(&:movie).uniq
+    # @showings = Showing.all.where(cinema_id: @cinema)
+    # @movies = @showings.map(&:movie).uniq
   end
 end

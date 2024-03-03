@@ -36,11 +36,10 @@ cinema2.save
 
 # Meguro Cinema Movie List Scrape
 doc.search(".time_title").each do |element|
-  @search_results << element.text.strip
+  @search_results << element.text.strip unless @search_results.include?(element.text.strip)
 end
 
-puts "#{@search_results.size} total movies found"
-puts "#{@search_results.uniq.size} unique movies found"
+puts "#{@search_results.size} unique movies found"
 @not_found = []
 
 def movie_api_call(list)

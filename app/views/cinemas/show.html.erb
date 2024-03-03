@@ -1,5 +1,5 @@
 <%= @cinema.name %>
-<% @movies.each do |movie| %>
+<% @cinema.movies.uniq.each do |movie| %>
   <div>
     <%= movie.name%>
   </div>
