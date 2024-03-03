@@ -1,7 +1,23 @@
-<%= @cinema.name %>
-<% @cinema.movies.uniq.each do |movie| %>
-  <div>
-    <%= movie.name%>
+<div class="container-fluid">
+  <div class="cinema-show-container">
+    <div class="cinema-header">
+      <h1><%= @cinema.name %></h1>
+    </div>
+    <div class="movie-grid">
+      <% @cinema.movies.uniq.each do |movie| %>
+        <div class="cinema-movie">
+          <%= link_to movie_path(movie.id) do %>
+            <div class="movie-poster-cinema" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url(<%= "#{movie.poster}" %>)">
+            </div>
+            <div class ="movie-title">
+              <h5><%= movie.name%></h5>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+    <div class ="cinema-map">
+      <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3278.5069178227864!2d139.71336906447036!3d35.634574030623185!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x60188b19055c8655%3A0xaba33b9365f206fe!2sMeguro%20Cinema!5e0!3m2!1sen!2sjp!4v1705662015979!5m2!1sen!2sjp" width="800" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
   </div>
-<% end %>
-<iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3278.5069178227864!2d139.71336906447036!3d35.634574030623185!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x60188b19055c8655%3A0xaba33b9365f206fe!2sMeguro%20Cinema!5e0!3m2!1sen!2sjp!4v1705662015979!5m2!1sen!2sjp" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+</div>

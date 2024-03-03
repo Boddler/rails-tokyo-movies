@@ -1,18 +1,19 @@
 <div class="container-fluid">
-  <div class="main-section">
-    <div class="movie-poster-show" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url(<%= "#{@movie.poster}" %>)">
-    </div>
-    <div class="search-side">
-      <div>
-        <div class="showing-movie-name">
-          <%= @movie.name %>
-        </div>
-        <%= "Year: #{@movie.year}" %></br>
-      <%= "Language: #{@movie.language}" %></br>
-    <%= "Director: #{@movie.director}" %></br>
-  <%= "Cast:" %></br>
-<% @movie.cast[0..5].each do |cast| %>
-  <%= "#{cast}" %></br>
+  <div class="movie-show-container">
+    <div class="main-section">
+      <div class="movie-poster-show" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url(<%= "#{@movie.poster}" %>)">
+      </div>
+      <div class="search-side">
+        <div>
+          <div class="showing-movie-name">
+            <%= @movie.name %>
+          </div>
+          <%= "Year: #{@movie.year}" %></br>
+        <%= "Language: #{@movie.language}" %></br>
+      <%= "Director: #{@movie.director}" %></br>
+    <%= "Cast:" %></br>
+  <% @movie.cast[0..5].each do |cast| %>
+    <%= "#{cast}" %></br>
 <% end %>
 </br>
 <%= "Overview: #{@movie.description}" %>
@@ -48,4 +49,5 @@
 </div>
 </div>
 <%= render "shared/carousel" %>
+</div>
 </div>

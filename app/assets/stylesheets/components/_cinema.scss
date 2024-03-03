@@ -1,0 +1,53 @@
+.cinema-show-container {
+  margin: 0 auto;
+  max-width: 67%;
+  justify-content: center;
+  align-items: center;
+}
+
+.cinema-map {
+  border: solid;
+  border-radius: 5px;
+  margin-top: 16px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+  max-width: 800px;
+}
+
+.movie-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.cinema-movie {
+  max-width: 200px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
+
+.movie-poster-cinema {
+  height: 300px;
+  width: 200px;
+  border-radius: 5px;
+  border: solid;
+  border-color: yellow;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+.movie-title {
+  background-color: lightblue;
+  color: darkblue;
+  text-align: center;
+  border: solid;
+  border-radius: 5px;
+  min-height: 40px;
+  width: 100%;
+  padding: 4px;
+}
+.cinema-movie a {
+  text-decoration: none;
+}
+.cinema-movie a :hover {
+  font-weight: bold;
+}

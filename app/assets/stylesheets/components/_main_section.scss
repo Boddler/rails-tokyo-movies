@@ -20,7 +20,8 @@
 
 .search-side {
   background-color: rgb(50, 50, 50);
-  margin: 28px;
+  margin-left: 28px;
+  margin-right: 28px;
   border-radius: 5px;
   padding: 16px;
   width: 56%;
@@ -41,7 +42,8 @@
   border-radius: 5px;
   border: solid;
   border-color: yellow;
-  margin: 16px;
+  margin-left: 16px;
+  margin-right: 16px;
   position: relative;
   overflow: hidden; /* Ensure image doesn't overflow */
 }
