@@ -26,3 +26,22 @@ Fixed! Wrong time pulled on ヴァチカン - seems to be the end time
 
 
 LANGUAGES={"en": "English", "es": "Spanish", "fr": "French", "de": "German", "it": "Italian", "pt": "Portuguese", "ja": "Japanese", "ko": "Korean", "ru": "Russian", "hi": "Hindi", "zh": "Chinese", "ar": "Arabic", "tr": "Turkish", "pl": "Polish", "nl": "Dutch", "sv": "Swedish", "da": "Danish", "fi": "Finnish", "cs": "Czech", "el": "Greek", "he": "Hebrew", "th": "Thai", "hu": "Hungarian", "no": "Norwegian", "uk": "Ukrainian", "id": "Indonesian", "ms": "Malay", "vi": "Vietnamese", "ro": "Romanian", "fa": "Persian", "bg": "Bulgarian", "sr": "Serbian", "sk": "Slovak", "sl": "Slovenian", "et": "Estonian", "ka": "Georgian", "hr": "Croatian", "lv": "Latvian", "lt": "Lithuanian", "is": "Icelandic", "ga": "Irish", "sq": "Albanian", "eu": "Basque", "mk": "Macedonian", "af": "Afrikaans", "hy": "Armenian", "mn": "Mongolian", "sw": "Swahili", "am": "Amharic", "ka": "Kannada"}
+
+Seed file
+
+- create empty array of titles
+- create empty array of times
+- create empty result array
+- create hashes of showings
+- iterate over showiings and save
+
+Cinema Specific (needs to be, not yet)
+- scrape cinema page
+- send titles to movie api call method, which saves the movies
+-
+
+To Do
+- create array of movie titles
+- find directors of the movies and put into an array
+- if there's more than one movie returned, put them all in there
+- for movies with multiple options returned, choose one by a director of one already returned
