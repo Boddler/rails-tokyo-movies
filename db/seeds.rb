@@ -51,7 +51,8 @@ def movie_api_call(list)
   list.uniq.each { |scraped_title|
     cast = []
 
-    encoded_title = URI.encode_www_form_component(scraped_title)
+    # encoded_title = URI.encode_www_form_component(scraped_title)
+    encoded_title = URI.encode_www_form_component("\"#{scraped_title}\"") # checks the quoted title - more precise but might miss stuff?
     url = URI("https://api.themoviedb.org/3/search/movie?api_key=#{api_key}&query=#{encoded_title}&language=en-gb")
     response = Net::HTTP.get(url)
     movie_json = JSON.parse(response)
