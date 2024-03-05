@@ -3,6 +3,10 @@
     <div class="cinema-header">
       <h1><%= @cinema.name %></h1>
     </div>
+    <p><%= @cinema.description %></p>
+    <p>Address:</p>
+    <p><%= @cinema.location %></p>
+    <p><%= link_to "Cinema website", @cinema.url, target: "_blank" %></p>
     <div class="movie-grid">
       <% @cinema.movies.uniq.each do |movie| %>
         <div class="cinema-movie">
