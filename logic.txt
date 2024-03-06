@@ -1,0 +1,3 @@
+delete showings that are out of date
+
+scrape the website - pass the cinema
