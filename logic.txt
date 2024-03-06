@@ -1,3 +1,32 @@
 delete showings that are out of date
+delete movies with no showings
 
-scrape the website - pass the cinema
+compile array of cinemas and...
+scrape their websites
+  scrape movie titles
+  scrape showing info
+
+clean up the titles
+
+send each title to the API and return:
+  results array
+  this includes:
+    title
+    overview
+    language
+    poster
+    release date
+    ID
+    popularity
+
+
+send ID to to more APIs
+  credits API to get the cast & director
+  images API to get the backdrops
+  runtime API to get the runtime
+
+Delete showings that are before today
+Showing.where("date_attribute < ?", Date.today).destroy_all
+
+Delete movies with no showings:
+Movie.includes(:showings).where(showings: { id: nil }).destroy_all

@@ -19,6 +19,7 @@ cinema1 = Cinema.new(
   name: "Meguro Cinema",
   location: "〒141-0021 東京都品川区上大崎２丁目２４−１５ 朝日建物株式会社 目黒西口ビル B1",
   url: "http://www.okura-movie.co.jp/meguro_cinema/now_showing.html",
+  schedule: "http://www.okura-movie.co.jp/meguro_cinema/now_showing.html",
   description: "A small, single screen cinema showing old and new movies.",
 )
 cinema1.save
@@ -27,6 +28,7 @@ cinema2 = Cinema.new(
   name: "Kawasaki Art Centre",
   location: "〒215-0004 神奈川県川崎市麻生区万福寺６丁目７−１",
   url: "https://kac-cinema.jp/",
+  schedule: "https://kac-cinema.jp/schedule/",
   description: "A cinema focused on European movies.",
 )
 cinema2.save
