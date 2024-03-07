@@ -26,7 +26,7 @@ send ID to to more APIs
   runtime API to get the runtime
 
 Delete showings that are before today
-Showing.where("date_attribute < ?", Date.today).destroy_all
+Showing.where("date < ?", Date.today).destroy_all
 
 Delete movies with no showings:
 Movie.includes(:showings).where(showings: { id: nil }).destroy_all

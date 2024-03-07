@@ -1,2 +1,21 @@
 Hello from the update view
+<br>
+<br>
 This should be deleted and is only here for testing purposes at the moment
+<br>
+<br>
+<%= @titles.class %>
+<br>
+<br>
+<% @titles.each do |title| %>
+  <%= title.size %>
+  <br>
+  <%= title[0]["title"] if title.any? %>
+  <%= title[0]["vote_count"] if title.any? %>
+  <br>
+  <%= title[1]["title"] if title[1] %>
+  <%= title[1]["vote_count"] if title[1] %>
+  <br>
+  <br>
+<% end %>
+<%# <% raise %> %>

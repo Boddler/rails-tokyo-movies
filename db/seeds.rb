@@ -21,6 +21,7 @@ cinema1 = Cinema.new(
   url: "http://www.okura-movie.co.jp/meguro_cinema/now_showing.html",
   schedule: "http://www.okura-movie.co.jp/meguro_cinema/now_showing.html",
   description: "A small, single screen cinema showing old and new movies.",
+  encoding: "shift-JIS",
 )
 cinema1.save
 
@@ -30,6 +31,7 @@ cinema2 = Cinema.new(
   url: "https://kac-cinema.jp/",
   schedule: "https://kac-cinema.jp/schedule/",
   description: "A cinema focused on European movies.",
+  encoding: "shift-JIS",
 )
 cinema2.save
 
