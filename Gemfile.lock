@@ -93,7 +93,10 @@ GEM
     debug (1.8.0)
       irb (>= 1.5.0)
       reline (>= 0.3.1)
-    dotenv (2.8.1)
+    dotenv (3.1.0)
+    dotenv-rails (3.1.0)
+      dotenv (= 3.1.0)
+      railties (>= 6.1)
     erubi (1.12.0)
     execjs (2.8.1)
     ffi (1.15.5)
@@ -240,7 +243,7 @@ DEPENDENCIES
   bootstrap (~> 5.3)
   capybara
   debug
-  dotenv
+  dotenv-rails
   font-awesome-sass (~> 6.1)
   importmap-rails
   jbuilder
