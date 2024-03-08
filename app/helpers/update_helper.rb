@@ -90,4 +90,64 @@ module UpdateHelper
                           backgrounds: info[:backgrounds])
     new_movie.save
   end
+
+  def showings(cinema)
+    result = []
+    html_content = URI.open(cinema.schedule)
+    doc = Nokogiri::HTML.parse(html_content, nil, cinema.encoding)
+    doc.search("#timetable").each do |line|
+      dates = date(line.css("p").text)
+      line.css(".time_box tr").each do |row|
+        title = row.css(".time_title").text.strip
+        times = row.css(".time_type2").map { |el| el.text.strip }
+        times.each do |time|
+          start_time = time.match(/(0?[0-9]|1[0-9]|2[0-3]):[0-5][0-9]/)
+          if start_time && dates.size.positive?
+            dates.each do |date|
+              title = clean_titles([title])[0]
+              # title = title.sub(/4K.*/, "")
+              # title = title.sub(/デジタルリマスター.*/, "")
+              # title = title.sub(/＋.*/, "")
+              matching_hash = result.find { |hash| hash[:name] == title && hash[:date] == date }
+              if matching_hash
+                matching_hash[:times] ||= []
+                matching_hash[:times] << start_time[0] unless matching_hash[:times].include?(start_time[0])
+              else
+                result << { name: title, times: [start_time[0]], date: date }
+              end
+            end
+          end
+        end
+      end
+    end
+    result
+  end
+
+  def date(date_string)
+    if date_string.include?("〜")
+      date_ranges = date_string.scan(/(\d{1,2})月(\d{1,2})日/)
+      start_date = Date.new(Date.today.year, date_ranges[0][0].to_i, date_ranges[0][1].to_i)
+      end_date = Date.new(Date.today.year, date_ranges[-1][0].to_i, date_ranges[-1][1].to_i)
+      (start_date..end_date).to_a
+    else
+      date_ranges = date_string.scan(/(\d{1,2})月(\d{1,2})日/)
+      return [] if date_ranges.empty?
+
+      date_ranges.map do |matches|
+        start_month = matches[0].to_i
+        start_day = matches[1].to_i
+        Date.new(Date.today.year, start_month, start_day)
+      end
+    end
+  end
+
+  def showing_create(array, cinema)
+    array.each do |date|
+      movie = Movie.all.find { |film| film.web_title == date[:name] }
+      if movie
+        showing = Showing.new(date: date[:date], times: date[:times], movie_id: movie.id, cinema_id: cinema.id)
+        showing.save
+      end
+    end
+  end
 end
