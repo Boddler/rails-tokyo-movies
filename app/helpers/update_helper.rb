@@ -2,7 +2,6 @@ module UpdateHelper
   require "open-uri"
   require "json"
   require "nokogiri"
-  require "dotenv/load"
 
   def clean_titles(list)
     list.map! { |str| str.sub(/4K.*/, "") }
@@ -17,8 +16,7 @@ module UpdateHelper
       url = URI("https://api.themoviedb.org/3/search/movie?api_key=#{ENV["TMDB_API_KEY"]}&query=#{encoded_title}&language=en-gb")
       response = Net::HTTP.get(url)
       movie_json = JSON.parse(response)
-      movie_json = JSON.parse(response)
-      movie_data << movie_json["results"].sort_by { |movie| -movie["vote_count"].to_f }
+      movie_data << [movie_json["results"].sort_by { |movie| -movie["vote_count"].to_f }, title]
     end
     movie_data
   end
@@ -38,18 +36,23 @@ module UpdateHelper
   def group_call(results)
     languages = JSON.parse(ENV["LANGUAGES"])
     results.each do |movie|
-      title = movie[0]["title"]
-      overview = movie[0]["overview"]
-      language = languages.fetch(movie[0]["original_language"], movie[0]["original_language"])
-      poster = movie[0]["poster_path"]
-      year = movie[0]["release_date"]
-      id = movie[0]["id"]
-      popularity = movie[0]["popularity"]
-      people = crew(id)
-      cast = people[0]
-      director = people[1]
-      runtime = runtime(id)
-      backgrounds = backgrounds(id)
+      if movie.nil? || !movie[0].empty?
+        hash = {}
+        hash[:title] = movie[0][0]["title"]
+        hash[:overview] = movie[0][0]["overview"]
+        hash[:language] = languages.fetch(movie[0][0]["original_language"], movie[0][0]["original_language"])
+        hash[:poster] = movie[0][0]["poster_path"]
+        hash[:year] = movie[0][0]["release_date"]
+        hash[:id] = movie[0][0]["id"]
+        hash[:popularity] = movie[0][0]["popularity"]
+        people = crew(hash[:id])
+        hash[:cast] = people[0]
+        hash[:scraped_title] = movie[1]
+        hash[:director] = people[1]
+        hash[:runtime] = runtime(hash[:id])
+        hash[:backgrounds] = backgrounds(hash[:id])
+        movie_create(hash)
+      end
     end
   end
 
@@ -75,9 +78,16 @@ module UpdateHelper
   end
 
   def backgrounds(id)
-    background_url = URI("https://api.themoviedb.org/3/movie/#{id}/images?api_key=#{api_key}")
+    background_url = URI("https://api.themoviedb.org/3/movie/#{id}/images?api_key=#{ENV["TMDB_API_KEY"]}")
     background_response = Net::HTTP.get(background_url)
     background_data = JSON.parse(background_response)
     background_data["backdrops"].nil? ? nil : background_data["backdrops"]
+  end
+
+  def movie_create(info)
+    new_movie = Movie.new(director: info[:director], popularity: info[:popularity], runtime: info[:runtime], name: info[:title], description: info[:overview],
+                          web_title: info[:scraped_title], year: info[:year], cast: info[:cast], language: info[:language], poster: "https://image.tmdb.org/t/p/w185/#{info[:poster]}",
+                          backgrounds: info[:backgrounds])
+    new_movie.save
   end
 end

@@ -1,6 +1,5 @@
 require "net/http"
 require "json"
-require "dotenv/load"
 require "date"
 require "nokogiri"
 require "open-uri"

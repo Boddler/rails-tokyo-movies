@@ -8,14 +8,15 @@ This should be deleted and is only here for testing purposes at the moment
 <br>
 <br>
 <% @titles.each do |title| %>
-  <%= title.size %>
-  <br>
-  <%= title[0]["title"] if title.any? %>
-  <%= title[0]["vote_count"] if title.any? %>
-  <br>
-  <%= title[1]["title"] if title[1] %>
-  <%= title[1]["vote_count"] if title[1] %>
   <br>
   <br>
+  <%= title[0].size %>
+  <% title[0].each do |movie| %>
+    <br>
+    <%= movie["title"] %>
+    <br>
+    <%= movie["vote_count"] %>
+  <% end %>
+  <br>
+  <%= title[1] %>
 <% end %>
-<%# <% raise %> %>
