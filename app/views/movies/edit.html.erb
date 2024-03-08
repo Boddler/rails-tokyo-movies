@@ -1,8 +1,14 @@
-<%= simple_form_for [@movie] do |f| %>
-  <%= f.input :name, as: :string%>
-  <%= f.input :description, as: :text%>
-  <%= f.input :capacity, as: :integer%>
-  <%= f.input :price_per_day, as: :integer%>
-  <%= f.input :photos, as: :file, input_html: { multiple: true } %>
-  <%= f.button :submit , class: "btn-flat"%>
-<% end %>
+<div class="container-fluid">
+  <div class="movie-edit">
+    <div class="update-sections">
+      <h2>Current Movie</h2>
+      <%= render "shared/movie_card", movie: @movie %>
+    </div>
+    <div class="update-sections">
+      <h2>Movie Options</h2>
+      <% @temps.each do |movie| %>
+        <%= render "shared/movie_card", movie: movie %>
+      <% end %>
+    </div>
+  </div>
+</div>

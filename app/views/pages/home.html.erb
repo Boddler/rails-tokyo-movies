@@ -5,30 +5,7 @@
       <h1>Top Picks</h1>
       <div>
         <% @movies.select { |movie| movie.year < 1990 }.sort_by { |movie| -movie.popularity }.each do |movie| %>
-          <div class="movie-card">
-            <a href="/movies/<%= movie.id %>">
-              <div class="movie-poster">
-                <img src="<%= "#{movie.poster}" %>" alt="Movie Poster">
-              </div>
-            </a>
-            <div class="movie-card-text">
-              <div class="movie-card-heading">
-                <div>
-                  <h4>
-                    <%= "#{movie.name}" %></h4>
-                </div>
-                <div class="language-tag">
-                  <%= "#{movie.language}" %>
-                </div>
-                <% # </div> %>
-              </div>
-              <div>
-                <p><%= "#{movie.year}" %></p>
-                <p><%= "Director: #{movie.director}" %></p>
-                <p><%= "Cast: #{movie.cast[0]}, #{movie.cast[1]}, #{movie.cast[2]}" %></p>
-              </div>
-            </div>
-          </div>
+          <%= render "shared/movie_card", movie: movie %>
         <% end %>
       </div>
     </div>
