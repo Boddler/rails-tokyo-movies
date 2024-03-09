@@ -15,7 +15,16 @@ class MoviesController < ApplicationController
     @movie = Movie.find(params[:id])
     options = first_api_call([@movie.web_title])[0][0]
     @temps = temp_movies(options).reject! { |movie| movie.description == @movie.description }
-    raise
+    # raise
+  end
+
+  def update
+    @movie = Movie.find(params[:id])
+    if @movie.update(movie_params)
+      redirect_to @movie, notice: "Movie was successfully updated."
+    else
+      render :edit
+    end
   end
 
   private
@@ -31,5 +40,10 @@ class MoviesController < ApplicationController
       #  Note - TMDB id is being saved as the runtime
     end
     results
+  end
+
+  def movie_params
+    params.require(:movie).permit(:name, :language, :runtime, :description, :director,
+                                  :poster, :backgrounds, :year, :popularity, :cast)
   end
 end
