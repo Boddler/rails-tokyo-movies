@@ -1,0 +1,4 @@
+<%= form_with(url: update_movie_path, method: :patch) do |form| %>
+  <%= form.select :selected_option_id, options_for_select([['Option 1', 1], ['Option 2', 2], ['Option 3', 3]]) %>
+  <%= form.submit "Update Instance" %>
+<% end %>

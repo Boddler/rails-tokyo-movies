@@ -7,9 +7,7 @@
     <div class="update-sections">
       <h2>Movie Options</h2>
       <% @temps.each do |movie| %>
-        <% link_to "Update Movie" edit_movie_path(@movie.id) do %>
-          <%= render "shared/movie_card", movie: movie %>
-        <% end %>
+        <%= render "shared/movie_card", movie: movie %>
       <% end %>
     </div>
   </div>

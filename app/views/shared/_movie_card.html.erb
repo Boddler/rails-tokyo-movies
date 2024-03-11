@@ -1,5 +1,5 @@
 <div class="movie-card">
-  <% if !movie.director.nil? %>
+  <% unless movie.director.nil? %>
     <a href="/movies/<%= movie.id %>">
     <% end %>
     <div class="movie-poster">
@@ -12,7 +12,7 @@
         <h4>
           <%= "#{movie.name}" %></h4>
       </div>
-      <% if !movie.language.nil? %>
+      <% unless movie.language.nil? %>
         <div class="language-tag">
           <%= "#{movie.language}" %>
         </div>
@@ -21,9 +21,11 @@
     </div>
     <div>
       <p><%= "#{movie.year}" %></p>
-      <% if !movie.director.nil? %>
+      <% if movie.director %>
         <p><%= "Director: #{movie.director}" %></p>
         <p><%= "Cast: #{movie.cast[0]}, #{movie.cast[1]}, #{movie.cast[2]}" %></p>
+      <% else %>
+        <%= render "shared/movie_form", movie: movie %>
       <% end %>
     </div>
   </div>

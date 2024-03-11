@@ -15,6 +15,7 @@ class MoviesController < ApplicationController
     @movie = Movie.find(params[:id])
     options = first_api_call([@movie.web_title])[0][0]
     @temps = temp_movies(options).reject! { |movie| movie.description == @movie.description }
+    @show_form = true
     # raise
   end
 
