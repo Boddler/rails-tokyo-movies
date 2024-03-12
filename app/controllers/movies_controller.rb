@@ -22,12 +22,13 @@ class MoviesController < ApplicationController
     new_movie_id = params[:movie][:runtime].to_i
     results = [[[first_api_call([@movie.web_title])[0][0].select { |hash| hash["id"] == new_movie_id }.first, @movie.web_title]]]
     movie_hash = group_call(results)[0]
+    movie_hash.delete(:id)
+    movie_hash[:web_title] = @movie.web_title
+    movie_hash[:poster] = "https://image.tmdb.org/t/p/w185/#{movie_hash[:poster]}"
     # raise
     if @movie.update(movie_hash)
       redirect_to @movie, notice: "Movie was successfully updated."
-      raise
     else
-      raise
       render :edit
     end
   end
@@ -45,11 +46,5 @@ class MoviesController < ApplicationController
       #  Note - TMDB id is being saved as the runtime
     end
     results
-  end
-
-  def movie_params(data)
-    # params.require(:movie).permit(:name, :language, :runtime, :description, :director,
-    #                               :poster, :backgrounds, :year, :popularity, :cast)
-    params.require(:movie).permit(data.keys)
   end
 end

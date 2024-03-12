@@ -9,6 +9,10 @@
       <% @temps.each do |movie| %>
         <%= render "shared/movie_card", movie: movie %>
       <% end %>
+      <%= form_with(model: @movie, url: movie_path(@movie), local: true, method: :patch) do |form| %>
+        <%= form.text_field :runtime %>
+        <%= form.submit "Update" %>
+      <% end %>
     </div>
   </div>
 </div>

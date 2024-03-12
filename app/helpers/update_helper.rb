@@ -39,8 +39,8 @@ module UpdateHelper
     results.each do |movie|
       if movie.nil? || !movie[0].empty?
         hash = {}
-        hash[:title] = movie[0][0]["title"]
-        hash[:overview] = movie[0][0]["overview"]
+        hash[:name] = movie[0][0]["title"]
+        hash[:description] = movie[0][0]["overview"]
         hash[:language] = languages.fetch(movie[0][0]["original_language"], movie[0][0]["original_language"])
         hash[:poster] = movie[0][0]["poster_path"]
         hash[:year] = movie[0][0]["release_date"]
@@ -48,7 +48,7 @@ module UpdateHelper
         hash[:popularity] = movie[0][0]["popularity"]
         people = crew(hash[:id])
         hash[:cast] = people[0]
-        hash[:scraped_title] = movie[1]
+        hash[:web_title] = movie[1]
         hash[:director] = people[1]
         hash[:runtime] = runtime(hash[:id])
         hash[:backgrounds] = backgrounds(hash[:id])
@@ -88,8 +88,8 @@ module UpdateHelper
 
   def movies_create(info)
     info.each do |movie|
-      new_movie = Movie.new(director: movie[:director], popularity: movie[:popularity], runtime: movie[:runtime], name: movie[:title], description: movie[:overview],
-                            web_title: movie[:scraped_title], year: movie[:year], cast: movie[:cast], language: movie[:language], poster: "https://image.tmdb.org/t/p/w185/#{movie[:poster]}",
+      new_movie = Movie.new(director: movie[:director], popularity: movie[:popularity], runtime: movie[:runtime], name: movie[:name], description: movie[:description],
+                            web_title: movie[:web_title], year: movie[:year], cast: movie[:cast], language: movie[:language], poster: "https://image.tmdb.org/t/p/w185/#{movie[:poster]}",
                             backgrounds: movie[:backgrounds])
       new_movie.save
     end
