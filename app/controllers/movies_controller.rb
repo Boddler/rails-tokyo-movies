@@ -15,18 +15,19 @@ class MoviesController < ApplicationController
     @movie = Movie.find(params[:id])
     options = first_api_call([@movie.web_title])[0][0]
     @temps = temp_movies(options).reject! { |movie| movie.description == @movie.description }
-    @show_form = true
-    # raise
   end
 
   def update
     @movie = Movie.find(params[:id])
-    new_movie_id = params[:movie][:runtime]
-    results = first_api_call([@movie.web_title])[0][0].select { |hash| hash["id"] == new_movie_id.to_i }.first
-    raise
-    if @movie.update(movie_params)
+    new_movie_id = params[:movie][:runtime].to_i
+    results = [[[first_api_call([@movie.web_title])[0][0].select { |hash| hash["id"] == new_movie_id }.first, @movie.web_title]]]
+    movie_hash = group_call(results)[0]
+    # raise
+    if @movie.update(movie_hash)
       redirect_to @movie, notice: "Movie was successfully updated."
+      raise
     else
+      raise
       render :edit
     end
   end
@@ -46,8 +47,9 @@ class MoviesController < ApplicationController
     results
   end
 
-  def movie_params
-    params.require(:movie).permit(:name, :language, :runtime, :description, :director,
-                                  :poster, :backgrounds, :year, :popularity, :cast)
+  def movie_params(data)
+    # params.require(:movie).permit(:name, :language, :runtime, :description, :director,
+    #                               :poster, :backgrounds, :year, :popularity, :cast)
+    params.require(:movie).permit(data.keys)
   end
 end
