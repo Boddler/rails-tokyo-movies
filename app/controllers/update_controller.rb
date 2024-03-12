@@ -8,7 +8,7 @@ class UpdateController < ApplicationController
     group_call(api_results)
     times = showings(Cinema.all.first)
     showing_create(times, Cinema.all.first)
-    Showing.where("date < ?", Date.today).destroy_all
+    # Showing.where("date < ?", Date.today).destroy_all
     Movie.includes(:showings).where(showings: { id: nil }).destroy_all
     redirect_to root_path
   end

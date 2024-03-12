@@ -21,6 +21,9 @@ class MoviesController < ApplicationController
 
   def update
     @movie = Movie.find(params[:id])
+    new_movie_id = params[:movie][:runtime]
+    results = first_api_call([@movie.web_title])[0][0].select { |hash| hash["id"] == new_movie_id.to_i }.first
+    raise
     if @movie.update(movie_params)
       redirect_to @movie, notice: "Movie was successfully updated."
     else
