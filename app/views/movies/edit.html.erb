@@ -10,7 +10,7 @@
         <%= render "shared/movie_card", movie: movie %>
       <% end %>
       <%= form_with(model: @movie, url: movie_path(@movie), local: true, method: :patch) do |form| %>
-        <%= form.text_field :runtime %>
+        <%= form.text_field :runtime, value: "", placeholder: "Enter TMDB ID here" %>
         <%= form.submit "Update" %>
       <% end %>
     </div>

@@ -21,6 +21,15 @@ module UpdateHelper
     movie_data
   end
 
+  def api_call_by_id(id)
+    movie_data = []
+    url = URI("https://api.themoviedb.org/3/movie/#{id}?api_key=#{ENV["TMDB_API_KEY"]}")
+    response = Net::HTTP.get(url)
+    movie_json = JSON.parse(response)
+    movie_data << [movie_json]
+    movie_data
+  end
+
   def scrape(cinema)
     search_results = []
     html_content = URI.open(cinema.schedule)

@@ -20,7 +20,12 @@ class MoviesController < ApplicationController
   def update
     @movie = Movie.find(params[:id])
     new_movie_id = params[:movie][:runtime].to_i
+    # new_movie_id.nil? ? new_movie_id =
     results = [[[first_api_call([@movie.web_title])[0][0].select { |hash| hash["id"] == new_movie_id }.first, @movie.web_title]]]
+    if results[0][0][0].nil?
+      results[0] = [api_call_by_id(new_movie_id), @movie.web_title]
+    end
+
     movie_hash = group_call(results)[0]
     movie_hash.delete(:id)
     movie_hash[:web_title] = @movie.web_title
