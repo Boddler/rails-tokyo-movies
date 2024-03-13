@@ -141,6 +141,7 @@ GEM
     nio4r (2.5.9)
     nokogiri (1.15.4-x86_64-linux)
       racc (~> 1.4)
+    pagy (7.0.10)
     pg (1.5.4)
     popper_js (2.11.8)
     public_suffix (5.0.3)
@@ -248,6 +249,7 @@ DEPENDENCIES
   importmap-rails
   jbuilder
   nokogiri
+  pagy
   pg (~> 1.1)
   puma (~> 5.0)
   rails (~> 7.0.7, >= 7.0.7.2)

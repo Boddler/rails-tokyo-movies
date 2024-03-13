@@ -1,0 +1,32 @@
+<div class="movie-card">
+  <% unless movie.director.nil? %>
+    <a href="/movies/<%= movie.id %>">
+    <% end %>
+    <div class="movie-poster">
+      <img src="<%= "#{movie.poster}" %>" alt="Movie Poster">
+    </div>
+  </a>
+  <div class="movie-card-text">
+    <div class="movie-card-heading">
+      <div>
+        <h4>
+          <%= "#{movie.name}" %></h4>
+      </div>
+      <% unless movie.language.nil? %>
+        <div class="language-tag">
+          <%= "#{movie.language}" %>
+        </div>
+      <% end %>
+      <% # </div> %>
+    </div>
+    <div>
+      <p><%= "#{movie.year}" %></p>
+      <% if movie.director %>
+        <p><%= "Director: #{movie.director}" %></p>
+        <p><%= "Cast: #{movie.cast[0]}, #{movie.cast[1]}, #{movie.cast[2]}" %></p>
+      <% else %>
+        <%= render "shared/movie_form", movie: movie %>
+      <% end %>
+    </div>
+  </div>
+</div>

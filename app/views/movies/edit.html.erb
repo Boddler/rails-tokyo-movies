@@ -1,0 +1,18 @@
+<div class="container-fluid">
+  <div class="movie-edit">
+    <div class="update-sections">
+      <h2>Current Movie</h2>
+      <%= render "shared/movie_card", movie: @movie %>
+    </div>
+    <div class="update-sections">
+      <h2>Movie Options</h2>
+      <% @temps.each do |movie| %>
+        <%= render "shared/movie_card", movie: movie %>
+      <% end %>
+      <%= form_with(model: @movie, url: movie_path(@movie), local: true, method: :patch) do |form| %>
+        <%= form.text_field :runtime, value: "", placeholder: "Enter TMDB ID here" %>
+        <%= form.submit "Update" %>
+      <% end %>
+    </div>
+  </div>
+</div>
