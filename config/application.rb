@@ -12,7 +12,7 @@ module RailsTokyoMovies
     config.load_defaults 7.0
 
     # Dotenv::Rails.load
-    Dotenv::Railtie.load
+    # Dotenv::Railtie.load
 
     # Configuration for the application, engines, and railties goes here.
     #
