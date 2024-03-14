@@ -14,7 +14,7 @@ class MoviesController < ApplicationController
   def edit
     @movie = Movie.find(params[:id])
     options = first_api_call([@movie.web_title])[0][0]
-    @temps = temp_movies(options).reject! { |movie| movie.description == @movie.description }
+    @temps = temp_movies(options).reject { |movie| movie.description == @movie.description }
   end
 
   def update
@@ -23,7 +23,7 @@ class MoviesController < ApplicationController
     # new_movie_id.nil? ? new_movie_id =
     results = [[[first_api_call([@movie.web_title])[0][0].select { |hash| hash["id"] == new_movie_id }.first, @movie.web_title]]]
     if results[0][0][0].nil?
-      results[0] = [api_call_by_id(new_movie_id), @movie.web_title]
+      results = [[api_call_by_id(new_movie_id), @movie.web_title]]
     end
 
     movie_hash = group_call(results)[0]
