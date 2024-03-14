@@ -11,12 +11,14 @@ module UpdateHelper
 
   def first_api_call(list)
     movie_data = []
-    list.uniq.each do |title|
-      encoded_title = URI.encode_www_form_component("\"#{title}\"")
-      url = URI("https://api.themoviedb.org/3/search/movie?api_key=#{ENV["TMDB_API_KEY"]}&query=#{encoded_title}&language=en-gb")
-      response = Net::HTTP.get(url)
-      movie_json = JSON.parse(response)
-      movie_data << [movie_json["results"].sort_by { |movie| -movie["vote_count"].to_f }, title]
+    list.each do |key, titles|
+      titles.each do |title|
+        encoded_title = URI.encode_www_form_component("\"#{title}\"")
+        url = URI("https://api.themoviedb.org/3/search/movie?api_key=#{ENV["TMDB_API_KEY"]}&query=#{encoded_title}&language=en-gb")
+        response = Net::HTTP.get(url)
+        movie_json = JSON.parse(response)
+        movie_data << [movie_json["results"].sort_by { |movie| -movie["vote_count"].to_f }, title]
+      end
     end
     movie_data
   end
@@ -35,7 +37,7 @@ module UpdateHelper
       html_content = URI.open(cinema.schedule)
       doc = Nokogiri::HTML.parse(html_content, nil, cinema.encoding)
       search_results = cinema_scrape(doc, cinema.name)
-      titles_hash[:cinema.name] = clean_titles(search_results)
+      titles_hash[cinema.name.to_sym] = clean_titles(search_results)
     end
     titles_hash
   end
@@ -76,6 +78,7 @@ module UpdateHelper
       end
     end
     models_to_be_saved
+    raise
   end
 
   def crew(id)

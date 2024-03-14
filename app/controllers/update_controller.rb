@@ -3,10 +3,9 @@ class UpdateController < ApplicationController
 
   def update
     titles = scrape(Cinema.all)
-    # Updated for 2+ cinemas to here
-    # titles is a hash, keys are the cinema.name, value is an array of cleaned up titles
     api_results = first_api_call(titles)
-    @titles = api_results
+    # Returns an array of arrays
+    # movie info from TMDB, original scraped title & cinema instance
     unsaved_models = group_call(api_results)
     movies_create(unsaved_models)
     times = showings(Cinema.all.first)
