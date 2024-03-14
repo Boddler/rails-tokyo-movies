@@ -29,16 +29,28 @@ module UpdateHelper
     movie_data << movie_json
   end
 
-  def scrape(cinema)
-    search_results = []
-    html_content = URI.open(cinema.schedule)
-    doc = Nokogiri::HTML.parse(html_content, nil, cinema.encoding)
-    # Need to add conditional calling contingent on the cinema here
-    doc.search(".time_title").each do |element|
-      search_results << element.text.strip unless search_results.include?(element.text.strip)
+  def scrape(cinemas)
+    titles_hash = {}
+    cinemas.each do |cinema|
+      html_content = URI.open(cinema.schedule)
+      doc = Nokogiri::HTML.parse(html_content, nil, cinema.encoding)
+      search_results = cinema_scrape(doc, cinema.name)
+      titles_hash[:cinema.name] = clean_titles(search_results)
     end
-    clean_titles(search_results)
-    # clean_titles(search_results)
+    titles_hash
+  end
+
+  def cinema_scrape(html, cinema)
+    search_results = []
+    case cinema
+    when "Meguro Cinema"
+      html.search(".time_title").each do |element|
+        search_results << element.text.strip unless search_results.include?(element.text.strip)
+      end
+    when "Kawasaki Art Centre"
+      "To do...."
+    end
+    search_results
   end
 
   def group_call(results)
