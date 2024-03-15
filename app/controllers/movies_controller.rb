@@ -24,7 +24,7 @@ class MoviesController < ApplicationController
     new_movie_id = params[:movie][:runtime].to_i
     hash = {}
     hash[:placeholder] = [@movie.web_title]
-    results = [[[first_api_call(hash)[0][0].select { |hash| hash["id"] == new_movie_id }.first, @movie.web_title]]]
+    results = [[[first_api_call(hash)[0][0].select { |element| element["id"] == new_movie_id }.first, @movie.web_title]]]
     if results[0][0][0].nil?
       results = [[api_call_by_id(new_movie_id), @movie.web_title]]
     end

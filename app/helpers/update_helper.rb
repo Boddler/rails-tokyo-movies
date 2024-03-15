@@ -117,34 +117,12 @@ module UpdateHelper
     end
   end
 
-  def showings(cinema)
+  def showings(cinemas)
     result = []
-    html_content = URI.open(cinema.schedule)
-    doc = Nokogiri::HTML.parse(html_content, nil, cinema.encoding)
-    doc.search("#timetable").each do |line|
-      dates = date(line.css("p").text)
-      line.css(".time_box tr").each do |row|
-        title = row.css(".time_title").text.strip
-        times = row.css(".time_type2").map { |el| el.text.strip }
-        times.each do |time|
-          start_time = time.match(/(0?[0-9]|1[0-9]|2[0-3]):[0-5][0-9]/)
-          if start_time && dates.size.positive?
-            dates.each do |date|
-              title = clean_titles([title])[0]
-              # title = title.sub(/4K.*/, "")
-              # title = title.sub(/デジタルリマスター.*/, "")
-              # title = title.sub(/＋.*/, "")
-              matching_hash = result.find { |hash| hash[:name] == title && hash[:date] == date }
-              if matching_hash
-                matching_hash[:times] ||= []
-                matching_hash[:times] << start_time[0] unless matching_hash[:times].include?(start_time[0])
-              else
-                result << { name: title, times: [start_time[0]], date: date }
-              end
-            end
-          end
-        end
-      end
+    cinemas.each do |cinema|
+      html_content = URI.open(cinema.schedule)
+      doc = Nokogiri::HTML.parse(html_content, nil, cinema.encoding)
+      result << showing_scrape(doc, cinema)
     end
     result
   end
@@ -167,6 +145,17 @@ module UpdateHelper
     end
   end
 
+  def showing_scrape(html, cinema)
+    search_results = []
+    case cinema.name
+    when "Meguro Cinema"
+      search_results << [meguro_showings(html), cinema]
+    when "Kawasaki Art Centre"
+      "To do...."
+    end
+    search_results
+  end
+
   def showing_create(array, cinema)
     array.each do |date|
       movie = Movie.all.find { |film| film.web_title == date[:name] }
@@ -175,5 +164,32 @@ module UpdateHelper
         showing.save
       end
     end
+  end
+
+  def meguro_showings(doc)
+    result = []
+    doc.search("#timetable").each do |line|
+      dates = date(line.css("p").text)
+      line.css(".time_box tr").each do |row|
+        title = row.css(".time_title").text.strip
+        times = row.css(".time_type2").map { |el| el.text.strip }
+        times.each do |time|
+          start_time = time.match(/(0?[0-9]|1[0-9]|2[0-3]):[0-5][0-9]/)
+          if start_time && dates.size.positive?
+            dates.each do |date|
+              title = clean_titles([title])[0]
+              matching_hash = result.find { |hash| hash[:name] == title && hash[:date] == date }
+              if matching_hash
+                matching_hash[:times] ||= []
+                matching_hash[:times] << start_time[0] unless matching_hash[:times].include?(start_time[0])
+              else
+                result << { name: title, times: [start_time[0]], date: date }
+              end
+            end
+          end
+        end
+      end
+    end
+    result
   end
 end
