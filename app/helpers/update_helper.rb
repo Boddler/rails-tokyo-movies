@@ -151,13 +151,14 @@ module UpdateHelper
     when "Meguro Cinema"
       search_results << [meguro_showings(html), cinema]
     when "Kawasaki Art Centre"
-      "To do...."
+      search_results << "To do...."
     end
     search_results
   end
 
-  def showing_create(array, cinema)
-    array.each do |date|
+  def showing_create(array)
+    cinema = array[0][0][1]
+    array[0][0][0].each do |date|
       movie = Movie.all.find { |film| film.web_title == date[:name] }
       if movie
         showing = Showing.new(date: date[:date], times: date[:times], movie_id: movie.id, cinema_id: cinema.id)

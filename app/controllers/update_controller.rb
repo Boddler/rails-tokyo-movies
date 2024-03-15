@@ -9,9 +9,8 @@ class UpdateController < ApplicationController
     movies_create(unsaved_models)
     # Up to here
     # Need to allow showing creation to handle an array
-    @times = showings(cinemas)
-    raise
-    showing_create(@times, cinemas)
+    times = showings(cinemas)
+    showing_create(times)
     Showing.where("date < ?", Date.today).destroy_all
     Movie.includes(:showings).where(showings: { id: nil }).destroy_all
     redirect_to root_path
