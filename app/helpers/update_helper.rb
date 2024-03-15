@@ -11,7 +11,7 @@ module UpdateHelper
 
   def first_api_call(list)
     movie_data = []
-    list.each do |key, titles|
+    list.each do |_, titles|
       titles.each do |title|
         encoded_title = URI.encode_www_form_component("\"#{title}\"")
         url = URI("https://api.themoviedb.org/3/search/movie?api_key=#{ENV["TMDB_API_KEY"]}&query=#{encoded_title}&language=en-gb")
@@ -78,7 +78,6 @@ module UpdateHelper
       end
     end
     models_to_be_saved
-    raise
   end
 
   def crew(id)
