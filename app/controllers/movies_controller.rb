@@ -13,15 +13,18 @@ class MoviesController < ApplicationController
 
   def edit
     @movie = Movie.find(params[:id])
-    options = first_api_call([@movie.web_title])[0][0]
-    @temps = temp_movies(options).reject { |movie| movie.description == @movie.description }
+    hash = {}
+    hash[:placeholder] = [@movie.web_title]
+    @options = first_api_call(hash)[0][0]
+    @temps = temp_movies(@options).reject { |movie| movie.description == @movie.description }
   end
 
   def update
     @movie = Movie.find(params[:id])
     new_movie_id = params[:movie][:runtime].to_i
-    # new_movie_id.nil? ? new_movie_id =
-    results = [[[first_api_call([@movie.web_title])[0][0].select { |hash| hash["id"] == new_movie_id }.first, @movie.web_title]]]
+    hash = {}
+    hash[:placeholder] = [@movie.web_title]
+    results = [[[first_api_call(hash)[0][0].select { |element| element["id"] == new_movie_id }.first, @movie.web_title]]]
     if results[0][0][0].nil?
       results = [[api_call_by_id(new_movie_id), @movie.web_title]]
     end

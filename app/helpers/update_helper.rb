@@ -11,12 +11,14 @@ module UpdateHelper
 
   def first_api_call(list)
     movie_data = []
-    list.uniq.each do |title|
-      encoded_title = URI.encode_www_form_component("\"#{title}\"")
-      url = URI("https://api.themoviedb.org/3/search/movie?api_key=#{ENV["TMDB_API_KEY"]}&query=#{encoded_title}&language=en-gb")
-      response = Net::HTTP.get(url)
-      movie_json = JSON.parse(response)
-      movie_data << [movie_json["results"].sort_by { |movie| -movie["vote_count"].to_f }, title]
+    list.each do |_, titles|
+      titles.each do |title|
+        encoded_title = URI.encode_www_form_component("\"#{title}\"")
+        url = URI("https://api.themoviedb.org/3/search/movie?api_key=#{ENV["TMDB_API_KEY"]}&query=#{encoded_title}&language=en-gb")
+        response = Net::HTTP.get(url)
+        movie_json = JSON.parse(response)
+        movie_data << [movie_json["results"].sort_by { |movie| -movie["vote_count"].to_f }, title]
+      end
     end
     movie_data
   end
@@ -29,16 +31,28 @@ module UpdateHelper
     movie_data << movie_json
   end
 
-  def scrape(cinema)
-    search_results = []
-    html_content = URI.open(cinema.schedule)
-    doc = Nokogiri::HTML.parse(html_content, nil, cinema.encoding)
-    # Need to add conditional calling contingent on the cinema here
-    doc.search(".time_title").each do |element|
-      search_results << element.text.strip unless search_results.include?(element.text.strip)
+  def scrape(cinemas)
+    titles_hash = {}
+    cinemas.each do |cinema|
+      html_content = URI.open(cinema.schedule)
+      doc = Nokogiri::HTML.parse(html_content, nil, cinema.encoding)
+      search_results = cinema_scrape(doc, cinema.name)
+      titles_hash[cinema.name.to_sym] = clean_titles(search_results)
     end
-    clean_titles(search_results)
-    # clean_titles(search_results)
+    titles_hash
+  end
+
+  def cinema_scrape(html, cinema)
+    search_results = []
+    case cinema
+    when "Meguro Cinema"
+      html.search(".time_title").each do |element|
+        search_results << element.text.strip unless search_results.include?(element.text.strip)
+      end
+    when "Kawasaki Art Centre"
+      "To do...."
+    end
+    search_results
   end
 
   def group_call(results)
@@ -103,34 +117,12 @@ module UpdateHelper
     end
   end
 
-  def showings(cinema)
+  def showings(cinemas)
     result = []
-    html_content = URI.open(cinema.schedule)
-    doc = Nokogiri::HTML.parse(html_content, nil, cinema.encoding)
-    doc.search("#timetable").each do |line|
-      dates = date(line.css("p").text)
-      line.css(".time_box tr").each do |row|
-        title = row.css(".time_title").text.strip
-        times = row.css(".time_type2").map { |el| el.text.strip }
-        times.each do |time|
-          start_time = time.match(/(0?[0-9]|1[0-9]|2[0-3]):[0-5][0-9]/)
-          if start_time && dates.size.positive?
-            dates.each do |date|
-              title = clean_titles([title])[0]
-              # title = title.sub(/4K.*/, "")
-              # title = title.sub(/デジタルリマスター.*/, "")
-              # title = title.sub(/＋.*/, "")
-              matching_hash = result.find { |hash| hash[:name] == title && hash[:date] == date }
-              if matching_hash
-                matching_hash[:times] ||= []
-                matching_hash[:times] << start_time[0] unless matching_hash[:times].include?(start_time[0])
-              else
-                result << { name: title, times: [start_time[0]], date: date }
-              end
-            end
-          end
-        end
-      end
+    cinemas.each do |cinema|
+      html_content = URI.open(cinema.schedule)
+      doc = Nokogiri::HTML.parse(html_content, nil, cinema.encoding)
+      result << showing_scrape(doc, cinema)
     end
     result
   end
@@ -153,13 +145,52 @@ module UpdateHelper
     end
   end
 
-  def showing_create(array, cinema)
-    array.each do |date|
+  def showing_scrape(html, cinema)
+    search_results = []
+    case cinema.name
+    when "Meguro Cinema"
+      search_results << [meguro_showings(html), cinema]
+    when "Kawasaki Art Centre"
+      search_results << "To do...."
+    end
+    search_results
+  end
+
+  def showing_create(array)
+    cinema = array[0][0][1]
+    array[0][0][0].each do |date|
       movie = Movie.all.find { |film| film.web_title == date[:name] }
       if movie
         showing = Showing.new(date: date[:date], times: date[:times], movie_id: movie.id, cinema_id: cinema.id)
         showing.save
       end
     end
+  end
+
+  def meguro_showings(doc)
+    result = []
+    doc.search("#timetable").each do |line|
+      dates = date(line.css("p").text)
+      line.css(".time_box tr").each do |row|
+        title = row.css(".time_title").text.strip
+        times = row.css(".time_type2").map { |el| el.text.strip }
+        times.each do |time|
+          start_time = time.match(/(0?[0-9]|1[0-9]|2[0-3]):[0-5][0-9]/)
+          if start_time && dates.size.positive?
+            dates.each do |date|
+              title = clean_titles([title])[0]
+              matching_hash = result.find { |hash| hash[:name] == title && hash[:date] == date }
+              if matching_hash
+                matching_hash[:times] ||= []
+                matching_hash[:times] << start_time[0] unless matching_hash[:times].include?(start_time[0])
+              else
+                result << { name: title, times: [start_time[0]], date: date }
+              end
+            end
+          end
+        end
+      end
+    end
+    result
   end
 end
