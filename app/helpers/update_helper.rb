@@ -4,9 +4,14 @@ module UpdateHelper
   require "nokogiri"
 
   def clean_titles(list)
-    list.map! { |str| str.sub(/4K.*/, "") }
-    list.map! { |str| str.sub(/デジタルリマスター.*/, "") }
-    list.map! { |str| str.sub(/＋.*/, "") }
+    list.map! do |str|
+      str.sub(/4K.*/, "")
+         .sub(/デジタルリマスター.*/, "")
+         .sub(/＋.*/, "")
+         .sub(/　.*/, "")
+         .sub(/\n/, "")
+         .strip
+    end
   end
 
   def first_api_call(list)
