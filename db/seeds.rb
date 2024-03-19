@@ -26,7 +26,7 @@ cinema1.save
 
 cinema2 = Cinema.new(
   name: "Waseda Shochiku",
-  location: "〒215-0004 神奈川県川崎市麻生区万福寺６丁目７−１",
+  location: "〒169-0075 新宿区高田馬場1-5-16",
   url: "http://wasedashochiku.co.jp/",
   schedule: "http://wasedashochiku.co.jp/",
   description: "Waseda Shochiku is a cinema in Takadanobaba.
@@ -36,7 +36,7 @@ cinema2 = Cinema.new(
 )
 cinema2.save
 
-# cinema2 = Cinema.new(
+# cinema3 = Cinema.new(
 #   name: "Kawasaki ",
 #   location: "〒215-0004 神奈川県川崎市麻生区万福寺６丁目７−１",
 #   url: "https://kac-cinema.jp/",
@@ -44,7 +44,7 @@ cinema2.save
 #   description: "A cinema focused on European movies.",
 #   encoding: "shift-JIS",
 # )
-# cinema2.save
+# cinema3.save
 
 @search_results = []
 @movie_times = []

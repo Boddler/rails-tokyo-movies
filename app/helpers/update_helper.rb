@@ -9,6 +9,7 @@ module UpdateHelper
          .sub(/デジタルリマスター.*/, "")
          .sub(/＋.*/, "")
          .sub(/　.*/, "")
+         .sub(/★.*/, " ")
          .sub(/\n/, "")
          .strip
     end
@@ -56,6 +57,10 @@ module UpdateHelper
       end
     when "Kawasaki Art Centre"
       "To do...."
+    when "Waseda Shochiku"
+      html.search(".schedule-item").each do |element|
+        search_results << element.at("th").text.strip unless search_results.include?(element.at("th").text.strip)
+      end
     end
     search_results
   end
@@ -156,6 +161,8 @@ module UpdateHelper
     when "Meguro Cinema"
       search_results << [meguro_showings(html), cinema]
     when "Kawasaki Art Centre"
+      search_results << "To do...."
+    when "Waseda Shochiku"
       search_results << "To do...."
     end
     search_results
