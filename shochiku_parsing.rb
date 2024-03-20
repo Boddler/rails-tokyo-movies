@@ -43,15 +43,29 @@ search_results = []
 # add the second th element inside that as the movie title
 # add td elements inside as the times
 
-doc.search(".top-schedule-area .schedule-item").each do |boxes|
-  hash = {}
+doc.search(".top-schedule-area").each do |boxes|
   date_text = boxes.search('th[colspan="4"]').text
-  hash[:title] = boxes.css("th").text.strip
-  hash[:date] = date_text
-  hash[:times] = boxes.css("td").map(&:text)
-  times_array << hash
+  boxes.search("tr").each_with_index do | title, index|
+    hash = {}
+    hash[:date] = date_text
+    hash[:title] = title.text.strip unless index == 0
+    hash[:times] = boxes.css("td").map(&:text).reject { |string| string == "" }.map! { |time| time.sub(/～.*/, "") }
+    times_array << hash unless hash[:title].nil?
+  end
 end
 
 times_array.each do |x|
-  puts x
+  pp x[:times]
+end
+
+puts "*" * 70
+
+times_array.each do |x|
+  pp x[:date]
+end
+
+puts "*" * 70
+
+times_array.each do |x|
+  pp x[:title]
 end
