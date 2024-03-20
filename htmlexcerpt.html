@@ -9,15 +9,6 @@
 <td>14:10</td>
 <td>18:20</td>
 </tr>
-
-# Pull the top-schedule-area mbM elements
-# Iterate through them and:
-; add the first th element as the dates
-; add the second th element inside that as the movie title
-; add td elements inside as the times
-
-
-
 <tr class="schedule-item">
 <th>イージー★ライダー</th>
 <td>12:10</td>
@@ -28,6 +19,19 @@
 </tr>
 </tbody>
 </table>
+
+<!-- Scrape all the top-schedule-area elements -->
+<!-- Scrape date cell -->
+<!-- Separate the dates and place in an array -->
+<!-- Iterate through each row and create a hash with a title and an array of times -->
+<!-- Iterate through the dates and create showing based on each hash -->
+
+<!-- find the integer to the left of a "/" -->
+<!-- find all the other integers and place in an array-->
+<!-- iterate through that, adding the month and creating date instances-->
+<!-- if the integer is lower, increase the month by 1 -->
+
+
 <table class="top-schedule-area mbM " border="0" cellspacing="0">
 <thead class="schedule-title">
 <tr>
