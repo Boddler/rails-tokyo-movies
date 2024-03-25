@@ -7,8 +7,9 @@ class UpdateController < ApplicationController
     api_results = first_api_call(titles)
     unsaved_models = group_call(api_results)
     movies_create(unsaved_models)
-    times = showings(cinemas)
-    showing_create(times)
+    @times = showings(cinemas)
+    showing_create(@times)
+    # raise
     Showing.where("date < ?", Date.today).destroy_all
     Movie.includes(:showings).where(showings: { id: nil }).destroy_all
     redirect_to root_path

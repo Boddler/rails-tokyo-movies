@@ -137,7 +137,46 @@ module UpdateHelper
     result
   end
 
-  def date(date_string)
+  def showing_scrape(html, cinema)
+    search_results = []
+    case cinema.name
+    when "Meguro Cinema"
+      search_results << [meguro_showings(html), cinema]
+    when "Kawasaki Art Centre"
+      search_results << "To do...."
+    when "Waseda Shochiku"
+      search_results << [shochiku_showings(html), cinema]
+    end
+    search_results
+  end
+
+  def showing_create(array)
+    array[0].each do |info|
+      cinema = array[1]
+      info[0].each do |date|
+        movie = Movie.all.find { |film| film.web_title == date[:name] }
+        if movie
+          showing = Showing.new(date: date[:date], times: date[:times], movie_id: movie.id, cinema_id: cinema.id)
+          showing.save
+        end
+      end
+    end
+  end
+
+  # def showing_create(array)
+  #   cinema = array[0][0][1]
+  #   array[0][0][0].each do |date|
+  #     movie = Movie.all.find { |film| film.web_title == date[:name] }
+  #     if movie
+  #       showing = Showing.new(date: date[:date], times: date[:times], movie_id: movie.id, cinema_id: cinema.id)
+  #       showing.save
+  #     end
+  #   end
+  # end
+
+  # Meguro
+
+  def meg_dates(date_string)
     if date_string.include?("〜")
       date_ranges = date_string.scan(/(\d{1,2})月(\d{1,2})日/)
       start_date = Date.new(Date.today.year, date_ranges[0][0].to_i, date_ranges[0][1].to_i)
@@ -155,29 +194,34 @@ module UpdateHelper
     end
   end
 
-  def showing_scrape(html, cinema)
-    search_results = []
-    case cinema.name
-    when "Meguro Cinema"
-      search_results << [meguro_showings(html), cinema]
-    when "Kawasaki Art Centre"
-      search_results << "To do...."
-    when "Waseda Shochiku"
-      search_results << [shochiku_showings(html), cinema]
-    end
-    search_results
-  end
-
-  def showing_create(array)
-    cinema = array[0][0][1]
-    array[0][0][0].each do |date|
-      movie = Movie.all.find { |film| film.web_title == date[:name] }
-      if movie
-        showing = Showing.new(date: date[:date], times: date[:times], movie_id: movie.id, cinema_id: cinema.id)
-        showing.save
+  def meguro_showings(doc)
+    result = []
+    doc.search("#timetable").each do |line|
+      dates = meg_dates(line.css("p").text)
+      line.css(".time_box tr").each do |row|
+        title = row.css(".time_title").text.strip
+        times = row.css(".time_type2").map { |el| el.text.strip }
+        times.each do |time|
+          start_time = time.match(/(0?[0-9]|1[0-9]|2[0-3]):[0-5][0-9]/)
+          if start_time && dates.size.positive?
+            dates.each do |date|
+              title = clean_titles([title])[0]
+              matching_hash = result.find { |hash| hash[:name] == title && hash[:date] == date }
+              if matching_hash
+                matching_hash[:times] ||= []
+                matching_hash[:times] << start_time[0] unless matching_hash[:times].include?(start_time[0])
+              else
+                result << { name: title, times: [start_time[0]], date: date }
+              end
+            end
+          end
+        end
       end
     end
+    result
   end
+
+  # Waseda Shochiku
 
   def sho_dates(string)
     dates = []
@@ -203,36 +247,22 @@ module UpdateHelper
     dates
   end
 
-  def meguro_showings(doc)
+  def shochiku_showings(doc)
     result = []
-    doc.search("#timetable").each do |line|
-      dates = date(line.css("p").text)
-      line.css(".time_box tr").each do |row|
-        title = row.css(".time_title").text.strip
-        times = row.css(".time_type2").map { |el| el.text.strip }
-        times.each do |time|
-          start_time = time.match(/(0?[0-9]|1[0-9]|2[0-3]):[0-5][0-9]/)
-          if start_time && dates.size.positive?
-            dates.each do |date|
-              title = clean_titles([title])[0]
-              matching_hash = result.find { |hash| hash[:name] == title && hash[:date] == date }
-              if matching_hash
-                matching_hash[:times] ||= []
-                matching_hash[:times] << start_time[0] unless matching_hash[:times].include?(start_time[0])
-              else
-                result << { name: title, times: [start_time[0]], date: date }
-              end
-            end
-          end
+    doc.search(".top-schedule-area").each do |table|
+      date_text = table.search('th[colspan="4"]').text
+      dates = sho_dates(date_text)
+      heads = table.search(".schedule-item")
+      heads.each do |row|
+        hash = {}
+        dates.each do |date|
+          hash[:date] = date
+          hash[:name] = row.at("th").text.strip
+          hash[:times] = row.css("td").map(&:text).reject { |string| string == "" }.map! { |time| time.sub(/～.*/, "") }
+          result << hash if hash[:name]
         end
       end
     end
-    result
-  end
-
-  def shochiku_showings(doc)
-    result = []
-
     result
   end
 end
