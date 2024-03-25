@@ -11,6 +11,7 @@ module UpdateHelper
          .sub(/　.*/, "")
          .sub(/★.*/, " ")
          .sub(/\n/, "")
+         .sub(/【レイトショー】/, "")
          .strip
     end
   end
@@ -152,7 +153,7 @@ module UpdateHelper
 
   def showing_create(array)
     array[0].each do |info|
-      cinema = array[1]
+      cinema = array[0][0][1]
       info[0].each do |date|
         movie = Movie.all.find { |film| film.web_title == date[:name] }
         if movie
@@ -254,10 +255,10 @@ module UpdateHelper
       dates = sho_dates(date_text)
       heads = table.search(".schedule-item")
       heads.each do |row|
-        hash = {}
         dates.each do |date|
+          hash = {}
           hash[:date] = date
-          hash[:name] = row.at("th").text.strip
+          hash[:name] = clean_titles([row.at("th").text.strip])[0]
           hash[:times] = row.css("td").map(&:text).reject { |string| string == "" }.map! { |time| time.sub(/～.*/, "") }
           result << hash if hash[:name]
         end
