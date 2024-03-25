@@ -163,7 +163,7 @@ module UpdateHelper
     when "Kawasaki Art Centre"
       search_results << "To do...."
     when "Waseda Shochiku"
-      search_results << "To do...."
+      search_results << [shochiku_showings(html), cinema]
     end
     search_results
   end
@@ -177,6 +177,30 @@ module UpdateHelper
         showing.save
       end
     end
+  end
+
+  def sho_dates(string)
+    dates = []
+    month = string.split("/").first.to_i
+    match_data = string.match(/\/(.+)$/)
+    integers = []
+
+    if match_data
+      integers = match_data[1].split("･").map { |s| s.split(/(?<!\/)\d+\//).reject(&:empty?) }.flatten.map(&:to_i)
+    end
+
+    integers.each_with_index do |day, index|
+      month += 1 if day < integers[integers.index(day) - 1] && !index.zero?
+      dates << Date.new(Date.today.year, month, day) unless day == 0
+      month -= 1 if day < integers[integers.index(day) - 1] unless index.zero?
+    end
+
+    if string.include?("～")
+      date_range = (dates[0]..dates[1])
+      dates = date_range.to_a
+    end
+
+    dates
   end
 
   def meguro_showings(doc)
@@ -203,6 +227,12 @@ module UpdateHelper
         end
       end
     end
+    result
+  end
+
+  def shochiku_showings(doc)
+    result = []
+
     result
   end
 end
