@@ -2,8 +2,8 @@ class UpdateController < ApplicationController
   include UpdateHelper
 
   def update
-    # cinemas = Cinema.all
-    cinemas = [Cinema.last]
+    cinemas = Cinema.all
+    # cinemas = [Cinema.first]
     titles = scrape(cinemas)
     api_results = first_api_call(titles)
     unsaved_models = group_call(api_results)
@@ -12,7 +12,7 @@ class UpdateController < ApplicationController
     showing_create(@times)
     # raise
     Showing.where("date < ?", Date.today).destroy_all
-    Movie.includes(:showings).where(showings: { id: nil }).destroy_all
+    # Movie.includes(:showings).where(showings: { id: nil }).destroy_all
     redirect_to root_path
   end
 end
