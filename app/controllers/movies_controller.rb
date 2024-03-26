@@ -16,7 +16,7 @@ class MoviesController < ApplicationController
     hash = {}
     hash[:placeholder] = [@movie.web_title]
     @options = first_api_call(hash)[0][0]
-    @temps = temp_movies(@options).reject { |movie| movie.description == @movie.description }
+    @temps = temp_movies(@options).reject { |movie| movie.description == @movie.description }.sort_by { |movie| -movie["vote_count"].to_f }
   end
 
   def update

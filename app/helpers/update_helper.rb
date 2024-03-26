@@ -3,33 +3,33 @@ module UpdateHelper
   require "json"
   require "nokogiri"
 
-    def scrape(cinemas)
-      titles_hash = {}
-      cinemas.each do |cinema|
-        html_content = URI.open(cinema.schedule)
-        doc = Nokogiri::HTML.parse(html_content, nil, cinema.encoding)
-        search_results = cinema_scrape(doc, cinema.name)
-        titles_hash[cinema.name.to_sym] = clean_titles(search_results)
-      end
-      titles_hash
+  def scrape(cinemas)
+    titles_hash = {}
+    cinemas.each do |cinema|
+      html_content = URI.open(cinema.schedule)
+      doc = Nokogiri::HTML.parse(html_content, nil, cinema.encoding)
+      search_results = cinema_scrape(doc, cinema.name)
+      titles_hash[cinema.name.to_sym] = clean_titles(search_results)
     end
+    titles_hash
+  end
 
-      def cinema_scrape(html, cinema)
-        search_results = []
-        case cinema
-        when "Meguro Cinema"
-          html.search(".time_title").each do |element|
-            search_results << element.text.strip unless search_results.include?(element.text.strip)
-          end
-        when "Kawasaki Art Centre"
-          "To do...."
-        when "Waseda Shochiku"
-          html.search(".schedule-item").each do |element|
-            search_results << element.at("th").text.strip unless search_results.include?(element.at("th").text.strip)
-          end
-        end
-        search_results
+  def cinema_scrape(html, cinema)
+    search_results = []
+    case cinema
+    when "Meguro Cinema"
+      html.search(".time_title").each do |element|
+        search_results << element.text.strip unless search_results.include?(element.text.strip)
       end
+    when "Kawasaki Art Centre"
+      "To do...."
+    when "Waseda Shochiku"
+      html.search(".schedule-item").each do |element|
+        search_results << element.at("th").text.strip unless search_results.include?(element.at("th").text.strip)
+      end
+    end
+    search_results
+  end
 
   def clean_titles(list)
     list.map! do |str|
@@ -59,41 +59,41 @@ module UpdateHelper
     movie_data
   end
 
-    def group_call(results)
-      languages = JSON.parse(ENV["LANGUAGES"])
-      models_to_be_saved = []
-      results.each do |movie|
-        if movie.nil? || !movie[0].empty?
-          hash = {}
-          hash[:name] = movie[0][0]["title"]
-          hash[:description] = movie[0][0]["overview"]
-          hash[:language] = languages.fetch(movie[0][0]["original_language"], movie[0][0]["original_language"])
-          hash[:poster] = movie[0][0]["poster_path"]
-          hash[:year] = movie[0][0]["release_date"]
-          hash[:id] = movie[0][0]["id"]
-          hash[:popularity] = movie[0][0]["popularity"]
-          people = crew(hash[:id])
-          hash[:cast] = people[0]
-          hash[:web_title] = movie[1]
-          hash[:director] = people[1]
-          hash[:runtime] = runtime(hash[:id])
-          hash[:backgrounds] = backgrounds(hash[:id])
-          models_to_be_saved << hash
-        end
-      end
-      models_to_be_saved
-    end
-
-    def movies_create(info)
-      info.each do |movie|
-        new_movie = Movie.new(director: movie[:director], popularity: movie[:popularity], runtime: movie[:runtime], name: movie[:name], description: movie[:description],
-                              web_title: movie[:web_title], year: movie[:year], cast: movie[:cast], language: movie[:language], poster: "https://image.tmdb.org/t/p/w185/#{movie[:poster]}",
-                              backgrounds: movie[:backgrounds])
-        new_movie.save
+  def group_call(results)
+    languages = JSON.parse(ENV["LANGUAGES"])
+    models_to_be_saved = []
+    results.each do |movie|
+      if movie.nil? || !movie[0].empty?
+        hash = {}
+        hash[:name] = movie[0][0]["title"]
+        hash[:description] = movie[0][0]["overview"]
+        hash[:language] = languages.fetch(movie[0][0]["original_language"], movie[0][0]["original_language"])
+        hash[:poster] = movie[0][0]["poster_path"]
+        hash[:year] = movie[0][0]["release_date"]
+        hash[:id] = movie[0][0]["id"]
+        hash[:popularity] = movie[0][0]["popularity"]
+        people = crew(hash[:id])
+        hash[:cast] = people[0]
+        hash[:web_title] = movie[1]
+        hash[:director] = people[1]
+        hash[:runtime] = runtime(hash[:id])
+        hash[:backgrounds] = backgrounds(hash[:id])
+        models_to_be_saved << hash
       end
     end
+    models_to_be_saved
+  end
 
-    # Movie Update Method
+  def movies_create(info)
+    info.each do |movie|
+      new_movie = Movie.new(director: movie[:director], popularity: movie[:popularity], runtime: movie[:runtime], name: movie[:name], description: movie[:description],
+                            web_title: movie[:web_title], year: movie[:year], cast: movie[:cast], language: movie[:language], poster: "https://image.tmdb.org/t/p/w185/#{movie[:poster]}",
+                            backgrounds: movie[:backgrounds])
+      new_movie.save
+    end
+  end
+
+  # Movie Update Method
 
   def api_call_by_id(id)
     movie_data = []
@@ -103,7 +103,7 @@ module UpdateHelper
     movie_data << movie_json
   end
 
-# Movie Instance Construction Start
+  # Movie Instance Construction Start
 
   def crew(id)
     cast = []
@@ -159,28 +159,19 @@ module UpdateHelper
   end
 
   def showing_create(array)
-    array[0].each do |info|
-      cinema = array[0][0][1]
-      info[0].each do |date|
-        movie = Movie.all.find { |film| film.web_title == date[:name] }
-        if movie
-          showing = Showing.new(date: date[:date], times: date[:times], movie_id: movie.id, cinema_id: cinema.id)
-          showing.save
+    array.each do |cinema|
+      cinema.each do |info|
+        place = info[1]
+        info[0].each do |date|
+          movie = Movie.all.find { |film| film.web_title == date[:name] }
+          if movie
+            showing = Showing.new(date: date[:date], times: date[:times], movie_id: movie.id, cinema_id: place.id)
+            showing.save
+          end
         end
       end
     end
   end
-
-  # def showing_create(array)
-  #   cinema = array[0][0][1]
-  #   array[0][0][0].each do |date|
-  #     movie = Movie.all.find { |film| film.web_title == date[:name] }
-  #     if movie
-  #       showing = Showing.new(date: date[:date], times: date[:times], movie_id: movie.id, cinema_id: cinema.id)
-  #       showing.save
-  #     end
-  #   end
-  # end
 
   # Meguro
 
