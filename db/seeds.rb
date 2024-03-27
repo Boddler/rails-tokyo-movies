@@ -21,22 +21,24 @@ cinema1 = Cinema.new(
   schedule: "http://www.okura-movie.co.jp/meguro_cinema/now_showing.html",
   description: "A small, single screen cinema showing old and new movies.",
   encoding: "shift-JIS",
+  map: "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3278.5069178227864!2d139.71336906447036!3d35.634574030623185!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x60188b19055c8655%3A0xaba33b9365f206fe!2sMeguro%20Cinema!5e0!3m2!1sen!2sjp!4v1705662015979!5m2!1sen!2sjp",
 )
 cinema1.save
 
 cinema2 = Cinema.new(
   name: "Waseda Shochiku",
-  location: "〒215-0004 神奈川県川崎市麻生区万福寺６丁目７−１",
+  location: "〒169-0075 新宿区高田馬場1-5-16",
   url: "http://wasedashochiku.co.jp/",
   schedule: "http://wasedashochiku.co.jp/",
   description: "Waseda Shochiku is a cinema in Takadanobaba.
   Waseda Shochiku screens movies that have finished their roadshows
   and past masterpieces in double features.",
   encoding: "utf-8",
+  map: "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d6479.1860777786615!2d139.708209!3d35.711631!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x60188d3c44e28145%3A0x7d13a0b5b4274512!2sWaseda%20Sh%C5%8Dchiku!5e0!3m2!1sen!2sus!4v1711435923714!5m2!1sen!2sus",
 )
 cinema2.save
 
-# cinema2 = Cinema.new(
+# cinema3 = Cinema.new(
 #   name: "Kawasaki ",
 #   location: "〒215-0004 神奈川県川崎市麻生区万福寺６丁目７−１",
 #   url: "https://kac-cinema.jp/",
@@ -44,7 +46,7 @@ cinema2.save
 #   description: "A cinema focused on European movies.",
 #   encoding: "shift-JIS",
 # )
-# cinema2.save
+# cinema3.save
 
 @search_results = []
 @movie_times = []

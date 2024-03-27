@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_03_07_030840) do
+ActiveRecord::Schema[7.0].define(version: 2024_03_26_065601) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -23,6 +23,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_07_030840) do
     t.datetime "updated_at", null: false
     t.string "schedule"
     t.string "encoding"
+    t.string "map"
   end
 
   create_table "movies", force: :cascade do |t|

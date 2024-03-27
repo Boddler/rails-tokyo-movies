@@ -3,39 +3,6 @@ module UpdateHelper
   require "json"
   require "nokogiri"
 
-  def clean_titles(list)
-    list.map! do |str|
-      str.sub(/4K.*/, "")
-         .sub(/デジタルリマスター.*/, "")
-         .sub(/＋.*/, "")
-         .sub(/　.*/, "")
-         .sub(/\n/, "")
-         .strip
-    end
-  end
-
-  def first_api_call(list)
-    movie_data = []
-    list.each do |_, titles|
-      titles.each do |title|
-        encoded_title = URI.encode_www_form_component("\"#{title}\"")
-        url = URI("https://api.themoviedb.org/3/search/movie?api_key=#{ENV["TMDB_API_KEY"]}&query=#{encoded_title}&language=en-gb")
-        response = Net::HTTP.get(url)
-        movie_json = JSON.parse(response)
-        movie_data << [movie_json["results"].sort_by { |movie| -movie["vote_count"].to_f }, title]
-      end
-    end
-    movie_data
-  end
-
-  def api_call_by_id(id)
-    movie_data = []
-    url = URI("https://api.themoviedb.org/3/movie/#{id}?api_key=#{ENV["TMDB_API_KEY"]}")
-    response = Net::HTTP.get(url)
-    movie_json = JSON.parse(response)
-    movie_data << movie_json
-  end
-
   def scrape(cinemas)
     titles_hash = {}
     cinemas.each do |cinema|
@@ -56,8 +23,40 @@ module UpdateHelper
       end
     when "Kawasaki Art Centre"
       "To do...."
+    when "Waseda Shochiku"
+      html.search(".schedule-item").each do |element|
+        search_results << element.at("th").text.strip unless search_results.include?(element.at("th").text.strip)
+      end
     end
     search_results
+  end
+
+  def clean_titles(list)
+    list.map! do |str|
+      str.sub(/4K.*/, "")
+         .sub(/デジタルリマスター.*/, "")
+         .sub(/＋.*/, "")
+         .sub(/　.*/, "")
+         .sub(/★.*/, " ")
+         .sub(/\n/, "")
+         .sub(/【ﾚｲﾄｼｮｰ】/, "")
+         .sub(/【ﾓｰﾆﾝｸﾞｼｮｰ】/, "")
+         .strip
+    end
+  end
+
+  def first_api_call(list)
+    movie_data = []
+    list.each do |_, titles|
+      titles.each do |title|
+        encoded_title = URI.encode_www_form_component("\"#{title}\"")
+        url = URI("https://api.themoviedb.org/3/search/movie?api_key=#{ENV["TMDB_API_KEY"]}&query=#{encoded_title}&language=en-gb")
+        response = Net::HTTP.get(url)
+        movie_json = JSON.parse(response)
+        movie_data << [movie_json["results"].sort_by { |movie| -movie["vote_count"].to_f }, title]
+      end
+    end
+    movie_data
   end
 
   def group_call(results)
@@ -84,6 +83,27 @@ module UpdateHelper
     end
     models_to_be_saved
   end
+
+  def movies_create(info)
+    info.each do |movie|
+      new_movie = Movie.new(director: movie[:director], popularity: movie[:popularity], runtime: movie[:runtime], name: movie[:name], description: movie[:description],
+                            web_title: movie[:web_title], year: movie[:year], cast: movie[:cast], language: movie[:language], poster: "https://image.tmdb.org/t/p/w185/#{movie[:poster]}",
+                            backgrounds: movie[:backgrounds])
+      new_movie.save
+    end
+  end
+
+  # Movie Update Method
+
+  def api_call_by_id(id)
+    movie_data = []
+    url = URI("https://api.themoviedb.org/3/movie/#{id}?api_key=#{ENV["TMDB_API_KEY"]}")
+    response = Net::HTTP.get(url)
+    movie_json = JSON.parse(response)
+    movie_data << movie_json
+  end
+
+  # Movie Instance Construction Start
 
   def crew(id)
     cast = []
@@ -113,14 +133,7 @@ module UpdateHelper
     background_data["backdrops"].nil? ? nil : background_data["backdrops"]
   end
 
-  def movies_create(info)
-    info.each do |movie|
-      new_movie = Movie.new(director: movie[:director], popularity: movie[:popularity], runtime: movie[:runtime], name: movie[:name], description: movie[:description],
-                            web_title: movie[:web_title], year: movie[:year], cast: movie[:cast], language: movie[:language], poster: "https://image.tmdb.org/t/p/w185/#{movie[:poster]}",
-                            backgrounds: movie[:backgrounds])
-      new_movie.save
-    end
-  end
+  # Movie Instance Construction End
 
   def showings(cinemas)
     result = []
@@ -132,7 +145,37 @@ module UpdateHelper
     result
   end
 
-  def date(date_string)
+  def showing_scrape(html, cinema)
+    search_results = []
+    case cinema.name
+    when "Meguro Cinema"
+      search_results << [meguro_showings(html), cinema]
+    when "Kawasaki Art Centre"
+      search_results << "To do...."
+    when "Waseda Shochiku"
+      search_results << [shochiku_showings(html), cinema]
+    end
+    search_results
+  end
+
+  def showing_create(array)
+    array.each do |cinema|
+      cinema.each do |info|
+        place = info[1]
+        info[0].each do |date|
+          movie = Movie.all.find { |film| film.web_title == date[:name] }
+          if movie
+            showing = Showing.new(date: date[:date], times: date[:times], movie_id: movie.id, cinema_id: place.id)
+            showing.save
+          end
+        end
+      end
+    end
+  end
+
+  # Meguro
+
+  def meg_dates(date_string)
     if date_string.include?("〜")
       date_ranges = date_string.scan(/(\d{1,2})月(\d{1,2})日/)
       start_date = Date.new(Date.today.year, date_ranges[0][0].to_i, date_ranges[0][1].to_i)
@@ -150,32 +193,10 @@ module UpdateHelper
     end
   end
 
-  def showing_scrape(html, cinema)
-    search_results = []
-    case cinema.name
-    when "Meguro Cinema"
-      search_results << [meguro_showings(html), cinema]
-    when "Kawasaki Art Centre"
-      search_results << "To do...."
-    end
-    search_results
-  end
-
-  def showing_create(array)
-    cinema = array[0][0][1]
-    array[0][0][0].each do |date|
-      movie = Movie.all.find { |film| film.web_title == date[:name] }
-      if movie
-        showing = Showing.new(date: date[:date], times: date[:times], movie_id: movie.id, cinema_id: cinema.id)
-        showing.save
-      end
-    end
-  end
-
   def meguro_showings(doc)
     result = []
     doc.search("#timetable").each do |line|
-      dates = date(line.css("p").text)
+      dates = meg_dates(line.css("p").text)
       line.css(".time_box tr").each do |row|
         title = row.css(".time_title").text.strip
         times = row.css(".time_type2").map { |el| el.text.strip }
@@ -193,6 +214,51 @@ module UpdateHelper
               end
             end
           end
+        end
+      end
+    end
+    result
+  end
+
+  # Waseda Shochiku
+
+  def sho_dates(string)
+    dates = []
+    month = string.split("/").first.to_i
+    match_data = string.match(/\/(.+)$/)
+    integers = []
+
+    if match_data
+      integers = match_data[1].split("･").map { |s| s.split(/(?<!\/)\d+\//).reject(&:empty?) }.flatten.map(&:to_i)
+    end
+
+    integers.each_with_index do |day, index|
+      month += 1 if day < integers[integers.index(day) - 1] && !index.zero?
+      dates << Date.new(Date.today.year, month, day) unless day == 0
+      month -= 1 if day < integers[integers.index(day) - 1] unless index.zero?
+    end
+
+    if string.include?("～")
+      date_range = (dates[0]..dates[1])
+      dates = date_range.to_a
+    end
+
+    dates
+  end
+
+  def shochiku_showings(doc)
+    result = []
+    doc.search(".top-schedule-area").each do |table|
+      date_text = table.search('th[colspan="4"]').text
+      dates = sho_dates(date_text)
+      heads = table.search(".schedule-item")
+      heads.each do |row|
+        dates.each do |date|
+          hash = {}
+          hash[:date] = date
+          hash[:name] = clean_titles([row.at("th").text.strip])[0]
+          hash[:times] = row.css("td").map(&:text).reject { |string| string == "" }.map! { |time| time.sub(/～.*/, "") }
+          result << hash if hash[:name]
         end
       end
     end
