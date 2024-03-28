@@ -2,6 +2,9 @@ require "open-uri"
 require "json"
 require "nokogiri"
 
+file = "shimo.html"
+doc = Nokogiri::HTML.parse(File.open(file), nil, "utf-8")
+
 def clean_titles(list)
   list.map! do |str|
     str.sub(/4K.*/, "")
@@ -15,7 +18,7 @@ def clean_titles(list)
   end
 end
 
-def sho_dates(string)
+def shimo_dates(string)
   dates = []
   month = string.split("/").first.to_i
   match_data = string.match(/\/(.+)$/)
@@ -39,7 +42,7 @@ def sho_dates(string)
   dates
 end
 
-def shochiku_showings(doc)
+def shimo_showings(doc)
   result = []
   doc.search(".top-schedule-area").each do |table|
     date_text = table.search('th[colspan="4"]').text
@@ -57,3 +60,13 @@ def shochiku_showings(doc)
   end
   result
 end
+
+search_results = []
+
+doc.search("td.sche-td").each do |element|
+  search_results << element.text.split("\t").first unless search_results.include?(element.text.split("\t").first)
+end
+
+x = clean_titles(search_results)
+
+pp x

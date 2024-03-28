@@ -21,8 +21,10 @@ module UpdateHelper
       html.search(".time_title").each do |element|
         search_results << element.text.strip unless search_results.include?(element.text.strip)
       end
-    when "Kawasaki Art Centre"
-      "To do...."
+    when "Shimo-Takaido Cinema"
+      html.search("td.sche-td").each do |element|
+        search_results << element.text.split("\t").first unless search_results.include?(element.text.split("\t").first)
+      end
     when "Waseda Shochiku"
       html.search(".schedule-item").each do |element|
         search_results << element.at("th").text.strip unless search_results.include?(element.at("th").text.strip)
@@ -150,8 +152,8 @@ module UpdateHelper
     case cinema.name
     when "Meguro Cinema"
       search_results << [meguro_showings(html), cinema]
-    when "Kawasaki Art Centre"
-      search_results << "To do...."
+    when "Shimo-Takaido Cinema"
+      search_results << [shimo_showings(html), cinema]
     when "Waseda Shochiku"
       search_results << [shochiku_showings(html), cinema]
     end
@@ -263,5 +265,17 @@ module UpdateHelper
       end
     end
     result
+  end
+
+  # Shimo-Takaido
+
+  def shimo_dates
+    dates = []
+    dates
+  end
+
+  def shimo_showings(doc)
+    results = []
+    results
   end
 end
