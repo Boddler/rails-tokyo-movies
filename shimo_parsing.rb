@@ -42,14 +42,18 @@ def shimo_dates(string)
     month -= 1 if day < integers[integers.index(day) - 1] unless index.zero?
   end
 
-  if string.include?("～")
-    date_range = (dates[0]..dates[1])
-    dates = date_range.to_a
+  if string.include?("～") || string.include?("〜")
+    if dates[1]
+      date_range = (dates[0]..dates[1])
+      dates = date_range.to_a
+    end
   end
-  if string.include?("〜")
-    date_range = (dates[0]..dates[1])
-    dates = date_range.to_a
-  end
+  # if string.include?("〜")
+  #   if dates[1]
+  #     date_range = (dates[0]..dates[1])
+  #     dates = date_range.to_a
+  #   end
+  # end
 
   dates
 end
@@ -73,38 +77,34 @@ def shimo_showings(doc)
   result
 end
 
-def first_api_call(list)
-  movie_data = []
-  list.each do |title|
-    encoded_title = URI.encode_www_form_component("\"#{title}\"")
-    url = URI("https://api.themoviedb.org/3/search/movie?api_key=#{ENV["TMDB_API_KEY"]}&query=#{encoded_title}&language=en-gb")
-    response = Net::HTTP.get(url)
-    movie_json = JSON.parse(response)
-    movie_data << [movie_json["results"], title]
-  end
-  movie_data
-end
-
 checking = []
 
-# html.search(".box .day").each do |element|
-#   checking << element.text.strip unless checking.include?(element.text.strip)
-# end
 html.search(".box").each do |element|
   unless element.search(".day").first.nil?
-    checking << element.search(".day").first.text.strip # unless element.search(".eiga-title").first.text.strip.nil?
+    hash = {}
+    hash[:title] = element.search(".eiga-title").first.text.strip unless element.search(".eiga-title").first.nil?
+    hash[:date] = element.search(".day").first.text.strip # unless element.search(".eiga-title").first.text.strip.nil?
+    checking << hash
   end
 end
 
 checking.each do |cell|
-  pp cell
+  # p cell[:title] unless cell[:title].nil?
+  # p cell[:date] unless cell[:title].nil?
+  # p "*" * 40 unless cell[:title].nil?
 end
 
 string = "3/16(土)〜3/22(金) 16：05〜(終18：11)\n" + "\t\t  3/23(土)〜3/29(金) 12：05〜(終14：11)"
 
-pp shimo_dates(string)
+# pp shimo_dates(string)
 
 ng1 = "3/9(土) 16:00〜(終17:55)\n" + "\t\t\t3/11(月) 17:55〜(終19:50)\n" + "\t\t\t3/15(金) 17:50〜(終19:45)\n" + "\t\t\t3/17(日) 20:10〜(終22:05)"
 ng2 = "3/16(土)、18(月)〜20(水)、22(金) 14：30〜(終15：52)"
 ng3 = "3/17(日)、21(木) 14：30〜(終15：50)"
 ng4 = "3/16(土)〜3/22(金) 16：05〜(終18：11)\n" + "\t\t  3/23(土)〜3/29(金) 12：05〜(終14：11)"
+
+dates = ["4/20(土) 19:45〜(終20:30)\n\t\t\t4/23(火) 21:00〜(終21:45)"]
+
+dates.each do |date|
+  pp shimo_dates(date)
+end
