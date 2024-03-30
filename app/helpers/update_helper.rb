@@ -22,8 +22,8 @@ module UpdateHelper
         search_results << element.text.strip unless search_results.include?(element.text.strip)
       end
     when "Shimo-Takaido Cinema"
-      html.search("td.sche-td").each do |element|
-        search_results << element.text.split("\t").first unless search_results.include?(element.text.split("\t").first)
+      html.search(".eiga-title").each do |element|
+        search_results << element.text.strip unless search_results.include?(element.text.strip)
       end
     when "Waseda Shochiku"
       html.search(".schedule-item").each do |element|

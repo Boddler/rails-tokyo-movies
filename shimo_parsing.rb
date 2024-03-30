@@ -1,20 +1,28 @@
 require "open-uri"
 require "json"
 require "nokogiri"
+require "net/http"
+require "dotenv/load"
 
 file = "shimo.html"
-doc = Nokogiri::HTML.parse(File.open(file), nil, "utf-8")
+html = Nokogiri::HTML.parse(File.open(file), nil, "utf-8")
 
 def clean_titles(list)
   list.map! do |str|
     str.sub(/4K.*/, "")
-       .sub(/デジタルリマスター.*/, "")
-       .sub(/＋.*/, "")
-       .sub(/　.*/, "")
-       .sub(/★.*/, " ")
-       .sub(/\n/, "")
-       .sub(/【レイトショー】/, "")
-       .strip
+      .sub(/デジタルリマスター.*/, "")
+      .sub(/＋.*/, "")
+      .sub(/　.*/, "")
+      .sub(/★.*/, " ")
+      .sub(/\n/, "")
+      .sub(/【ﾚｲﾄｼｮｰ】/, "")
+      .sub(/【ﾓｰﾆﾝｸﾞｼｮｰ】/, "")
+      .sub(/【劇場版】.*/, "")
+      .sub(/劇場公開版.*/, "")
+      .gsub(/\t.*/, "")
+      .sub(/【吹替版】/, "")
+      .sub(/ ４Kレストア.*/, "")
+      .strip
   end
 end
 
@@ -38,14 +46,18 @@ def shimo_dates(string)
     date_range = (dates[0]..dates[1])
     dates = date_range.to_a
   end
+  if string.include?("〜")
+    date_range = (dates[0]..dates[1])
+    dates = date_range.to_a
+  end
 
   dates
 end
 
 def shimo_showings(doc)
   result = []
-  doc.search(".top-schedule-area").each do |table|
-    date_text = table.search('th[colspan="4"]').text
+  doc.search(".box").each do |table|
+    date_text = table.search(".day").text
     dates = sho_dates(date_text)
     heads = table.search(".schedule-item")
     heads.each do |row|
@@ -61,12 +73,38 @@ def shimo_showings(doc)
   result
 end
 
-search_results = []
-
-doc.search("td.sche-td").each do |element|
-  search_results << element.text.split("\t").first unless search_results.include?(element.text.split("\t").first)
+def first_api_call(list)
+  movie_data = []
+  list.each do |title|
+    encoded_title = URI.encode_www_form_component("\"#{title}\"")
+    url = URI("https://api.themoviedb.org/3/search/movie?api_key=#{ENV["TMDB_API_KEY"]}&query=#{encoded_title}&language=en-gb")
+    response = Net::HTTP.get(url)
+    movie_json = JSON.parse(response)
+    movie_data << [movie_json["results"], title]
+  end
+  movie_data
 end
 
-x = clean_titles(search_results)
+checking = []
 
-pp x
+# html.search(".box .day").each do |element|
+#   checking << element.text.strip unless checking.include?(element.text.strip)
+# end
+html.search(".box").each do |element|
+  unless element.search(".day").first.nil?
+    checking << element.search(".day").first.text.strip # unless element.search(".eiga-title").first.text.strip.nil?
+  end
+end
+
+checking.each do |cell|
+  pp cell
+end
+
+string = "3/16(土)〜3/22(金) 16：05〜(終18：11)\n" + "\t\t  3/23(土)〜3/29(金) 12：05〜(終14：11)"
+
+pp shimo_dates(string)
+
+ng1 = "3/9(土) 16:00〜(終17:55)\n" + "\t\t\t3/11(月) 17:55〜(終19:50)\n" + "\t\t\t3/15(金) 17:50〜(終19:45)\n" + "\t\t\t3/17(日) 20:10〜(終22:05)"
+ng2 = "3/16(土)、18(月)〜20(水)、22(金) 14：30〜(終15：52)"
+ng3 = "3/17(日)、21(木) 14：30〜(終15：50)"
+ng4 = "3/16(土)〜3/22(金) 16：05〜(終18：11)\n" + "\t\t  3/23(土)〜3/29(金) 12：05〜(終14：11)"

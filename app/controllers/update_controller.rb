@@ -15,3 +15,11 @@ class UpdateController < ApplicationController
     redirect_to root_path
   end
 end
+
+# Logic
+# Iterate through boxes and....
+# Find and parse the dates and stick in an array
+# iterate through that array and create a hash for each day with:
+# the movie name
+# the times of the movie
+# the date
