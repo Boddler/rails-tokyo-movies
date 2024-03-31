@@ -151,7 +151,7 @@ module UpdateHelper
     search_results = []
     case cinema.name
     when "Meguro Cinema"
-      search_results << [meguro_showings(html), cinema]
+      search_results << [meg_showings(html), cinema]
     when "Shimo-Takaido Cinema"
       search_results << [shimo_showings(html), cinema]
     when "Waseda Shochiku"
@@ -195,7 +195,7 @@ module UpdateHelper
     end
   end
 
-  def meguro_showings(doc)
+  def meg_showings(doc)
     result = []
     doc.search("#timetable").each do |line|
       dates = meg_dates(line.css("p").text)

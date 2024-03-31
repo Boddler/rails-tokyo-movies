@@ -81,30 +81,47 @@ checking = []
 
 html.search(".box").each do |element|
   unless element.search(".day").first.nil?
-    hash = {}
-    hash[:title] = element.search(".eiga-title").first.text.strip unless element.search(".eiga-title").first.nil?
-    hash[:date] = element.search(".day").first.text.strip # unless element.search(".eiga-title").first.text.strip.nil?
-    checking << hash
+    if element.search(".day").first.text.strip.include?("\n")
+      element.first.text.strip.split("\n").each do |snippet|
+        hash = {}
+        hash[:date] = shimo_dates(snippet)
+        hash[:title] = snippet.search(".eiga-title").first.text.strip unless element.search(".eiga-title").first.nil?
+        hash[:time] = snippet.first.text.strip.match(/\d{1,2}：\d{2}/)
+        checking << hash
+      end
+    else
+      hash = {}
+      hash[:title] = element.search(".eiga-title").first.text.strip unless element.search(".eiga-title").first.nil?
+      time = element.search(".day").first.text.strip.match(/\d{1,2}：\d{2}/)
+      hash[:times] = time[0] if time
+      hash[:date] = element.search(".day").first.text.strip # unless element.search(".eiga-title").first.text.strip.nil?
+      checking << hash
+    end
   end
 end
 
 checking.each do |cell|
-  # p cell[:title] unless cell[:title].nil?
-  # p cell[:date] unless cell[:title].nil?
-  # p "*" * 40 unless cell[:title].nil?
+  p cell[:title] unless cell[:title].nil?
+  p cell[:times] unless cell[:title].nil?
+  p cell[:date] unless cell[:title].nil?
+  p "*" * 40 unless cell[:title].nil?
 end
 
 string = "3/16(土)〜3/22(金) 16：05〜(終18：11)\n" + "\t\t  3/23(土)〜3/29(金) 12：05〜(終14：11)"
 
 # pp shimo_dates(string)
 
-ng1 = "3/9(土) 16:00〜(終17:55)\n" + "\t\t\t3/11(月) 17:55〜(終19:50)\n" + "\t\t\t3/15(金) 17:50〜(終19:45)\n" + "\t\t\t3/17(日) 20:10〜(終22:05)"
-ng2 = "3/16(土)、18(月)〜20(水)、22(金) 14：30〜(終15：52)"
-ng3 = "3/17(日)、21(木) 14：30〜(終15：50)"
-ng4 = "3/16(土)〜3/22(金) 16：05〜(終18：11)\n" + "\t\t  3/23(土)〜3/29(金) 12：05〜(終14：11)"
-
-dates = ["4/20(土) 19:45〜(終20:30)\n\t\t\t4/23(火) 21:00〜(終21:45)"]
+dates = ["3/23(土) 14:30〜(終15:56)\n\t\t\t3/24(日) 16:20〜(終17:46)\n\t\t\t3/28(木) 14:30〜(終15:56)\n\t\t\t3/29(金) 16:10〜(終17:36)"]
 
 dates.each do |date|
-  pp shimo_dates(date)
+  date.split("\n").each do |element|
+    shimo_dates(element)
+  end
 end
+
+html.search(".box").each do |element|
+  time = element.search(".day").first.text.strip.match(/\d{1,2}：\d{2}/)
+  # pp time[0] if time
+end
+
+pp checking.drop(5).take(5)
