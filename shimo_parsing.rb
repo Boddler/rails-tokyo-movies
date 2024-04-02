@@ -82,7 +82,7 @@ checking = []
 html.search(".box").each do |element|
   unless element.search(".day").first.nil?
     if element.search(".day").first.text.strip.include?("\n")
-      element.first.text.strip.split("\n").each do |snippet|
+      element.search(".day").first.text.strip.split("\n").each do |snippet|
         hash = {}
         hash[:date] = shimo_dates(snippet)
         hash[:title] = snippet.search(".eiga-title").first.text.strip unless element.search(".eiga-title").first.nil?
