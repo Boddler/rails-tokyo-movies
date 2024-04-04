@@ -8,44 +8,30 @@ require "dotenv/load"
 file = "shimo.html"
 html = Nokogiri::HTML.parse(File.open(file), nil, "utf-8")
 
-def date_handling(month, date1, date2 = nil)
-  dates = []
-  if date2.nil?
-    dates << Date.new(Date.today.year, month, date1) unless date1.zero?
-  else
-    month += 1 if day < integers[integers.index(day) - 1] && !index.zero?
-    dates << Date.new(Date.today.year, month, day) unless day.zero?
-    month -= 1 if day < integers[integers.index(day) - 1] && !index.zero?
-  end
-  dates
-end
-
 def shimo_dates(string)
   dates = []
-  p month = string.split("/").first.to_i
-  p match_data = string.match(/\/(.+)$/)
-  p match_data2 = string.match(/～(\d+)\(/) unless string.match(/～(\d+)\(/).nil?
+  month = string.split("/").first.to_i
+  match_data = string.match(/\/(.+)$/)
+  p match_data[0]
+  p match_data[1]
+  p match_data[2]
+  p match_data[3]
   integers = []
   if match_data
     integers = match_data[1].split("･").map { |s| s.split(/(?<!\/)\d+\//).reject(&:empty?) }.flatten.map(&:to_i)
   end
-  p integers
   integers.each_with_index do |day, index|
     month += 1 if day < integers[integers.index(day) - 1] && !index.zero?
     dates << Date.new(Date.today.year, month, day) unless day.zero?
     month -= 1 if day < integers[integers.index(day) - 1] && !index.zero?
   end
   if string.include?("～") || string.include?("〜")
-    if dates[1]
+    if integers[1]
       date_range = (dates[0]..dates[1])
+      dates = date_range.to_a
     else
-      if match_data2
-        day2 = match_data2[1].split("･").map { |s| s.split(/(?<!\/)\d+\//).reject(&:empty?) }.flatten.map(&:to_i)
-      end
-      date_range = (dates[0]..integers[0])
-      p day2
+      "To do...."
     end
-    dates = date_range.to_a
   end
   dates
 end
@@ -100,23 +86,35 @@ checking = []
 #   end
 # end
 
-html.search(".box").each do |box|
+html.search(".help").each do |box|
   hash = {}
   title = box.search(".eiga-title").first.text.strip unless box.search(".eiga-title").first.nil?
-  hash[:title] = clean_titles([title])[0] if title
-  p hash[:title]
-  time = box.search(".day").first.text.strip.match(/\d{1,2}：\d{2}|\d{1,2}:\d{2}/)&.[](0)
-  hash[:times] = time.gsub("：", ":") if hash[:title]
+  clean_title = clean_titles([title])[0] if title
   date_cell = box.search(".day").first.text.strip
-  dates = shimo_dates(date_cell) if date_cell
-  hash[:dates] = dates
-  checking << hash if hash[:title]
+  if date_cell.include?("\n")
+    date_cell.split("\n").each do |day|
+      new_hash = {}
+      new_hash[:title] = clean_title
+      new_hash[:dates] = shimo_dates(day)
+      time = day.match(/\d{1,2}：\d{2}|\d{1,2}:\d{2}/)&.[](0)
+      new_hash[:times] = time.gsub("：", ":")
+      checking << new_hash
+    end
+  else
+    hash[:title] = clean_title
+    hash[:dates] = shimo_dates(date_cell) if date_cell && hash[:title]
+    time = box.search(".day").first.text.strip.match(/\d{1,2}：\d{2}|\d{1,2}:\d{2}/)&.[](0)
+    hash[:times] = time.gsub("：", ":") unless time.nil?
+    checking << hash if hash[:title]
+  end
 end
 
-# x = 110
+x = 110
 # pp checking.drop(x).take(10)
 
-# pp checking
-pp checking.size
+pp checking
+# pp checking.size
 
 # Send the full date string to the dates method and return an array, then iterate over the dates.
+
+pp shimo_dates("3/17(日)、21(木) 14：30〜(終15：50)")
