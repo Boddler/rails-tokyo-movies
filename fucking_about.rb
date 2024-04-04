@@ -12,10 +12,6 @@ def shimo_dates(string)
   dates = []
   month = string.split("/").first.to_i
   match_data = string.match(/\/(.+)$/)
-  p match_data[0]
-  p match_data[1]
-  p match_data[2]
-  p match_data[3]
   integers = []
   if match_data
     integers = match_data[1].split("･").map { |s| s.split(/(?<!\/)\d+\//).reject(&:empty?) }.flatten.map(&:to_i)
@@ -86,35 +82,41 @@ checking = []
 #   end
 # end
 
-html.search(".help").each do |box|
+html.search(".box").each do |box|
   hash = {}
   title = box.search(".eiga-title").first.text.strip unless box.search(".eiga-title").first.nil?
   clean_title = clean_titles([title])[0] if title
-  date_cell = box.search(".day").first.text.strip
+  date_cell = box.search(".day").first.text.strip.gsub("～(", " (")
   if date_cell.include?("\n")
     date_cell.split("\n").each do |day|
-      new_hash = {}
-      new_hash[:title] = clean_title
-      new_hash[:dates] = shimo_dates(day)
       time = day.match(/\d{1,2}：\d{2}|\d{1,2}:\d{2}/)&.[](0)
-      new_hash[:times] = time.gsub("：", ":")
-      checking << new_hash
+      day.split("、").each do |part|
+        new_hash = {}
+        new_hash[:title] = clean_title
+        new_hash[:dates] = shimo_dates(part)
+        new_hash[:times] = time.gsub("：", ":")
+        checking << new_hash
+      end
     end
   else
-    hash[:title] = clean_title
-    hash[:dates] = shimo_dates(date_cell) if date_cell && hash[:title]
     time = box.search(".day").first.text.strip.match(/\d{1,2}：\d{2}|\d{1,2}:\d{2}/)&.[](0)
-    hash[:times] = time.gsub("：", ":") unless time.nil?
-    checking << hash if hash[:title]
+    new_time = time.gsub("：", ":") unless time.nil?
+    date_cell.split("、").each do |part|
+      hash = {}
+      hash[:title] = clean_title
+      hash[:dates] = shimo_dates(part) if date_cell && hash[:title]
+      hash[:times] = new_time
+      checking << hash if hash[:title]
+    end
   end
 end
 
-x = 110
+# x = 110
 # pp checking.drop(x).take(10)
 
 pp checking
-# pp checking.size
+pp checking.size
 
 # Send the full date string to the dates method and return an array, then iterate over the dates.
 
-pp shimo_dates("3/17(日)、21(木) 14：30〜(終15：50)")
+# pp shimo_dates("3/17(日)、21(木) 14：30〜(終15：50)")
