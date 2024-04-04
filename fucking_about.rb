@@ -8,14 +8,20 @@ require "dotenv/load"
 file = "shimo.html"
 html = Nokogiri::HTML.parse(File.open(file), nil, "utf-8")
 
-def shimo_dates(string)
+def shimo_dates(string, month)
   dates = []
-  month = string.split("/").first.to_i
   match_data = string.match(/\/(.+)$/)
   integers = []
-  if match_data
-    integers = match_data[1].split("･").map { |s| s.split(/(?<!\/)\d+\//).reject(&:empty?) }.flatten.map(&:to_i)
+  # if match_data
+  #   integers = match_data[1].split("･").map { |s| s.split(/(?<!\/)\d+\//).reject(&:empty?) }.flatten.map(&:to_i)
+  # end
+  if integers.empty?
+    integers = string.scan(/(\d+)\([^)]+\)/).flatten.map(&:to_i)
   end
+  # p string
+  # p integers
+  # p "*" * 40
+
   integers.each_with_index do |day, index|
     month += 1 if day < integers[integers.index(day) - 1] && !index.zero?
     dates << Date.new(Date.today.year, month, day) unless day.zero?
@@ -90,10 +96,11 @@ html.search(".box").each do |box|
   if date_cell.include?("\n")
     date_cell.split("\n").each do |day|
       time = day.match(/\d{1,2}：\d{2}|\d{1,2}:\d{2}/)&.[](0)
-      day.split("、").each do |part|
+      day.split("、").each_with_index do |part, index|
+        month = day.split("/").first.to_i
         new_hash = {}
         new_hash[:title] = clean_title
-        new_hash[:dates] = shimo_dates(part)
+        new_hash[:dates] = shimo_dates(part, month)
         new_hash[:times] = time.gsub("：", ":")
         checking << new_hash
       end
@@ -101,10 +108,11 @@ html.search(".box").each do |box|
   else
     time = box.search(".day").first.text.strip.match(/\d{1,2}：\d{2}|\d{1,2}:\d{2}/)&.[](0)
     new_time = time.gsub("：", ":") unless time.nil?
-    date_cell.split("、").each do |part|
+    date_cell.split("、").each_with_index do |part, index|
+      month = date_cell.split("/").first.to_i
       hash = {}
       hash[:title] = clean_title
-      hash[:dates] = shimo_dates(part) if date_cell && hash[:title]
+      hash[:dates] = shimo_dates(part, month) if date_cell && hash[:title]
       hash[:times] = new_time
       checking << hash if hash[:title]
     end
@@ -115,7 +123,7 @@ end
 # pp checking.drop(x).take(10)
 
 pp checking
-pp checking.size
+# pp checking.size
 
 # Send the full date string to the dates method and return an array, then iterate over the dates.
 
