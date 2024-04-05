@@ -58,6 +58,7 @@ def clean_titles(list)
 end
 
 checking = []
+final_array = []
 
 # html.search(".box").each do |element|
 #   # unless element.search(".day").first.nil?
@@ -118,12 +119,22 @@ html.search(".box").each do |box|
     end
   end
 end
+checking.each do |movie|
+  movie[:dates].each do |date|
+    hash = {}
+    hash[:title] = movie[:title]
+    hash[:date] = date
+    hash[:times] = movie[:times]
+    final_array << hash
+  end
+end
 
 # x = 110
 # pp checking.drop(x).take(10)
 
-pp checking
-# pp checking.size
+# pp checking
+pp final_array
+pp final_array.size
 
 # Send the full date string to the dates method and return an array, then iterate over the dates.
 
