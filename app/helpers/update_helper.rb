@@ -303,8 +303,8 @@ module UpdateHelper
             month = day.split("/").first.to_i
             new_hash = {}
             new_hash[:name] = clean_title
-            new_hash[:dates] = shimo_dates(part, month)
-            new_hash[:times] = time.gsub("：", ":")
+            new_hash[:date] = shimo_dates(part, month)
+            new_hash[:times] = [time.gsub("：", ":")]
             results << new_hash
           end
         end
@@ -315,18 +315,18 @@ module UpdateHelper
           month = date_cell.split("/").first.to_i
           hash = {}
           hash[:name] = clean_title
-          hash[:dates] = shimo_dates(part, month) if date_cell && hash[:title]
-          hash[:times] = new_time
-          results << hash if hash[:title]
+          hash[:date] = shimo_dates(part, month) if date_cell && hash[:name]
+          hash[:times] = [new_time]
+          results << hash if hash[:name]
         end
       end
     end
     results.each do |movie|
-      movie[:dates].each do |date|
+      movie[:date].each do |date|
         hash = {}
         hash[:name] = movie[:name]
         hash[:date] = date
-        hash[:times] = [movie[:times]]
+        hash[:times] = movie[:times]
         final_array << hash
       end
     end
