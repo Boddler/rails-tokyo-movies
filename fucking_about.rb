@@ -8,33 +8,50 @@ require "dotenv/load"
 file = "shimo.html"
 html = Nokogiri::HTML.parse(File.open(file), nil, "utf-8")
 
+# def shimo_dates(string, month)
+#   dates = []
+#   match_data = string.match(/\/(.+)$/)
+#   integers = []
+#   # if match_data
+#   #   integers = match_data[1].split("･").map { |s| s.split(/(?<!\/)\d+\//).reject(&:empty?) }.flatten.map(&:to_i)
+#   # end
+#   if integers.empty?
+#     integers = string.scan(/(\d+)\([^)]+\)/).flatten.map(&:to_i)
+#   end
+#   # p string
+#   # p integers
+#   # p "*" * 40
+
+#   integers.each_with_index do |day, index|
+#     month += 1 if day < integers[integers.index(day) - 1] && !index.zero?
+#     dates << Date.new(Date.today.year, month, day) unless day.zero?
+#     month -= 1 if day < integers[integers.index(day) - 1] && !index.zero?
+#   end
+#   if string.include?("～") || string.include?("〜")
+#     if integers[1]
+#       date_range = (dates[0]..dates[1])
+#       dates = date_range.to_a
+#     else
+#       "To do...."
+#     end
+#   end
+#   dates
+# end
+
 def shimo_dates(string, month)
   dates = []
-  match_data = string.match(/\/(.+)$/)
-  integers = []
-  # if match_data
-  #   integers = match_data[1].split("･").map { |s| s.split(/(?<!\/)\d+\//).reject(&:empty?) }.flatten.map(&:to_i)
-  # end
-  if integers.empty?
-    integers = string.scan(/(\d+)\([^)]+\)/).flatten.map(&:to_i)
-  end
-  # p string
-  # p integers
-  # p "*" * 40
+  integers = string.scan(/(\d+)\([^)]+\)/).flatten.map(&:to_i)
 
   integers.each_with_index do |day, index|
-    month += 1 if day < integers[integers.index(day) - 1] && !index.zero?
+    month += 1 if day < integers[index - 1] && index.positive?
     dates << Date.new(Date.today.year, month, day) unless day.zero?
-    month -= 1 if day < integers[integers.index(day) - 1] && !index.zero?
+    month -= 1 if day < integers[index - 1] && index.positive?
   end
+
   if string.include?("～") || string.include?("〜")
-    if integers[1]
-      date_range = (dates[0]..dates[1])
-      dates = date_range.to_a
-    else
-      "To do...."
-    end
+    dates = (dates.first..dates.last).to_a if dates.size > 1
   end
+
   dates
 end
 

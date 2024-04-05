@@ -6,6 +6,7 @@
     </div>
     <div class="update-sections">
       <h2>Movie Options</h2>
+      <h5>Scraped Title: <%= @movie.web_title %></h5>
       <% @temps.each do |movie| %>
         <%= render "shared/movie_card", movie: movie %>
       <% end %>

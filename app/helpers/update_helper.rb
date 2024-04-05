@@ -36,14 +36,19 @@ module UpdateHelper
   def clean_titles(list)
     list.map! do |str|
       str.sub(/4K.*/, "")
-         .sub(/デジタルリマスター.*/, "")
-         .sub(/＋.*/, "")
-         .sub(/　.*/, "")
-         .sub(/★.*/, " ")
-         .sub(/\n/, "")
-         .sub(/【ﾚｲﾄｼｮｰ】/, "")
-         .sub(/【ﾓｰﾆﾝｸﾞｼｮｰ】/, "")
-         .strip
+        .sub(/デジタルリマスター.*/, "")
+        .sub(/＋.*/, "")
+        .sub(/　.*/, "")
+        .sub(/★.*/, " ")
+        .sub(/\n/, "")
+        .sub(/【ﾚｲﾄｼｮｰ】/, "")
+        .sub(/【ﾓｰﾆﾝｸﾞｼｮｰ】/, "")
+        .sub(/【劇場版】.*/, "")
+        .sub(/劇場公開版.*/, "")
+        .gsub(/\t.*/, "")
+        .sub(/【吹替版】/, "")
+        .sub(/ ４Kレストア.*/, "")
+        .strip
     end
   end
 
@@ -269,13 +274,62 @@ module UpdateHelper
 
   # Shimo-Takaido
 
-  def shimo_dates
+  def shimo_dates(string, month)
     dates = []
+    integers = string.scan(/(\d+)\([^)]+\)/).flatten.map(&:to_i)
+    integers.each_with_index do |day, index|
+      month += 1 if day < integers[index - 1] && index.positive?
+      dates << Date.new(Date.today.year, month, day) unless day.zero?
+      month -= 1 if day < integers[index - 1] && index.positive?
+    end
+    if string.include?("～") || string.include?("〜")
+      dates = (dates.first..dates.last).to_a if dates.size > 1
+    end
     dates
   end
 
   def shimo_showings(doc)
     results = []
-    results
+    final_array = []
+    doc.search(".box").each do |box|
+      hash = {}
+      title = box.search(".eiga-title").first.text.strip unless box.search(".eiga-title").first.nil?
+      clean_title = clean_titles([title])[0] if title
+      date_cell = box.search(".day").first.text.strip.gsub("～(", " (")
+      if date_cell.include?("\n")
+        date_cell.split("\n").each do |day|
+          time = day.match(/\d{1,2}：\d{2}|\d{1,2}:\d{2}/)&.[](0)
+          day.split("、").each_with_index do |part, index|
+            month = day.split("/").first.to_i
+            new_hash = {}
+            new_hash[:name] = clean_title
+            new_hash[:dates] = shimo_dates(part, month)
+            new_hash[:times] = time.gsub("：", ":")
+            results << new_hash
+          end
+        end
+      else
+        time = box.search(".day").first.text.strip.match(/\d{1,2}：\d{2}|\d{1,2}:\d{2}/)&.[](0)
+        new_time = time.gsub("：", ":") unless time.nil?
+        date_cell.split("、").each_with_index do |part, index|
+          month = date_cell.split("/").first.to_i
+          hash = {}
+          hash[:name] = clean_title
+          hash[:dates] = shimo_dates(part, month) if date_cell && hash[:title]
+          hash[:times] = new_time
+          results << hash if hash[:title]
+        end
+      end
+    end
+    results.each do |movie|
+      movie[:dates].each do |date|
+        hash = {}
+        hash[:name] = movie[:name]
+        hash[:date] = date
+        hash[:times] = [movie[:times]]
+        final_array << hash
+      end
+    end
+    final_array
   end
 end
