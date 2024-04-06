@@ -4,16 +4,20 @@
       <h2>Current Movie</h2>
       <%= render "shared/movie_card", movie: @movie %>
     </div>
-    <div class="update-sections">
+    <div data-controller="tmdb-api-search" class="update-sections">
       <h2>Movie Options</h2>
       <h5>Scraped Title: <%= @movie.web_title %></h5>
       <% @temps.each do |movie| %>
         <%= render "shared/movie_card", movie: movie %>
       <% end %>
       <%= form_with(model: @movie, url: movie_path(@movie), local: true, method: :patch) do |form| %>
-        <%= form.text_field :runtime, value: "", placeholder: "Enter TMDB ID here" %>
-        <%= form.submit "Update" %>
+        <div data-action="keyup->tmdb-api-search#search">
+          <%= form.text_field :runtime, value: "", placeholder: "Enter TMDB ID here" %>
+          <%= form.submit "Update" %>
+        </div>
       <% end %>
+      <div data-tmdb-api-search-target="newMovie">
+      </div>
     </div>
   </div>
 </div>
