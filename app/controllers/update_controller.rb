@@ -9,7 +9,7 @@ class UpdateController < ApplicationController
     movies_create(unsaved_models)
     @times = showings(cinemas)
     showing_create(@times)
-    Showing.where("date < ?", Date.today).destroy_all
+    # Showing.where("date < ?", Date.today).destroy_all
     Movie.includes(:showings).where(showings: { id: nil }).destroy_all
     redirect_to root_path
   end

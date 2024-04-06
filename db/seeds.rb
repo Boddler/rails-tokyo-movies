@@ -38,6 +38,17 @@ cinema2 = Cinema.new(
 )
 cinema2.save
 
+cinema3 = Cinema.new(
+  name: "Shimo-Takaido Cinema",
+  location: "〒156-0043 世田谷区松原 3-27-26-2F",
+  url: "http://www.shimotakaidocinema.com/index.html",
+  schedule: "http://www.shimotakaidocinema.com/schedule/schedule.html",
+  description: "A cinema in Shimo Takaido with no discernable about section on its website...",
+  encoding: "utf-8",
+  map: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3241.449792322695!2d139.6401235760827!3d35.665925272592126!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6018f3af070c47bb%3A0xb940ca5acadedabb!2sShimo-Takaido%20Cinema!5e0!3m2!1sen!2sjp!4v1711627245141!5m2!1sen!2sjp",
+)
+cinema3.save
+
 # cinema3 = Cinema.new(
 #   name: "Kawasaki ",
 #   location: "〒215-0004 神奈川県川崎市麻生区万福寺６丁目７−１",

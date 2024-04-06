@@ -11,9 +11,10 @@
           <%= "Year: #{@movie.year}" %></br>
         <%= "Language: #{@movie.language}" %></br>
       <%= "Director: #{@movie.director}" %></br>
-    <%= "Cast:" %></br>
-  <% @movie.cast[0..5].each do |cast| %>
-    <%= "#{cast}" %></br>
+    <%= "Runtime: #{@movie.runtime} minutes" %></br>
+  <%= "Cast:" %></br>
+<% @movie.cast[0..5].each do |cast| %>
+  <%= "#{cast}" %></br>
 <% end %>
 </br>
 <%= "Overview: #{@movie.description}" %>
