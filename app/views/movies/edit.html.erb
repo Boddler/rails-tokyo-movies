@@ -3,22 +3,42 @@
     <div class="update-sections">
       <h2>Current Movie</h2>
       <%= render "shared/movie_card", movie: @movie %>
+      <p><%= link_to "Cinema website 1", @movie.showings[0].cinema.schedule, target: "_blank" %></p>
+      <p><%= link_to "Cinema website 2", @movie.showings[-1].cinema.schedule, target: "_blank" %></p>
     </div>
-<div data-controller="tmdb-api-search" class="update-sections">
-    <h2>Movie Options</h2>
-    <h5>Scraped Title: <%= @movie.web_title %></h5>
-    <% @temps.each do |movie| %>
-        <%= render "shared/movie_card", movie: movie %>
-    <% end %>
-    <%= form_with(model: @movie, url: movie_path(@movie), local: true, method: :patch) do |form| %>
+    <div data-controller="tmdb-api-search" class="update-sections">
+      <h2>Movie Options</h2>
+      <h5>Scraped Title: <%= @movie.web_title %></h5>
+      <%= form_with(model: @movie, url: movie_path(@movie), local: true, method: :patch) do |form| %>
         <div data-action="keyup->tmdb-api-search#search">
-            <%= form.text_field :runtime, value: "", placeholder: "Enter TMDB ID here", data: { "tmdb-api-search-target": "input" } %>
+          <%= form.text_field :runtime, value: "", placeholder: "Enter TMDB ID here", data: { "tmdb-api-search-target": "input" } %>
         </div>
         <%= form.submit "Update" %>
-    <% end %>
-    <div data-tmdb-api-search-target="newMovie">
+      <% end %>
+      <div data-tmdb-api-search-target="newMovie" style="background: #4169E1; padding: 4px; border-radius: 5px">
+        <div class="movie-card">
+          <div class="movie-poster">
+            <img src="https://media.themoviedb.org/t/p/w600_and_h900_bestv2/fGbduH5p0ABftecVweJX9xQLSEr.jpg" alt="Movie Poster" style="height: 171px; object-fit: cover;">
+          </div>
+        </a>
+        <div class="movie-card-text">
+          <div class="movie-card-heading">
+            <div>
+              <h4>Placeholder</h4>
+            </div>
+            <div class="language-tag">
+              Language
+            </div>
+          </div>
+          <div>
+            <p>Release Date: TBD...</p>
+          </div>
+        </div>
+      </div>
     </div>
-</div>
-
+    <% @temps.each do |movie| %>
+      <%= render "shared/movie_card", movie: movie %>
+    <% end %>
   </div>
+</div>
 </div>
