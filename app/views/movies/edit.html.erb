@@ -4,7 +4,7 @@
       <h2>Current Movie</h2>
       <%= render "shared/movie_card", movie: @movie %>
     </div>
-    <div data-controller="tmdb-api-search" class="update-sections">
+    <div data-controller="tmdb-api-search" data-tmdb-api-search-target="input" class="update-sections">
       <h2>Movie Options</h2>
       <h5>Scraped Title: <%= @movie.web_title %></h5>
       <% @temps.each do |movie| %>
@@ -13,8 +13,8 @@
       <%= form_with(model: @movie, url: movie_path(@movie), local: true, method: :patch) do |form| %>
         <div data-action="keyup->tmdb-api-search#search">
           <%= form.text_field :runtime, value: "", placeholder: "Enter TMDB ID here" %>
-          <%= form.submit "Update" %>
         </div>
+        <%= form.submit "Update" %>
       <% end %>
       <div data-tmdb-api-search-target="newMovie">
       </div>
