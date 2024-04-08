@@ -4,7 +4,7 @@ require "nokogiri"
 require "net/http"
 require "dotenv/load"
 
-file = "shimo.html"
+file = "new_cinema.html"
 html = Nokogiri::HTML.parse(File.open(file), nil, "utf-8")
 
 def clean_titles(list)
@@ -48,13 +48,6 @@ def shimo_dates(string)
       dates = date_range.to_a
     end
   end
-  # if string.include?("〜")
-  #   if dates[1]
-  #     date_range = (dates[0]..dates[1])
-  #     dates = date_range.to_a
-  #   end
-  # end
-
   dates
 end
 
