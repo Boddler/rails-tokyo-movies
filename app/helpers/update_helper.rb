@@ -29,8 +29,11 @@ module UpdateHelper
       html.search(".schedule-item").each do |element|
         search_results << element.at("th").text.strip unless search_results.include?(element.at("th").text.strip)
       end
+    when "Shin-Bungeiza"
+      p_element = html.search(".schedule-program p")
+      search_results = p_element.children.select { |node| node.text? }.map(&:text).reject { |str| str.strip == "" }
     end
-    search_results
+    search_results.uniq
   end
 
   def clean_titles(list)
@@ -48,6 +51,7 @@ module UpdateHelper
         .gsub(/\t.*/, "")
         .sub(/【吹替版】/, "")
         .sub(/ ４Kレストア.*/, "")
+        .sub(/2本目割./, "")
         .strip
     end
   end
@@ -161,6 +165,8 @@ module UpdateHelper
       search_results << [shimo_showings(html), cinema]
     when "Waseda Shochiku"
       search_results << [shochiku_showings(html), cinema]
+    when "Shin-Bungeiza"
+      search_results << [bungeiza_showings(html), cinema]
     end
     search_results
   end
@@ -331,5 +337,13 @@ module UpdateHelper
       end
     end
     final_array
+  end
+
+  # Shin-Bungeiza
+
+  def bungeiza_dates(string)
+  end
+
+  def bungeiza_showings(doc)
   end
 end

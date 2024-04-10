@@ -22,6 +22,7 @@ def clean_titles(list)
       .gsub(/\t.*/, "")
       .sub(/【吹替版】/, "")
       .sub(/ ４Kレストア.*/, "")
+      .sub(/2本目割./, "")
       .strip
   end
 end
@@ -72,9 +73,15 @@ end
 
 checking = []
 
-html.search(".schedule-box-txt h1").each do |element|
-  checking << element.text.strip
-end
+p_element = html.search(".schedule-program p")
+titles = p_element.children.select { |node| node.text? }.map(&:text).reject { |str| str.strip == "" }
+
+# titles = titles.reject(&:empty?)
+# titles = titles.reject { |str| str.strip == "" }
+
+# html.search(".schedule-program p").each do |element|
+#   checking << element.text.match(/^[^（\(]+/)[0].strip
+# end
 
 def movie_api_call(list)
   api_key = ENV["TMDB_API_KEY"]
@@ -126,7 +133,19 @@ def movie_api_call(list)
 end
 
 # movie_api_call(checking)
-pp checking
+cleaned_titles = clean_titles(titles).uniq
+bleached_titles = cleaned_titles
+
+# end
+
+# pp bleached_titles.uniq.sort
+# pp cleaned_titles.uniq.size
+
+# pp titles.size
+
+pp movie_api_call(bleached_titles)
+pp movie_api_call(bleached_titles).size
+pp bleached_titles.size
 
 # pp checking.drop(5).take(5)
 
