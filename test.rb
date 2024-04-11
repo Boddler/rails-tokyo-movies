@@ -106,7 +106,7 @@ def showing_create(doc)
       movie = line.at("p").children.select { |node| node.text? }.map(&:text).reject { |str| str.strip == "" }
       movie = line.at("a").children.select { |node| node.text? }.map(&:text).reject { |str| str.strip == "" } if movie[0].nil?
       time = line.search("li").text.strip
-      results << [month, day, clean_titles(movie), time]
+      results << [month, day, clean_titles(movie), time[0..4]]
     end
     # p dates = line.text.strip
     # results << dates
@@ -119,4 +119,9 @@ x = showing_create(html)
 # pp x.select { |str| str.include?("/") }
 # pp x.select { |str| str.include?("/") }.size
 # pp x.size
-# pp x
+x.each do |y|
+  pp y
+end
+
+# results.each do |x|
+# end
