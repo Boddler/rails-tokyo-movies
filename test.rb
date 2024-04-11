@@ -73,12 +73,40 @@ MOVIES = ["ナチュラル",
           "伽倻子のために",
           "眠る男"]
 
+def clean_titles(list)
+  list.map! do |str|
+    str.sub(/4K.*/, "")
+      .sub(/デジタルリマスター.*/, "")
+      .sub(/＋.*/, "")
+      .sub(/　.*/, "")
+      .sub(/★.*/, " ")
+      .sub(/\n/, "")
+      .sub(/【ﾚｲﾄｼｮｰ】/, "")
+      .sub(/【ﾓｰﾆﾝｸﾞｼｮｰ】/, "")
+      .sub(/【劇場版】.*/, "")
+      .sub(/劇場公開版.*/, "")
+      .gsub(/\t.*/, "")
+      .sub(/【吹替版】/, "")
+      .sub(/ ４Kレストア.*/, "")
+      .sub(/2本目割./, "")
+      .strip
+  end
+end
+
 def showing_create(doc)
   results = []
   doc.search(".schedule-content-inner").each do |box|
-    p month = box.css("h2").text.strip[0].to_i
-    box.each do |line|
-      date = box.css
+    month = box.at("h2").text.strip[0].to_i
+    day = ""
+    box.search(".schedule-program").each do |line|
+      if line.previous_element.name == "h2"
+        new = line.previous_element.text.strip.match(/(\d+)（/)
+        day = new[1].to_i if new
+      end
+      movie = line.at("p").children.select { |node| node.text? }.map(&:text).reject { |str| str.strip == "" }
+      movie = line.at("a").children.select { |node| node.text? }.map(&:text).reject { |str| str.strip == "" } if movie[0].nil?
+      time = line.search("li").text.strip
+      results << [month, day, clean_titles(movie), time]
     end
     # p dates = line.text.strip
     # results << dates
@@ -90,4 +118,5 @@ x = showing_create(html)
 
 # pp x.select { |str| str.include?("/") }
 # pp x.select { |str| str.include?("/") }.size
-pp x.size
+# pp x.size
+# pp x
