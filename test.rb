@@ -3,6 +3,7 @@ require "json"
 require "nokogiri"
 require "net/http"
 require "dotenv/load"
+require "date"
 
 file = "new_cinema.html"
 html = Nokogiri::HTML.parse(File.open(file), nil, "utf-8")
@@ -95,6 +96,7 @@ end
 
 def showing_create(doc)
   results = []
+  final = []
   doc.search(".schedule-content-inner").each do |box|
     month = box.at("h2").text.strip[0].to_i
     day = ""
@@ -102,26 +104,37 @@ def showing_create(doc)
       if line.previous_element.name == "h2"
         new = line.previous_element.text.strip.match(/(\d+)（/)
         day = new[1].to_i if new
+        # add logic here to increment the month if day is lower than before
       end
       movie = line.at("p").children.select { |node| node.text? }.map(&:text).reject { |str| str.strip == "" }
       movie = line.at("a").children.select { |node| node.text? }.map(&:text).reject { |str| str.strip == "" } if movie[0].nil?
       time = line.search("li").text.strip
-      results << [month, day, clean_titles(movie), time[0..4]]
+      movie = movie[0].split("＋")
+      results << [month, day, clean_titles(movie), time[0..4], month]
     end
-    # p dates = line.text.strip
-    # results << dates
   end
-  results
+  # p dates = line.text.strip
+  # results << dates
+  results.each do |result|
+    result[2].each do |movie|
+      hash = {}
+      hash[:name] = movie
+      hash[:times] = [result[3]]
+      hash[:date] = Date.new(Date.today.year, result[4], result[1])
+      final << hash
+    end
+  end
+  final
 end
 
 x = showing_create(html)
 
 # pp x.select { |str| str.include?("/") }
 # pp x.select { |str| str.include?("/") }.size
-# pp x.size
 x.each do |y|
   pp y
 end
 
+pp x.size
 # results.each do |x|
 # end

@@ -7,12 +7,12 @@ require "open-uri"
 # html_content = URI.open("http://www.okura-movie.co.jp/meguro_cinema/now_showing.html")
 # doc = Nokogiri::HTML.parse(html_content, nil, "shift-JIS")
 
-# Movie.destroy_all
-# puts "Movies deleted"
-# Cinema.destroy_all
-# puts "Cinemas deleted"
-# Showing.destroy_all
-# puts "Showings deleted"
+Movie.destroy_all
+puts "Movies deleted"
+Cinema.destroy_all
+puts "Cinemas deleted"
+Showing.destroy_all
+puts "Showings deleted"
 
 cinema = Cinema.new(
   name: "Meguro Cinema",
