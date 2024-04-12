@@ -3,8 +3,12 @@
     <div class="update-sections">
       <h2>Current Movie</h2>
       <%= render "shared/movie_card", movie: @movie %>
-      <p><%= link_to "Cinema website 1", @movie.showings[0].cinema.schedule, target: "_blank" %></p>
-      <p><%= link_to "Cinema website 2", @movie.showings[-1].cinema.schedule, target: "_blank" %></p>
+      <% if @movie.showings[0] %>
+        <p><%= link_to "Cinema website 1", @movie.showings[0].cinema.schedule, target: "_blank" %></p>
+      <% end %>
+      <% if @movie.showings[-1] && (@movie.showings[-1].cinema != @movie.showings[0].cinema) %>
+        <p><%= link_to "Cinema website 2", @movie.showings[-1].cinema.schedule, target: "_blank" %></p>
+      <% end %>
     </div>
     <div data-controller="tmdb-api-search" class="update-sections">
       <h2>Movie Options</h2>
