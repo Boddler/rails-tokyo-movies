@@ -32,7 +32,7 @@ class MoviesController < ApplicationController
     movie_hash = group_call(results)[0]
     movie_hash.delete(:id)
     movie_hash[:web_title] = @movie.web_title
-    movie_hash[:poster] = "https://image.tmdb.org/t/p/w185/#{movie_hash[:poster]}"
+    movie_hash[:poster] = "https://image.tmdb.org/t/p/w500/#{movie_hash[:poster]}"
     # raise
     if @movie.update(movie_hash)
       redirect_to @movie, notice: "Movie was successfully updated."
@@ -48,7 +48,7 @@ class MoviesController < ApplicationController
     list.each do |movie|
       temp_movie = Movie.new(name: movie["title"], description: movie["overview"],
                              year: movie["release_date"], language: movie["language"],
-                             poster: "https://image.tmdb.org/t/p/w185/#{movie["poster_path"]}",
+                             poster: "https://image.tmdb.org/t/p/w500/#{movie["poster_path"]}",
                              runtime: movie["id"].to_i)
       results << temp_movie
       #  Note - TMDB id is being saved as the runtime

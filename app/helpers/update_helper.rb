@@ -29,8 +29,11 @@ module UpdateHelper
       html.search(".schedule-item").each do |element|
         search_results << element.at("th").text.strip unless search_results.include?(element.at("th").text.strip)
       end
+    when "Shin-Bungeiza"
+      p_element = html.search(".schedule-program p")
+      search_results = p_element.children.select { |node| node.text? }.map(&:text).reject { |str| str.strip == "" }
     end
-    search_results
+    search_results.uniq
   end
 
   def clean_titles(list)
@@ -48,6 +51,7 @@ module UpdateHelper
         .gsub(/\t.*/, "")
         .sub(/【吹替版】/, "")
         .sub(/ ４Kレストア.*/, "")
+        .sub(/2本目割./, "")
         .strip
     end
   end
@@ -94,7 +98,7 @@ module UpdateHelper
   def movies_create(info)
     info.each do |movie|
       new_movie = Movie.new(director: movie[:director], popularity: movie[:popularity], runtime: movie[:runtime], name: movie[:name], description: movie[:description],
-                            web_title: movie[:web_title], year: movie[:year], cast: movie[:cast], language: movie[:language], poster: "https://image.tmdb.org/t/p/w185/#{movie[:poster]}",
+                            web_title: movie[:web_title], year: movie[:year], cast: movie[:cast], language: movie[:language], poster: "https://image.tmdb.org/t/p/w500/#{movie[:poster]}",
                             backgrounds: movie[:backgrounds])
       new_movie.save
     end
@@ -161,6 +165,8 @@ module UpdateHelper
       search_results << [shimo_showings(html), cinema]
     when "Waseda Shochiku"
       search_results << [shochiku_showings(html), cinema]
+    when "Shin-Bungeiza"
+      search_results << [bungeiza_showings(html), cinema]
     end
     search_results
   end
@@ -331,5 +337,40 @@ module UpdateHelper
       end
     end
     final_array
+  end
+
+  # Shin-Bungeiza
+
+  def bungeiza_showings(doc)
+    results = []
+    final = []
+    doc.search(".schedule-content-inner").each do |box|
+      month = box.at("h2").text.strip[0].to_i
+      day = 0
+      box.search(".schedule-program").each do |line|
+        if line.previous_element.name == "h2"
+          new = line.previous_element.text.strip.match(/(\d+)（/)
+          month += 1 if new && (new[1].to_i < day)
+          day = new[1].to_i if new
+          # add logic here to increment the month if day is lower than before
+        end
+        movie = line.at("p").children.select { |node| node.text? }.map(&:text).reject { |str| str.strip == "" }
+        movie = line.at("a").children.select { |node| node.text? }.map(&:text).reject { |str| str.strip == "" } if movie[0].nil?
+        time = line.search("li").text.strip
+        movie = movie[0].split("＋") if movie[0].include?("＋")
+        results << [month, day, clean_titles(movie), time[0..4], month]
+        month -= 1 if new && (new[1].to_i < day)
+      end
+    end
+    results.each do |result|
+      result[2].each_with_index do |movie, index|
+        hash = {}
+        hash[:name] = movie
+        hash[:times] = [result[3] + ("*" unless index.zero?).to_s]
+        hash[:date] = Date.new(Date.today.year, result[4], result[1])
+        final << hash
+      end
+    end
+    final
   end
 end
