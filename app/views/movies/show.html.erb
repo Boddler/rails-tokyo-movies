@@ -49,7 +49,7 @@
 <% end %>
 </div>
 </div>
-<%= render "shared/carousel" %>
+<%= render "shared/carousel" if @movie.backgrounds[0] %>
 <%= link_to edit_movie_path(@movie) do %>
   <%= image_tag "https://b5digital.dk/wp-content/uploads/2021/03/software-update.jpg", style: "border-radius: 5px; height: 80px; width: auto; margin: 24px;" %>
 <% end %>

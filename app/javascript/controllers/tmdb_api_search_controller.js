@@ -27,7 +27,7 @@ addMovie(data) {
   searchResultsElement.innerHTML = `
   <div class="movie-card">
     <div class="movie-poster">
-      <img src="https://image.tmdb.org/t/p/w185/${data.poster_path}" alt="Movie Poster" style="height: 171px; object-fit: cover;">
+      <img src="https://image.tmdb.org/t/p/w500/${data.poster_path}" alt="Movie Poster" style="height: 171px; object-fit: cover;">
     </div>
   </a>
   <div class="movie-card-text">
@@ -45,7 +45,6 @@ addMovie(data) {
   </div>
 </div>
 `;
-// debugger
 }
 
 }

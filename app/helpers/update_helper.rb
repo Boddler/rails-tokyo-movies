@@ -98,7 +98,7 @@ module UpdateHelper
   def movies_create(info)
     info.each do |movie|
       new_movie = Movie.new(director: movie[:director], popularity: movie[:popularity], runtime: movie[:runtime], name: movie[:name], description: movie[:description],
-                            web_title: movie[:web_title], year: movie[:year], cast: movie[:cast], language: movie[:language], poster: "https://image.tmdb.org/t/p/w185/#{movie[:poster]}",
+                            web_title: movie[:web_title], year: movie[:year], cast: movie[:cast], language: movie[:language], poster: "https://image.tmdb.org/t/p/w500/#{movie[:poster]}",
                             backgrounds: movie[:backgrounds])
       new_movie.save
     end
@@ -362,8 +362,6 @@ module UpdateHelper
         month -= 1 if new && (new[1].to_i < day)
       end
     end
-    # p dates = line.text.strip
-    # results << dates
     results.each do |result|
       result[2].each_with_index do |movie, index|
         hash = {}
