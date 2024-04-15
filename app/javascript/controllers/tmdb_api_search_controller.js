@@ -15,15 +15,12 @@ export default class extends Controller {
     fetch(`https://api.themoviedb.org/3/movie/${this.inputTarget.value}?api_key=${apiKey}`)
     .then(response => response.json())
     .then((data) => {
-      console.log(data);
       this.addMovie(data);
     })
 }
 
 addMovie(data) {
   const searchResultsElement = this.newMovieTarget;
-  console.log("OK?");
-  console.log(data.title);
   searchResultsElement.innerHTML = `
   <div class="movie-card">
     <div class="movie-poster">

@@ -72,6 +72,7 @@ module UpdateHelper
 
   def group_call(results)
     languages = JSON.parse(ENV["LANGUAGES"])
+    unknown = "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Question_mark_alternate.svg/1577px-Question_mark_alternate.svg.png"
     models_to_be_saved = []
     results.each do |movie|
       if movie.nil? || !movie[0].empty?
@@ -79,7 +80,8 @@ module UpdateHelper
         hash[:name] = movie[0][0]["title"]
         hash[:description] = movie[0][0]["overview"]
         hash[:language] = languages.fetch(movie[0][0]["original_language"], movie[0][0]["original_language"])
-        hash[:poster] = movie[0][0]["poster_path"]
+        poster = movie[0][0]["poster_path"]
+        hash[:poster] = poster.nil? ? unknown : "https://image.tmdb.org/t/p/w500/#{poster}"
         hash[:year] = movie[0][0]["release_date"]
         hash[:id] = movie[0][0]["id"]
         hash[:popularity] = movie[0][0]["popularity"]
@@ -97,8 +99,10 @@ module UpdateHelper
 
   def movies_create(info)
     info.each do |movie|
-      new_movie = Movie.new(director: movie[:director], popularity: movie[:popularity], runtime: movie[:runtime], name: movie[:name], description: movie[:description],
-                            web_title: movie[:web_title], year: movie[:year], cast: movie[:cast], language: movie[:language], poster: "https://image.tmdb.org/t/p/w500/#{movie[:poster]}",
+      new_movie = Movie.new(director: movie[:director], popularity: movie[:popularity], runtime: movie[:runtime],
+                            name: movie[:name], description: movie[:description],
+                            web_title: movie[:web_title], year: movie[:year], cast: movie[:cast],
+                            language: movie[:language], poster: movie[:poster],
                             backgrounds: movie[:backgrounds])
       new_movie.save
     end

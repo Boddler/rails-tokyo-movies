@@ -1,26 +1,18 @@
 Only one director is found (some movies have 2+ directors...)
-If numerous movies share a title it might find the wrong one
-
-
 
 To Do
 Save unfound movies and allow for online updating
+ Need a poster
+Landing page changes
+  Add some picks sections
+    Language?
+    Director?
 navbar options
-FAQ
 footer fleshing out? - after other things?
 movie index
 cinema index
 cinema show - add modals for the movie info
 filter - add cinemas & languages
-
-Issues
-Non known
-
-
-Cinema Specific (needs to be, not yet)
-- scrape cinema page
-- send titles to movie api call method, which saves the movies
-
 
 
 

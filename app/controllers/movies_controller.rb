@@ -25,15 +25,10 @@ class MoviesController < ApplicationController
     hash = {}
     hash[:placeholder] = [@movie.web_title]
     results = [[[first_api_call(hash)[0][0].select { |element| element["id"] == new_movie_id }.first, @movie.web_title]]]
-    if results[0][0][0].nil?
-      results = [[api_call_by_id(new_movie_id), @movie.web_title]]
-    end
-
+    results = [[api_call_by_id(new_movie_id), @movie.web_title]] if results[0][0][0].nil?
     movie_hash = group_call(results)[0]
     movie_hash.delete(:id)
     movie_hash[:web_title] = @movie.web_title
-    movie_hash[:poster] = "https://image.tmdb.org/t/p/w500/#{movie_hash[:poster]}"
-    # raise
     if @movie.update(movie_hash)
       redirect_to @movie, notice: "Movie was successfully updated."
     else
