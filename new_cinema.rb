@@ -75,13 +75,7 @@ checking = []
 
 p_element = html.search(".schedule-program p")
 titles = p_element.children.select { |node| node.text? }.map(&:text).reject { |str| str.strip == "" }
-
-# titles = titles.reject(&:empty?)
-# titles = titles.reject { |str| str.strip == "" }
-
-# html.search(".schedule-program p").each do |element|
-#   checking << element.text.match(/^[^（\(]+/)[0].strip
-# end
+p titles
 
 def movie_api_call(list)
   api_key = ENV["TMDB_API_KEY"]
@@ -99,8 +93,9 @@ def movie_api_call(list)
     if movie_data.any?
       title = movie_data[0]["title"]
       overview = movie_data[0]["overview"]
-      # language = movie_data.spoken_languages[0]
-      poster = movie_data[0]["poster_path"]
+      # language = movie_data[0].spoken_languages[0]
+      poster = movie_data[0]["poster_path"] # unless movie_data[0]["poster_path"].nil?
+      puts "#{title} has no poster path!******************" if movie_data[0]["poster_path"].nil?
       language = languages.fetch(movie_data[0]["original_language"], movie_data[0]["original_language"])
       year = movie_data[0]["release_date"]
       id = movie_data[0]["id"]
@@ -125,47 +120,19 @@ def movie_api_call(list)
       background_data = JSON.parse(background_response)
       # background = (background_data["backdrops"][0].nil? ? "https://www.themoviedb.org/t/p/original/bm2pU9rfFOhuHrzMciV6NlfcSeO.jpg" : background_data["backdrops"][0])
       background = (background_data["backdrops"].nil? ? nil : background_data["backdrops"])
-      # puts "#{title} found successfully"
+      puts "#{title} found successfully"
     else
-      puts "Movie not found: #{scraped_title}"
+      puts "Movie not found: #{scraped_title} ***********************************************"
     end
   }
 end
 
-# movie_api_call(checking)
+movie_api_call(titles)
 cleaned_titles = clean_titles(titles).uniq
 bleached_titles = cleaned_titles
 
-# end
-
-# pp bleached_titles.uniq.sort
-# pp cleaned_titles.uniq.size
-
-# pp titles.size
-
-pp movie_api_call(bleached_titles)
-pp movie_api_call(bleached_titles).size
+# pp movie_api_call(bleached_titles)
+# pp movie_api_call(bleached_titles).size
 pp bleached_titles.size
 
 # pp checking.drop(5).take(5)
-
-# html.search(".schedule-txt-catch").each do |element|
-#   unless element.search(".day").first.nil?
-#     if element.search(".day").first.text.strip.include?("\n")
-#       element.search(".day").first.text.strip.split("\n").each do |snippet|
-#         hash = {}
-#         hash[:date] = shimo_dates(snippet)
-#         hash[:title] = snippet.search(".eiga-title").first.text.strip unless element.search(".eiga-title").first.nil?
-#         hash[:time] = snippet.first.text.strip.match(/\d{1,2}：\d{2}/)
-#         checking << hash
-#       end
-#     else
-#       hash = {}
-#       hash[:title] = element.search(".eiga-title").first.text.strip unless element.search(".eiga-title").first.nil?
-#       time = element.search(".day").first.text.strip.match(/\d{1,2}：\d{2}/)
-#       hash[:times] = time[0] if time
-#       hash[:date] = element.search(".day").first.text.strip # unless element.search(".eiga-title").first.text.strip.nil?
-#       checking << hash
-#     end
-#   end
-# end
