@@ -29,7 +29,6 @@ class MoviesController < ApplicationController
     movie_hash = group_call(results)[0]
     movie_hash.delete(:id)
     movie_hash[:web_title] = @movie.web_title
-    movie_hash[:poster] = "https://image.tmdb.org/t/p/w500/#{movie_hash[:poster]}"
     if @movie.update(movie_hash)
       redirect_to @movie, notice: "Movie was successfully updated."
     else
