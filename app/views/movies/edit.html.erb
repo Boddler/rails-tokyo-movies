@@ -19,6 +19,12 @@
         </div>
         <%= form.submit "Update With Found Movie" %>
       <% end %>
+      <%= form_with(model: @movie, url: movie_path(@movie), local: true, method: :patch) do |form| %>
+        <div data-action="keyup->tmdb-api-search#name">
+          <%= form.text_field :runtime, value: "", placeholder: "Enter Movie Name here", data: { "tmdb-api-search-target": "name" } %>
+        </div>
+        <%= form.submit "Update With Found Movie" %>
+      <% end %>
       <div data-tmdb-api-search-target="newMovie" style="background: #4169E1; padding: 4px; border-radius: 5px">
         <div class="movie-card">
           <div class="movie-poster">
