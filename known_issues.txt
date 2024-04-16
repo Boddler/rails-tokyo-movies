@@ -2,6 +2,7 @@ Only one director is found (some movies have 2+ directors...)
 
 To Do
 Landing page changes
+pagy
   Add some picks sections
     Language?
     Director?
