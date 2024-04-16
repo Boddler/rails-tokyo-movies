@@ -7,6 +7,9 @@ pagy
     Language?
     Director?
 navbar options
+authentication for updates
+add option to hide saved movies we don't want to show (talks, lectures etc)
+add option to update by movie name
 footer fleshing out? - after other things?
 movie index
 cinema index
