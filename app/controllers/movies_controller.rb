@@ -21,18 +21,22 @@ class MoviesController < ApplicationController
 
   def update
     @movie = Movie.find(params[:id])
-    new_movie_id = params[:movie][:runtime].to_i
-    hash = {}
-    hash[:placeholder] = [@movie.web_title]
-    results = [[[first_api_call(hash)[0][0].select { |element| element["id"] == new_movie_id }.first, @movie.web_title]]]
-    results = [[api_call_by_id(new_movie_id), @movie.web_title]] if results[0][0][0].nil?
-    movie_hash = group_call(results)[0]
-    movie_hash.delete(:id)
-    movie_hash[:web_title] = @movie.web_title
-    if @movie.update(movie_hash)
-      redirect_to @movie, notice: "Movie was successfully updated."
+    new_movie_id = params[:movie].nil? ? -1 : params[:movie][:runtime].to_i
+    if new_movie_id == -1
+      blank_update(@movie)
     else
-      render :edit
+      hash = {}
+      hash[:placeholder] = [@movie.web_title]
+      results = [[[first_api_call(hash)[0][0][0].select { |element| element["id"] == new_movie_id }.first, @movie.web_title]]]
+      results = [[api_call_by_id(new_movie_id), @movie.web_title]] if results[0][0][0].nil?
+      movie_hash = group_call(results)[0]
+      movie_hash.delete(:id)
+      movie_hash[:web_title] = @movie.web_title
+      if @movie.update(movie_hash)
+        redirect_to @movie, notice: "Movie was successfully updated."
+      else
+        render :edit
+      end
     end
   end
 
@@ -40,7 +44,7 @@ class MoviesController < ApplicationController
 
   def temp_movies(list)
     results = []
-    list.each do |movie|
+    list[0].each do |movie|
       temp_movie = Movie.new(name: movie["title"], description: movie["overview"],
                              year: movie["release_date"], language: movie["language"],
                              poster: "https://image.tmdb.org/t/p/w500/#{movie["poster_path"]}",

@@ -67,7 +67,9 @@ module UpdateHelper
         movie_data << [movie_json["results"].sort_by { |movie| -movie["vote_count"].to_f }, title]
       end
     end
-    movie_data
+    missing = []
+    missing = movie_data.select { |array| array[0] == [] }.map { |array| array[1] }
+    [movie_data, missing]
   end
 
   def group_call(results)
@@ -86,9 +88,11 @@ module UpdateHelper
         hash[:id] = movie[0][0]["id"]
         hash[:popularity] = movie[0][0]["popularity"]
         people = crew(hash[:id])
-        hash[:cast] = people[0]
+        unless people.nil?
+          hash[:cast] = people[0]
+          hash[:director] = people[1]
+        end
         hash[:web_title] = movie[1]
-        hash[:director] = people[1]
         hash[:runtime] = runtime(hash[:id])
         hash[:backgrounds] = backgrounds(hash[:id])
         models_to_be_saved << hash
@@ -108,6 +112,36 @@ module UpdateHelper
     end
   end
 
+  def unfound_movies(movies)
+    movies.each do |movie|
+      new_movie = Movie.new(director: "Unknown", popularity: 0.0, runtime: nil,
+                            name: movie, description: "No match has been found for this movie",
+                            web_title: movie, year: nil, cast: ["Unknown"], poster: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Question_mark_alternate.svg/1577px-Question_mark_alternate.svg.png",
+                            language: "Unknown", backgrounds: [])
+      new_movie.save
+    end
+  end
+
+  def blank_update(movie)
+    default_values = {
+      director: "Unknown",
+      popularity: 0.0,
+      runtime: nil,
+      name: movie.web_title,
+      description: "No match has been found for this movie",
+      year: nil,
+      cast: ["Unknown"],
+      poster: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Question_mark_alternate.svg/1577px-Question_mark_alternate.svg.png",
+      language: "Unknown",
+      backgrounds: [],
+    }
+    if movie.update(default_values)
+      redirect_to movie, notice: "Movie was successfully updated."
+    else
+      render :edit
+    end
+  end
+
   # Movie Update Method
 
   def api_call_by_id(id)
@@ -121,17 +155,19 @@ module UpdateHelper
   # Movie Instance Construction Start
 
   def crew(id)
-    cast = []
-    credits_url = URI("https://api.themoviedb.org/3/movie/#{id}/credits?api_key=#{ENV["TMDB_API_KEY"]}")
-    credits_response = Net::HTTP.get(credits_url)
-    credits_data = JSON.parse(credits_response)
-    x = 0
-    10.times do
-      cast << credits_data["cast"][x]["name"] if credits_data["cast"][x] && credits_data["cast"][x]["name"]
-      x += 1
+    unless id.nil?
+      cast = []
+      credits_url = URI("https://api.themoviedb.org/3/movie/#{id}/credits?api_key=#{ENV["TMDB_API_KEY"]}")
+      credits_response = Net::HTTP.get(credits_url)
+      credits_data = JSON.parse(credits_response)
+      x = 0
+      10.times do
+        cast << credits_data["cast"][x]["name"] if credits_data["cast"][x] && credits_data["cast"][x]["name"]
+        x += 1
+      end
+      director = (credits_data["crew"].find { |person| person["job"] == "Director" }.nil? ? "Unknown" : credits_data["crew"].find { |person| person["job"] == "Director" }["name"])
+      [cast, director]
     end
-    director = (credits_data["crew"].find { |person| person["job"] == "Director" }.nil? ? "Unknown" : credits_data["crew"].find { |person| person["job"] == "Director" }["name"])
-    [cast, director]
   end
 
   def runtime(id)

@@ -3,7 +3,7 @@
     <a href="/movies/<%= movie.id %>">
     <% end %>
     <div class="movie-poster">
-      <% if movie.poster.end_with?("/") %>
+      <% if movie.poster.nil? || movie.poster.end_with?("/") %>
         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Question_mark_alternate.svg/1577px-Question_mark_alternate.svg.png" alt="Movie Poster">
       <% else %>
         <img src="<%= movie.poster %>" alt="Movie Poster">
