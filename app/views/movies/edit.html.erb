@@ -17,7 +17,7 @@
         <div data-action="keyup->tmdb-api-search#search">
           <%= form.text_field :runtime, value: "", placeholder: "Enter TMDB ID here", data: { "tmdb-api-search-target": "input" } %>
         </div>
-        <%= form.submit "Update" %>
+        <%= form.submit "Update With Found Movie" %>
       <% end %>
       <div data-tmdb-api-search-target="newMovie" style="background: #4169E1; padding: 4px; border-radius: 5px">
         <div class="movie-card">
@@ -40,8 +40,13 @@
         </div>
       </div>
     </div>
-    <% @temps.each do |movie| %>
-      <%= render "shared/movie_card", movie: movie %>
+    <%= form_with(model: @movie, url: movie_path(@movie), local: true, method: :patch) do |form| %>
+      <%= form.submit "Replace with Blank Template" %>
+    <% end %>
+    <% if @temps %>
+      <% @temps.each do |movie| %>
+        <%= render "shared/movie_card", movie: movie %>
+      <% end %>
     <% end %>
   </div>
 </div>

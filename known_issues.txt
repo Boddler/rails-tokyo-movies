@@ -1,8 +1,6 @@
 Only one director is found (some movies have 2+ directors...)
 
 To Do
-Save unfound movies and allow for online updating
- Need a poster
 Landing page changes
   Add some picks sections
     Language?
@@ -13,8 +11,5 @@ movie index
 cinema index
 cinema show - add modals for the movie info
 filter - add cinemas & languages
-
-
-
 
           <%= image_tag "https://kanji.reader.bz/images/og/630x630/5a9e64e1e78cff72ec69e571875f9fb4.png", style: "width: 40%; height: auto; border-radius: 5px; margin: 24px;" %>
