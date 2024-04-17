@@ -22,7 +22,7 @@ export default class extends Controller {
     console.log("Connected to the name!");
     console.log(this.nameTarget.value);
     const apiKey = document.querySelector("meta[name='api-key']").getAttribute("content");
-    fetch(`https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${this.nameTarget.value}`)
+    fetch(`https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${this.nameTarget.value}&sort_by=popularity.desc`)
     .then(response => response.json())
     .then((data) => {
       console.log(data);
@@ -58,8 +58,9 @@ addMovie(data) {
 
 addMovies(data) {
   const searchResultsElement = this.newMovieTarget;
+  searchResultsElement.innerHTML = ``
   data.results.forEach(element => {
-    searchResultsElement.insertAdjacentHTML("afterbegin", `
+    searchResultsElement.insertAdjacentHTML("beforeend", `
       <div class="movie-card">
         <div class="movie-poster">
           <img src="https://image.tmdb.org/t/p/w500/${element.poster_path}" alt="Movie Poster" style="height: 171px; object-fit: cover;">
@@ -75,6 +76,7 @@ addMovies(data) {
           </div>
           <div>
             <p>Release Date: ${element.release_date}</p>
+            <p>          ID: ${element.id}</p>
           </div>
         </div>
       </div>
