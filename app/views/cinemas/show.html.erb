@@ -8,7 +8,7 @@
     <p><%= @cinema.location %></p>
     <p><%= link_to "Cinema website", @cinema.url, target: "_blank" %></p>
     <div class="movie-grid">
-      <% @cinema.movies.uniq.each do |movie| %>
+      <% @cinema.movies.select { |movie| movie.hide == false }.uniq.each do |movie| %>
         <div class="cinema-movie">
           <%= link_to movie_path(movie.id) do %>
             <div class="movie-poster-cinema" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url(<%= "#{movie.poster}" %>)">
