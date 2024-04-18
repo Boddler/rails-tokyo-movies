@@ -10,7 +10,7 @@
         <p><%= link_to "Cinema website 2", @movie.showings[-1].cinema.schedule, target: "_blank" %></p>
       <% end %>
     </div>
-    <div data-controller="tmdb-api-search" class="update-sections">
+    <div data-controller="tmdb-api-search" class="update-sections" >
       <h2>Movie Options</h2>
       <h5>Scraped Title: <%= @movie.web_title %></h5>
       <%= form_with(model: @movie, url: movie_path(@movie), local: true, method: :patch) do |form| %>
