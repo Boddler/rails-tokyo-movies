@@ -9,6 +9,9 @@
       <% if @movie.showings[-1] && (@movie.showings[-1].cinema != @movie.showings[0].cinema) %>
         <p><%= link_to "Cinema website 2", @movie.showings[-1].cinema.schedule, target: "_blank" %></p>
       <% end %>
+      <%= form_with(model: @movie, url: toggle_hide_movie_path(@movie), local: true, method: :patch) do |form| %>
+        <%= form.submit @movie.hide ? "Set as Visible" : "Set as Hidden", class: "btn btn-secondary" %>
+      <% end %>
     </div>
     <div data-controller="tmdb-api-search" class="update-sections" >
       <h2>Movie Options</h2>

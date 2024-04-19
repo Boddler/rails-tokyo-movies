@@ -40,6 +40,12 @@ class MoviesController < ApplicationController
     end
   end
 
+  def toggle_hide
+    @movie = Movie.find(params[:id])
+    @movie.update(hide: !@movie.hide)
+    redirect_to @movie
+  end
+
   private
 
   def temp_movies(list)
