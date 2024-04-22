@@ -4,7 +4,24 @@ class MoviesController < ApplicationController
   include UpdateHelper
 
   def index
-    @movies = Movie.all
+    @cinemas = Cinema.all
+    @languages = Movie.all.map(&:language)
+    @movies = []
+    if params[:query].present?
+      @movies = Movie.all.select { |movie| movie.hide == false }
+      @movies = PgSearch.multisearch(params[:query]).map do |result|
+        result.searchable_type.constantize.find(result.searchable_id)
+      end
+    end
+    @movies = @movies.uniq
+  end
+
+  if params[:filter_cinema].present?
+    @movies = @movies.joins(:cinemas).where(cinemas: { name: params[:filter_cinema] })
+  end
+
+  if params[:filter_language].present?
+    @movies = @movies.where(language: params[:filter_language])
   end
 
   def show
