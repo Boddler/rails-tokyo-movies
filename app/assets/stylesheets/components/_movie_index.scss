@@ -1,0 +1,22 @@
+.movie-index {
+  background: rgb(81, 48, 69);
+  display: flex;
+}
+
+.checkboxes {
+  background: white;
+  width: 30%;
+  min-width: 100px;
+  max-width: 220px;
+  margin: 8px;
+  padding: 8px;
+  text-align: right;
+}
+.checkboxes h5 {
+  text-align: center;
+  font-weight: bolder;
+}
+
+.checkbox-section {
+  margin-bottom: 8px;
+}

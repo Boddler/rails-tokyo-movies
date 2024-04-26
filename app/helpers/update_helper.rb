@@ -51,6 +51,7 @@ module UpdateHelper
         .gsub(/\t.*/, "")
         .sub(/【吹替版】/, "")
         .sub(/ ４Kレストア.*/, "")
+        .sub(/ 2Kレストア版.*/, "")
         .sub(/2本目割./, "")
         .strip
     end
@@ -67,7 +68,6 @@ module UpdateHelper
         movie_data << [movie_json["results"].sort_by { |movie| -movie["vote_count"].to_f }, title]
       end
     end
-    missing = []
     missing = movie_data.select { |array| array[0] == [] }.map { |array| array[1] }
     [movie_data, missing]
   end

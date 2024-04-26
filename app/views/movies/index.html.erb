@@ -1,1 +1,39 @@
-To do...
+<div class="container-fluid">
+  <div class="movie-index">
+    <div class="checkboxes">
+      <h5>Cinemas</h5>
+      <div class=checkbox-section>
+        <% @cinemas.each do |cinema| %>
+          <label>
+            <%=  cinema.name %> <input type="checkbox" name="filter_cinema" value="<%=cinema.name%>">
+          </label><br>
+        <% end %>
+      </div>
+      <h5>Languages</h5>
+      <% @languages.uniq.sort.each do |language| %>
+        <label>
+          <%= "#{language} (#{@languages.count(language)})" %> <input type="checkbox" name="filter_language" value="<%=language%>">
+        </label><br>
+      <% end %>
+    </div>
+    <div>
+      <div class="row justify-content-center">
+        <div class="col-sm-8 my-3">
+          <%= form_with url: movies_path, method: :get, class: "d-flex" do %>
+            <%= text_field_tag :query,
+              params[:query],
+              class: "form-control",
+              style: "min-width: 300px",
+              placeholder: "Type the name of a film or director"
+          %>
+            <%= submit_tag "Search", name: "", class: "btn btn-warning" %>
+          <% end %>
+        </div>
+      </div>
+      <% @movies.each do |movie| %>
+        <%= render "shared/movie_card", movie: movie %>
+        <br>
+      <% end %>
+    </div>
+  </div>
+</div>

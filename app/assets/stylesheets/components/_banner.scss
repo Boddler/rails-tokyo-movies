@@ -3,19 +3,24 @@
   background-position: center -70px;
   padding: 150px 0;
   height: 600px;
-  display: flex;
+  // display: flex;
 }
 
 .banner-text {
   font-size: 20px;
-  margin-left: 900px;
-  color: white;
+  // margin-left: 900px;
   opacity: .8;
   text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
-  align-self: flex-start;
-  margin-left: auto;
+  // align-self: flex-start;
+  // margin-left: auto;
   display: inline-block; /* Ensures the pseudo-element width matches the text */
   text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+}
+
+.banner-content {
+  color: rgb(200, 200, 200);
+  text-shadow: 3px 3px 9px rgba(0,0,0,0.2);
+  padding-left: 100px;
 }
 
 .banner-headline {
