@@ -3,6 +3,6 @@ class Movie < ApplicationRecord
   validates :name, presence: true
   has_many :cinemas, through: :showings
 
-  include PgSearch::Model
-  multisearchable against: [:name, :director]
+  # include PgSearch::Model
+  # multisearchable against: [:name, :director]
 end
