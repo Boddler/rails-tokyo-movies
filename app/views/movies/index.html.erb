@@ -2,17 +2,17 @@
   <div class="movie-index">
     <div class="checkboxes">
       <h5>Cinemas</h5>
-      <div class=checkbox-section>
+      <div data-controller="search" class="checkbox-section">
         <% @cinemas.each do |cinema| %>
           <label>
-            <%=  cinema.name %> <input type="checkbox" name="filter_cinema" value="<%=cinema.name%>">
+            <%= cinema.name %> <input type="checkbox" data-action="click->search#cinema" data-cinema="<%= cinema.name %>" name="filter_cinema" value="<%= cinema.name %>">
           </label><br>
         <% end %>
       </div>
       <h5>Languages</h5>
-      <% @languages.uniq.sort.each do |language| %>
+      <% @languages.uniq.sort_by(&:to_s).each do |language| %>
         <label>
-          <%= "#{language} (#{@languages.count(language)})" %> <input type="checkbox" name="filter_language" value="<%=language%>">
+          <%= "#{language} (#{@languages.count { |lang| lang == language }})" %> <input type="checkbox" name="filter_language" value="<%=language%>">
         </label><br>
       <% end %>
     </div>
