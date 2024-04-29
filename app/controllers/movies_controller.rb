@@ -6,7 +6,17 @@ class MoviesController < ApplicationController
   def index
     @cinemas = Cinema.all
     @languages = Movie.all.map(&:language)
-    @movies = Movie.all.select { |movie| movie.hide == false }
+    movies = Movie.all.select { |movie| movie.hide == false }
+    @movies = []
+    if params[:filters].present?
+      params[:filters].each do |cinema|
+        movies.each do |movie|
+          if movie.showings.any? { |showing| showing.cinema_id == Cinema.find_by(name: cinema).id }
+            @movies << movie
+          end
+        end
+      end
+    end
     if params[:query].present?
       @movies = PgSearch.multisearch(params[:query]).map do |result|
         result.searchable_type.constantize.find(result.searchable_id)

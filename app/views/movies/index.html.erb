@@ -1,8 +1,8 @@
 <div class="container-fluid">
-  <div class="movie-index">
+  <div class="movie-index"  data-controller="search">
     <div class="checkboxes">
       <h5>Cinemas</h5>
-      <div data-controller="search" class="checkbox-section">
+      <div class="checkbox-section">
         <% @cinemas.each do |cinema| %>
           <label>
             <%= cinema.name %> <input type="checkbox" data-action="click->search#cinema" data-cinema="<%= cinema.name %>" name="filter_cinema" value="<%= cinema.name %>">
@@ -19,7 +19,7 @@
     <div>
       <div class="row justify-content-center">
         <div class="col-sm-8 my-3">
-          <%= form_with url: movies_path, method: :get, class: "d-flex" do %>
+          <%= form_with url: movies_path, method: :get, class: "d-flex", data: { target: "search.form" } do %>
             <%= text_field_tag :query,
               params[:query],
               class: "form-control",
@@ -31,10 +31,12 @@
           <% end %>
         </div>
       </div>
-      <% @movies.each do |movie| %>
-        <%= render "shared/movie_card", movie: movie %>
-        <br>
-      <% end %>
+      <div id="search-results">
+        <% @movies.each do |movie| %>
+          <%= render "shared/movie_card", movie: movie %>
+          <br>
+        <% end %>
+      </div>
     </div>
   </div>
 </div>
