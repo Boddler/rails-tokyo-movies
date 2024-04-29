@@ -5,15 +5,20 @@ class MoviesController < ApplicationController
 
   def index
     @cinemas = Cinema.all
-    @languages = Movie.all.map(&:language)
     movies = Movie.all.select { |movie| movie.hide == false }
+    @languages = movies.map(&:language)
     @movies = []
-    if params[:filters].present?
-      params[:filters].each do |cinema|
+    if params[:cinemas].present? && (params[:cinemas][0] != "")
+      params[:cinemas].each do |cinema|
         movies.each do |movie|
-          if movie.showings.any? { |showing| showing.cinema_id == Cinema.find_by(name: cinema).id }
-            @movies << movie
-          end
+          @movies << movie if movie.showings.any? { |showing| showing.cinema_id == Cinema.find_by(name: cinema).id }
+        end
+      end
+    end
+    if params[:languages].present?
+      params[:languages].each do |language|
+        movies.each do |movie|
+          @movies << movie if movie.language == language
         end
       end
     end

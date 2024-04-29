@@ -12,7 +12,7 @@
       <h5>Languages</h5>
       <% @languages.uniq.sort_by(&:to_s).each do |language| %>
         <label>
-          <%= "#{language} (#{@languages.count { |lang| lang == language }})" %> <input type="checkbox" name="filter_language" value="<%=language%>">
+          <%= "#{language} (#{@languages.count { |lang| lang == language }})" %> <input type="checkbox" data-action="click->search#cinema" data-language="<%=language%>" name="filter_language" value="<%=language%>">
         </label><br>
       <% end %>
     </div>

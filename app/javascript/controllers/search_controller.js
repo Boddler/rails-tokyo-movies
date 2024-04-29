@@ -16,6 +16,9 @@ static targets = ["input", "cinema", "form"];
     const checkedCinemas = Array.from(checkboxes)
       .filter(checkbox => checkbox.checked)
       .map(checkbox => checkbox.getAttribute("data-cinema"));
+      const checkedLanguages = Array.from(checkboxes)
+      .filter(checkbox => checkbox.checked)
+      .map(checkbox => checkbox.getAttribute("data-language"));
     const searchQuery = document.getElementById('search-box').value;
     console.log(checkedCinemas);
     console.log(searchQuery);
@@ -23,7 +26,7 @@ static targets = ["input", "cinema", "form"];
     $.ajax({
       url: 'movies',
       method: 'GET',
-      data: { filters: checkedCinemas, search_query: searchQuery },
+      data: { cinemas: checkedCinemas, languages: checkedLanguages, search_query: searchQuery },
       success: function(response) {
         const movieCardsHtml = $(response).find('#search-results').html();
 
