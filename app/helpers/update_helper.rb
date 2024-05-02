@@ -106,7 +106,7 @@ module UpdateHelper
       new_movie = Movie.new(director: movie[:director], popularity: movie[:popularity], runtime: movie[:runtime],
                             name: movie[:name], description: movie[:description],
                             web_title: movie[:web_title], year: movie[:year], cast: movie[:cast],
-                            language: movie[:language], poster: movie[:poster],
+                            language: movie[:language], poster: movie[:poster], tmdb_id: movie[:id],
                             backgrounds: movie[:backgrounds])
       new_movie.save
     end
@@ -117,7 +117,7 @@ module UpdateHelper
       new_movie = Movie.new(director: "Unknown", popularity: 0.0, runtime: nil,
                             name: movie, description: "No match has been found for this movie",
                             web_title: movie, year: nil, cast: ["Unknown"], poster: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Question_mark_alternate.svg/1577px-Question_mark_alternate.svg.png",
-                            language: "Unknown", backgrounds: [])
+                            language: "Unknown", backgrounds: [], tmdb_id: -1)
       new_movie.save
     end
   end
@@ -130,6 +130,7 @@ module UpdateHelper
       name: movie.web_title,
       description: "No match has been found for this movie",
       year: nil,
+      tmdb_id: 0,
       cast: ["Unknown"],
       poster: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Question_mark_alternate.svg/1577px-Question_mark_alternate.svg.png",
       language: "Unknown",
