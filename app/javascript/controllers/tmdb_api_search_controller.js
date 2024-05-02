@@ -6,7 +6,6 @@ export default class extends Controller {
 
   connect() {
     const apiKey = document.querySelector("meta[name='api-key']").getAttribute("content");
-    console.log("Connected!");
   }
 
   search() {
@@ -85,9 +84,7 @@ addMovies(data) {
 }
 
 id(event) {
-  console.log("Connected to the event function");
   const id = event.currentTarget.parentElement.dataset.tmdbId;
-  console.log("Clicked ID:", id);
   this.inputTarget.value = id;
 }
 

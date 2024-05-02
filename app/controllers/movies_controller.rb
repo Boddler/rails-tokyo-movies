@@ -8,36 +8,38 @@ class MoviesController < ApplicationController
     movies = Movie.all.select { |movie| movie.hide == false }
     @languages = movies.map(&:language)
     @movies = []
-    if params[:cinemas].present? && (params[:cinemas][0] != "")
-      params[:cinemas].each do |cinema|
-        movies.each do |movie|
-          @movies << movie if movie.showings.any? { |showing| showing.cinema_id == Cinema.find_by(name: cinema).id }
-        end
-      end
-    end
-    if params[:languages].present?
-      params[:languages].each do |language|
-        movies.each do |movie|
-          @movies << movie if movie.language == language
-        end
-      end
-    end
+    cinemas = []
+    movie_lang = []
     if params[:query].present?
       @movies = PgSearch.multisearch(params[:query]).map do |result|
         result.searchable_type.constantize.find(result.searchable_id)
       end
     end
+    if params[:cinemas].present?
+      params[:cinemas].each do |cinema|
+        next if cinema == ""
+
+        movies.each do |movie|
+          cinemas << movie if movie.showings.any? { |showing| showing.cinema_id == Cinema.find_by(name: cinema).id }
+        end
+      end
+    end
+    if params[:languages].present?
+      params[:languages].each do |language|
+        next if language == ""
+
+        movies.each do |movie|
+          movie_lang << movie if movie.language == language
+        end
+      end
+    end
+    @movies = movie_lang if @movies.empty? && cinemas.empty?
+    @movies = cinemas if @movies.empty? && movie_lang.empty?
+    @movies &= movie_lang unless movie_lang.empty?
+    @movies &= cinemas unless cinemas.empty?
+    @movies = cinemas &= movie_lang if @movies.empty?
     @movies = @movies.uniq
   end
-
-  # if params[:filter_cinema].present?
-  #   @movies = @movies.joins(:cinemas).where(cinemas: { name: params[:filter_cinema] })
-  # end
-
-  # if params[:filter_language].present?
-  #   @movies = @movies.where(language: params[:filter_language])
-  # end
-  # end
 
   def show
     @movie = Movie.find(params[:id])
