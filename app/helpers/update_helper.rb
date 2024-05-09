@@ -92,7 +92,8 @@ module UpdateHelper
           hash[:cast] = people[0]
           hash[:director] = people[1]
         end
-        hash[:web_title] = movie[1]
+        hash[:web_title] ||= []
+        hash[:web_title] << movie[1]
         hash[:runtime] = runtime(hash[:id])
         hash[:backgrounds] = backgrounds(hash[:id])
         models_to_be_saved << hash
@@ -108,7 +109,15 @@ module UpdateHelper
                             web_title: movie[:web_title], year: movie[:year], cast: movie[:cast],
                             language: movie[:language], poster: movie[:poster], tmdb_id: movie[:id],
                             backgrounds: movie[:backgrounds])
-      new_movie.save
+      unless new_movie.save
+        existing_movie = Movie.find_by(tmdb_id: new_movie.tmdb_id)
+        if existing_movie
+          existing_movie.web_title += new_movie.web_title
+          existing_movie.save
+        else
+          Rails.logger.error("Existing movie not found for tmdb_id: #{new_movie.tmdb_id}")
+        end
+      end
     end
   end
 
@@ -116,7 +125,7 @@ module UpdateHelper
     movies.each do |movie|
       new_movie = Movie.new(director: "Unknown", popularity: 0.0, runtime: nil,
                             name: movie, description: "No match has been found for this movie",
-                            web_title: movie, year: nil, cast: ["Unknown"], poster: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Question_mark_alternate.svg/1577px-Question_mark_alternate.svg.png",
+                            web_title: [movie], year: nil, cast: ["Unknown"], poster: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Question_mark_alternate.svg/1577px-Question_mark_alternate.svg.png",
                             language: "Unknown", backgrounds: [], tmdb_id: -1)
       new_movie.save
     end
@@ -127,7 +136,7 @@ module UpdateHelper
       director: "Unknown",
       popularity: 0.0,
       runtime: nil,
-      name: movie.web_title,
+      name: movie.web_title[0],
       description: "No match has been found for this movie",
       year: nil,
       tmdb_id: 0,
@@ -217,7 +226,8 @@ module UpdateHelper
       cinema.each do |info|
         place = info[1]
         info[0].each do |date|
-          movie = Movie.all.find { |film| film.web_title == date[:name] }
+          movie = Movie.all.find { |film| film.web_title.any? { |title| title.include?(date[:name]) } }
+          # movie = Movie.all.find { |film| film.web_title.include?(date[:name]) }
           if movie
             showing = Showing.new(date: date[:date], times: date[:times], movie_id: movie.id, cinema_id: place.id)
             showing.save
