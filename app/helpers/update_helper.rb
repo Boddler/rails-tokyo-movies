@@ -51,6 +51,7 @@ module UpdateHelper
         .gsub(/\t.*/, "")
         .sub(/【吹替版】/, "")
         .sub(/ ４Kレストア.*/, "")
+        .sub(/ 4Ｋ$/, "")
         .sub(/ 2Kレストア版.*/, "")
         .sub(/2本目割./, "")
         .strip
