@@ -113,7 +113,7 @@ module UpdateHelper
       unless new_movie.save
         existing_movie = Movie.find_by(tmdb_id: new_movie.tmdb_id)
         if existing_movie
-          existing_movie.web_title += new_movie.web_title
+          existing_movie.web_title += new_movie.web_title unless existing_movie.web_title.include?(new_movie.web_title[0])
           existing_movie.save
         else
           Rails.logger.error("Existing movie not found for tmdb_id: #{new_movie.tmdb_id}")
@@ -123,13 +123,26 @@ module UpdateHelper
   end
 
   def unfound_movies(movies)
-    movies.each do |movie|
-      new_movie = Movie.new(director: "Unknown", popularity: 0.0, runtime: nil,
-                            name: movie, description: "No match has been found for this movie",
-                            web_title: [movie], year: nil, cast: ["Unknown"], poster: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Question_mark_alternate.svg/1577px-Question_mark_alternate.svg.png",
-                            language: "Unknown", backgrounds: [], tmdb_id: -1)
-      new_movie.save
-    end
+    existing_web_titles = Movie.pluck(:web_title).to_set
+    new_movies = movies.map do |movie|
+      unless existing_web_titles.include?(movie)
+        Movie.new(
+          director: "Unknown",
+          popularity: 0.0,
+          runtime: nil,
+          name: movie,
+          description: "No match has been found for this movie",
+          web_title: [movie],
+          year: nil,
+          cast: ["Unknown"],
+          poster: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Question_mark_alternate.svg/1577px-Question_mark_alternate.svg.png",
+          language: "Unknown",
+          backgrounds: [],
+          tmdb_id: -1,
+        )
+      end
+    end.compact
+    Movie.import(new_movies.uniq)
   end
 
   def blank_update(movie)
