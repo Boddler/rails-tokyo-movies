@@ -126,7 +126,7 @@ module UpdateHelper
   def unfound_movies(movies)
     existing_web_titles = Movie.pluck(:web_title).flatten.to_set
     new_movies = movies.map do |movie|
-      unless existing_web_titles.include?([movie])
+      unless existing_web_titles.include?(movie)
         Movie.new(
           director: "Unknown",
           popularity: 0.0,
