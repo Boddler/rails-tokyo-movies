@@ -2,9 +2,11 @@ require "net/http"
 
 class MoviesController < ApplicationController
   include UpdateHelper
+  include Pagy::Backend
 
   def index
     @cinemas = Cinema.all
+    @records = []
     movies = Movie.all.select { |movie| movie.hide == false }
     @languages = movies.map(&:language)
     @movies = []
@@ -39,6 +41,7 @@ class MoviesController < ApplicationController
     @movies &= cinemas unless cinemas.empty?
     @movies = cinemas &= movie_lang if @movies.empty?
     @movies = @movies.uniq
+    @pagy, @movies = pagy(Movie.where(id: @movies.map(&:id)))
   end
 
   def show
