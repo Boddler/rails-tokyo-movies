@@ -74,7 +74,8 @@ module UpdateHelper
   end
 
   def group_call(results)
-    languages = JSON.parse(ENV["LANGUAGES"])
+    # languages = JSON.parse(ENV["LANGUAGES"])
+    languages = LANGUAGES
     unknown = "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Question_mark_alternate.svg/1577px-Question_mark_alternate.svg.png"
     models_to_be_saved = []
     results.each do |movie|
@@ -82,7 +83,7 @@ module UpdateHelper
         hash = {}
         hash[:name] = movie[0][0]["title"]
         hash[:description] = movie[0][0]["overview"]
-        hash[:language] = languages.fetch(movie[0][0]["original_language"], movie[0][0]["original_language"])
+        hash[:language] = languages.fetch(movie[0][0]["original_language"].to_sym, movie[0][0]["original_language"])
         poster = movie[0][0]["poster_path"]
         hash[:poster] = poster.nil? ? unknown : "https://image.tmdb.org/t/p/w500/#{poster}"
         hash[:year] = movie[0][0]["release_date"]
