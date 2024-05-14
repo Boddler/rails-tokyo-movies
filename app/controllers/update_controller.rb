@@ -1,5 +1,6 @@
 class UpdateController < ApplicationController
   include UpdateHelper
+  before_action :authenticate
 
   def update
     cinemas = Cinema.all
@@ -17,5 +18,11 @@ class UpdateController < ApplicationController
     Showing.where("date < ?", Date.today).destroy_all
     Movie.includes(:showings).where(showings: { id: nil }).destroy_all
     redirect_to root_path
+  end
+
+  def authenticate
+    authenticate_or_request_with_http_basic do |username, password|
+      username == ENV["USERNAME"] && password == ENV["PASSWORD"]
+    end
   end
 end
