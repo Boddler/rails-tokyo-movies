@@ -3,6 +3,7 @@ require "net/http"
 class MoviesController < ApplicationController
   include UpdateHelper
   include Pagy::Backend
+  before_action :authenticate, only: [:edit, :update, :toggle_hide]
 
   def index
     @cinemas = Cinema.all
@@ -97,5 +98,11 @@ class MoviesController < ApplicationController
       #  Note - TMDB id is being saved as the runtime
     end
     results
+  end
+
+  def authenticate
+    authenticate_or_request_with_http_basic do |username, password|
+      username == ENV["USERNAME"] && password == ENV["PASSWORD"]
+    end
   end
 end
