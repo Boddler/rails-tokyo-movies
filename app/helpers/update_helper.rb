@@ -74,7 +74,6 @@ module UpdateHelper
   end
 
   def group_call(results)
-    # languages = JSON.parse(ENV["LANGUAGES"])
     languages = LANGUAGES
     unknown = "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Question_mark_alternate.svg/1577px-Question_mark_alternate.svg.png"
     models_to_be_saved = []
@@ -104,28 +103,30 @@ module UpdateHelper
     models_to_be_saved
   end
 
-  def movies_create(info)
+  def movies_create(info, all_movies)
+    existing_web_titles = all_movies.map(&:web_title).flatten.to_set
     info.each do |movie|
-      new_movie = Movie.new(director: movie[:director], popularity: movie[:popularity], runtime: movie[:runtime],
-                            name: movie[:name], description: movie[:description],
-                            web_title: movie[:web_title], year: movie[:year], cast: movie[:cast],
-                            language: movie[:language], poster: movie[:poster], tmdb_id: movie[:id],
-                            backgrounds: movie[:backgrounds])
-      unless new_movie.save
-        existing_movie = Movie.find_by(tmdb_id: new_movie.tmdb_id)
-        if existing_movie
-          existing_movie.web_title += new_movie.web_title unless existing_movie.web_title.include?(new_movie.web_title[0])
-          existing_movie.update(web_title: existing_movie.web_title)
-          # existing_movie.save
-        else
-          Rails.logger.error("Existing movie not found for tmdb_id: #{new_movie.tmdb_id}")
+      unless existing_web_titles.include?(movie[:web_title][0])
+        new_movie = Movie.new(director: movie[:director], popularity: movie[:popularity], runtime: movie[:runtime],
+                              name: movie[:name], description: movie[:description],
+                              web_title: movie[:web_title], year: movie[:year], cast: movie[:cast],
+                              language: movie[:language], poster: movie[:poster], tmdb_id: movie[:id],
+                              backgrounds: movie[:backgrounds])
+        unless new_movie.save &&
+               existing_movie = Movie.find_by(tmdb_id: new_movie.tmdb_id)
+          if existing_movie
+            existing_movie.web_title += new_movie.web_title unless existing_movie.web_title.include?(new_movie.web_title[0])
+            existing_movie.update(web_title: existing_movie.web_title)
+          else
+            Rails.logger.error("Existing movie not found for tmdb_id: #{new_movie.tmdb_id}")
+          end
         end
       end
     end
   end
 
-  def unfound_movies(movies)
-    existing_web_titles = Movie.pluck(:web_title).flatten.to_set
+  def unfound_movies(movies, all_movies)
+    existing_web_titles = all_movies.map(&:web_title).flatten.to_set
     new_movies = movies.map do |movie|
       unless existing_web_titles.include?(movie)
         Movie.new(
@@ -237,12 +238,12 @@ module UpdateHelper
     search_results
   end
 
-  def showing_create(array)
+  def showing_create(array, all_movies)
     array.each do |cinema|
       cinema.each do |info|
         place = info[1]
         info[0].each do |date|
-          movie = Movie.all.find { |film| film.web_title.any? { |title| title.include?(date[:name]) } }
+          movie = all_movies.find { |film| film.web_title.any? { |title| title.include?(date[:name]) } }
           # movie = Movie.all.find { |film| film.web_title.include?(date[:name]) }
           if movie
             showing = Showing.new(date: date[:date], times: date[:times], movie_id: movie.id, cinema_id: place.id)
