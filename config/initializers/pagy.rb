@@ -10,7 +10,7 @@ require "pagy/extras/bootstrap"
 # Pagy.new|Pagy::Countless.new|Pagy::Calendar::*.new or any of the #pagy* controller methods
 # Here are the few that make more sense as DEFAULTs:
 Pagy::DEFAULT[:items] = 10                    # default
-# Pagy::DEFAULT[:size]        = [1,4,4,1]             # default in pagy < 7.0
+Pagy::DEFAULT[:size] = [1, 3, 3, 1]             # default in pagy < 7.0
 # Pagy::DEFAULT[:page_param]  = :page                 # default
 # Pagy::DEFAULT[:count_args]  = []                    # example for non AR ORMs
 
