@@ -82,3 +82,4 @@ gem "dotenv-rails", groups: [:development, :test]
 gem "pagy"
 gem "pg_search"
 gem "activerecord-import"
+gem "flatpickr"

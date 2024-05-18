@@ -1,0 +1,10 @@
+<div class="showing">
+  <%= showing.movie.name %>
+  <br>
+  <%= showing.cinema.name %>
+  <br>
+  <% showing.times.each do |time| %>
+    <%= time %>
+    <br>
+  <% end %>
+</div>

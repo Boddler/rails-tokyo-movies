@@ -1,23 +1,23 @@
 <div class="container-fluid">
-  <div class="movie-index"  data-controller="search">
+  <div class="movie-index"  data-controller="showing-search">
     <div class="checkboxes">
       <h5>Cinemas</h5>
       <div class="checkbox-section">
         <% @cinemas.each do |cinema| %>
           <label>
-            <%= cinema.name %> <input type="checkbox" data-action="click->search#cinema" data-cinema="<%= cinema.name %>" name="filter_cinema" value="<%= cinema.name %>">
+            <%= cinema.name %> <input type="checkbox" data-action="click->showing-search#cinema" data-cinema="<%= cinema.name %>" name="filter_cinema" value="<%= cinema.name %>">
           </label><br>
         <% end %>
       </div>
       <h5>Languages</h5>
       <% @languages.uniq.sort_by(&:to_s).each do |language| %>
         <label>
-          <%= "#{language} (#{@languages.count { |lang| lang == language }})" %> <input type="checkbox" data-action="click->search#cinema" data-language="<%=language%>" name="filter_language" value="<%=language%>">
+          <%= language %> <input type="checkbox" data-action="click->showing-search#cinema" data-language="<%=language%>" name="filter_language" value="<%=language%>">
         </label><br>
       <% end %>
     </div>
     <div>
-      <div class="row justify-content-center">
+      <div class="d-none">
         <div class="col-sm-8 my-3">
           <%= form_with url: movies_path, method: :get, class: "d-flex", data: { target: "search.form" } do %>
             <%= text_field_tag :query,
@@ -33,13 +33,18 @@
       </div>
       <div id="search-results">
         <div class="search">
-          <% @movies.each do |movie| %>
-            <%= render "shared/movie_card", movie: movie %>
+          <% previous_date = nil %>
+          <% @showings.each do |showing| %>
+            <% if showing.date != previous_date %>
+              <%= render "shared/showing_date", date: showing.date %>
+              <% previous_date = showing.date %>
+            <% end %>
+            <%= render "shared/movie_showing", showing: showing %>
             <br>
           <% end %>
         </div>
         <div class="pagy">
-          <%== pagy_bootstrap_nav(@pagy) if @pagy.pages > 1 %>
+          <%== pagy_bootstrap_nav(@pagy) if @pagy.pages > 1  %>
         </div>
       </div>
     </div>

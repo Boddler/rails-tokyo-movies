@@ -7,7 +7,6 @@ class MoviesController < ApplicationController
 
   def index
     @cinemas = Cinema.all
-    @records = []
     movies = Movie.all.select { |movie| movie.hide == false }
     @languages = movies.map(&:language)
     @movies = []

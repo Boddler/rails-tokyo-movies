@@ -54,6 +54,7 @@ module UpdateHelper
         .sub(/ 4Ｋ$/, "")
         .sub(/ 2Kレストア版.*/, "")
         .sub(/2本目割./, "")
+        .sub(/デジタル修復版.*/, "")
         .strip
     end
   end

@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get 'showings/index'
   get "pages/home"
   get "about", to: "pages#about"
   get "update", to: "update#update"
@@ -9,4 +10,5 @@ Rails.application.routes.draw do
     end
   end
   resources :cinemas, only: [:show, :index]
+  resources :showings, only: [:index]
 end
