@@ -1,8 +1,9 @@
 Rails.application.routes.draw do
-  get 'showings/index'
+  get "showings/index"
   get "pages/home"
   get "about", to: "pages#about"
   get "update", to: "update#update"
+  get "latest", to: "additions#index"
   root to: "pages#home"
   resources :movies, only: [:show, :index, :edit, :update, :create] do
     member do

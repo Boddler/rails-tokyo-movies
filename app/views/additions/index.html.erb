@@ -1,0 +1,22 @@
+<div class="container" style="text: white">
+  <div style = "display: flex; flex-wrap: wrap;">
+    <div>
+      <h1>New Additions</h1>
+      <ul>
+        <% @latest_additions.each do |movie| %>
+          <%= render "shared/movie_card", movie: movie %>
+        <% end %>
+      </ul>
+    </div>
+    <div>
+      <h1>Recent Additions</h1>
+      <% if @latest_additions.empty? %>
+        <ul>
+          <% @recent_additions.each do |movie| %>
+            <li><%= movie.name %> - <%= movie.created_at.strftime("%Y-%m-%d %H:%M:%S") %></li>
+          <% end %>
+        </ul>
+      <% end %>
+    </div>
+  </div>
+</div>
