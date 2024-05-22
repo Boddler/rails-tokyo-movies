@@ -4,15 +4,15 @@
       <h5>Cinemas</h5>
       <div class="checkbox-section">
         <% @cinemas.each do |cinema| %>
-          <label>
-            <%= cinema.name %> <input type="checkbox" data-action="click->search#cinema" data-cinema="<%= cinema.name %>" name="filter_cinema" value="<%= cinema.name %>">
-          </label><br>
+          <input class="hide-checkbox" id="<%=cinema.name%>" type="checkbox" data-action="click->search#cinema" data-cinema="<%= cinema.name %>" name="filter_cinema" value="<%= cinema.name %>">
+          <label for= "<%=cinema.name%>" ><%= cinema.name %>
+          </label>
         <% end %>
       </div>
       <h5>Languages</h5>
       <% @languages.uniq.sort_by(&:to_s).each do |language| %>
-        <label>
-          <%= "#{language} (#{@languages.count { |lang| lang == language }})" %> <input type="checkbox" data-action="click->search#cinema" data-language="<%=language%>" name="filter_language" value="<%=language%>">
+        <input class="hide-checkbox" id="<%= language %>" type="checkbox" data-action="click->search#cinema" data-language="<%=language%>" name="filter_language" value="<%=language%>">
+        <label for="<%= language %>"><%= "#{language} (#{@languages.count { |lang| lang == language }})" %>
         </label><br>
       <% end %>
     </div>
