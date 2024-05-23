@@ -13,12 +13,15 @@
   max-width: 800px;
   height: 450px;
   box-sizing: border-box;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .movie-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
 }
 
 .cinema-movie {
