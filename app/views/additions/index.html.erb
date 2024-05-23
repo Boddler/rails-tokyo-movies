@@ -3,6 +3,7 @@
     <div style ="width: 50%">
       <h1>New Additions</h1>
       <% @latest_additions.each do |movie| %>
+        <%= render "shared/movie_card", movie: movie %>
       <% end %>
     </div>
     <div style ="width: 50%">
