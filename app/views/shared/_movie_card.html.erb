@@ -1,6 +1,6 @@
 <div class="movie-card">
   <% unless movie.director.nil? %>
-    <a href="/movies/<%= movie.id %>">
+    <a href="/movies/<%= movie.slug %>">
     <% end %>
     <div class="movie-poster">
       <% if movie.poster.nil? || movie.poster.end_with?("/") %>

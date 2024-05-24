@@ -4,7 +4,7 @@ class CinemasController < ApplicationController
   end
 
   def show
-    @cinema = Cinema.find(params[:id])
+    @cinema = Cinema.friendly.find(params[:id])
     # @showings = Showing.all.where(cinema_id: @cinema)
     # @movies = @showings.map(&:movie).uniq
   end

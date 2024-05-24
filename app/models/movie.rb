@@ -1,4 +1,6 @@
 class Movie < ApplicationRecord
+  extend FriendlyId
+  friendly_id :web_title, use: :slugged
   has_many :showings, dependent: :destroy
   validates :name, presence: true
   has_many :cinemas, through: :showings
@@ -6,6 +8,10 @@ class Movie < ApplicationRecord
 
   def special_case?
     tmdb_id == -1 || tmdb_id.zero?
+  end
+
+  def to_param
+    slug
   end
 
   include PgSearch::Model
