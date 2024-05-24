@@ -1,4 +1,4 @@
-<%= form_with(model: @movie, url: movie_path(@movie), local: true, method: :patch) do |form| %>
+<%= form_with(model: @movie, url: movie_path(@movie.id), local: true, method: :patch) do |form| %>
   <%= form.hidden_field :runtime, value: movie.runtime %>
   <%= form.submit "Update" %>
 <% end %>
