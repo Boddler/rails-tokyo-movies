@@ -21,7 +21,7 @@
 </div>
 <% @movie.cinemas.uniq.each do |cinema| %>
   <div class="movie-showing">
-    <%= link_to cinema_path(cinema.id) do %>
+    <%= link_to cinema_path(cinema) do %>
       <div class="showing-cinema-name">
         <%= cinema.name %>
       </div>

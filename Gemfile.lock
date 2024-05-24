@@ -105,6 +105,8 @@ GEM
     flatpickr (4.6.13.1)
     font-awesome-sass (6.4.2)
       sassc (~> 2.0)
+    friendly_id (5.5.1)
+      activerecord (>= 4.0.0)
     globalid (1.2.1)
       activesupport (>= 6.1)
     i18n (1.14.1)
@@ -254,6 +256,7 @@ DEPENDENCIES
   dotenv-rails
   flatpickr
   font-awesome-sass (~> 6.1)
+  friendly_id
   importmap-rails
   jbuilder
   nokogiri
