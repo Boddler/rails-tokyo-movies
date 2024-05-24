@@ -16,7 +16,7 @@
     <div data-controller="tmdb-api-search" class="update-sections" >
       <h2>Movie Options</h2>
       <h5>Scraped Title: <%= @movie.web_title %></h5>
-      <%= form_with(model: @movie, url: movie_path(@movie), local: true, method: :patch) do |form| %>
+      <%= form_with(model: @movie, url: movie_path(@movie.id), local: true, method: :patch) do |form| %>
         <div data-action="keyup->tmdb-api-search#search">
           <%= form.text_field :runtime, value: "", placeholder: "Enter TMDB ID here", data: { "tmdb-api-search-target": "input" } %>
         </div>

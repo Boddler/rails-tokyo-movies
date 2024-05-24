@@ -49,7 +49,7 @@ class MoviesController < ApplicationController
   end
 
   def edit
-    @movie = Movie.find(params[:id])
+    @movie = Movie.friendly.find(params[:id])
     hash = {}
     hash[:placeholder] = [@movie.web_title]
     @options = first_api_call(hash)[0][0]
@@ -69,6 +69,7 @@ class MoviesController < ApplicationController
       movie_hash = group_call(results)[0]
       movie_hash[:tmdb_id] = movie_hash[:id]
       movie_hash.delete(:id)
+      movie_hash[:slug] = movie_hash[:name]
       movie_hash[:web_title] = @movie.web_title
       if @movie.update(movie_hash)
         redirect_to @movie, notice: "Movie was successfully updated."
