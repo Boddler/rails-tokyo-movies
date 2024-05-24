@@ -1,6 +1,6 @@
 class Movie < ApplicationRecord
   extend FriendlyId
-  friendly_id :web_title, use: :slugged
+  friendly_id :name, use: :slugged
   has_many :showings, dependent: :destroy
   validates :name, presence: true
   has_many :cinemas, through: :showings
