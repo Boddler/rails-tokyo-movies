@@ -28,6 +28,7 @@ class ShowingsController < ApplicationController
           movie_lang << showing if showing.movie.language == language
         end
       end
+      raise
     end
     @showings = movie_lang if @showings.empty? && cinemas.empty?
     @showings = cinemas if @showings.empty? && movie_lang.empty?
