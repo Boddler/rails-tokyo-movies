@@ -17,19 +17,18 @@
       <% end %>
     </div>
     <div>
-      <div class="d-none">
-        <div class="col-sm-8 my-3">
-          <%= form_with url: movies_path, method: :get, class: "d-flex", data: { target: "search.form" } do %>
-            <%= text_field_tag :query,
-              params[:query],
-              class: "form-control",
-              id: "search-box",
-              style: "min-width: 300px",
-              placeholder: "Type the name of a film or director"
-          %>
-            <%= submit_tag "Search", name: "", class: "btn btn-warning" %>
-          <% end %>
-        </div>
+      <div class="col-6 mx-5 my-3">
+        <%= form_with url: showings_path, method: :get, class: "d-flex", data: { target: "search.form" } do |f| %>
+          <%= f.text_field :opening_date,
+        as: :string,
+        value: params[:dates],
+        data: { controller: "datepicker"},
+        placeholder: "Select dates",
+        class: "form-control",
+        id: "dates"
+      %>
+          <%= submit_tag "Search", name: "", class: "d-none" %>
+        <% end %>
       </div>
       <div id="search-results">
         <div class="search">
