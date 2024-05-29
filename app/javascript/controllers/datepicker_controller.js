@@ -7,8 +7,27 @@ export default class extends Controller {
       mode: 'range',
       minDate: "today",
       onChange: this.dateChanged.bind(this),
+      dateFormat: "D - Y-m-d",
       locale: {
-        firstDayOfWeek: 1
+        firstDayOfWeek: 1 // Monday
+      },
+      onReady: function(selectedDates, dateStr, instance) {
+        const days = instance.days.childNodes;
+        days.forEach(day => {
+          const date = day.dateObj;
+          if (date.getDay() === 0 || date.getDay() === 6) { // Sunday or Saturday
+            day.classList.add('weekend');
+          }
+        });
+      },
+      onMonthChange: function(selectedDates, dateStr, instance) {
+        const days = instance.days.childNodes;
+        days.forEach(day => {
+          const date = day.dateObj;
+          if (date.getDay() === 0 || date.getDay() === 6) { // Sunday or Saturday
+            day.classList.add('weekend');
+          }
+        });
       }
     });
   }
