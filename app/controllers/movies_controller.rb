@@ -72,7 +72,7 @@ class MoviesController < ApplicationController
       movie_hash[:slug] = movie_hash[:name]
       movie_hash[:web_title] = @movie.web_title
       if @movie.update(movie_hash)
-        redirect_to @movie, notice: "Movie was successfully updated."
+        redirect_to @movie, notice: "Movie info successfully updated."
       else
         render :edit
       end
