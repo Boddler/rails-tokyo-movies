@@ -164,7 +164,7 @@ module UpdateHelper
       backgrounds: [],
     }
     if movie.update(default_values)
-      redirect_to movie, notice: "Movie was successfully updated."
+      redirect_to movie, alert: "Movie info successfully set as blank"
     else
       render :edit
     end
