@@ -16,8 +16,9 @@ class UpdateController < ApplicationController
     times = showings(cinemas)
     showing_create(times, movies)
     Showing.where("date < ?", Date.today).destroy_all
+    Showing.where(times: []).destroy_all
     Movie.includes(:showings).where(showings: { id: nil }).destroy_all
-    redirect_to root_path
+    redirect_to latest_path
   end
 
   def authenticate

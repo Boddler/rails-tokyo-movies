@@ -52,4 +52,5 @@ LANGUAGES = {
   sh: "Serbo-Croatian",
   cn: "Chinese",
   ta: "Tamil",
+  te: "Telugu",
 }.freeze
