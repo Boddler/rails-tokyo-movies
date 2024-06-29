@@ -374,13 +374,17 @@ module UpdateHelper
       if date_cell.include?("\n")
         date_cell.split("\n").each do |day|
           time = day.match(/\d{1,2}：\d{2}|\d{1,2}:\d{2}/)&.[](0)
-          day.split("、").each_with_index do |part, index|
-            month = day.split("/").first.to_i
-            new_hash = {}
-            new_hash[:name] = clean_title
-            new_hash[:date] = shimo_dates(part, month)
-            new_hash[:times] = [time.gsub("：", ":")]
-            results << new_hash
+          if time
+            day.split("、").each_with_index do |part, index|
+              month = day.split("/").first.to_i
+              next if month.nil? || month > 12
+
+              new_hash = {}
+              new_hash[:name] = clean_title
+              new_hash[:date] = shimo_dates(part, month)
+              new_hash[:times] = [time.gsub("：", ":")]
+              results << new_hash if hash[:name]
+            end
           end
         end
       else
@@ -388,6 +392,8 @@ module UpdateHelper
         new_time = time.gsub("：", ":") unless time.nil?
         date_cell.split("、").each_with_index do |part, index|
           month = date_cell.split("/").first.to_i
+          next if month.nil? || month > 12
+
           hash = {}
           hash[:name] = clean_title
           hash[:date] = shimo_dates(part, month) if date_cell && hash[:name]
