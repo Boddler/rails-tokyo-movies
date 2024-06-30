@@ -41,7 +41,7 @@ class MoviesController < ApplicationController
     @movies &= cinemas unless cinemas.empty?
     @movies = cinemas &= movie_lang if @movies.empty?
     @movies = @movies.uniq
-    @pagy, @movies = pagy(Movie.where(id: @movies.map(&:id)))
+    @pagy, @movies = pagy(Movie.where(id: @movies.map(&:id)), items: 30)
   end
 
   def show

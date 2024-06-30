@@ -32,9 +32,9 @@
         </div>
       </div>
       <div id="search-results">
-        <div class="search">
+        <div class="movie-grid">
           <% @movies.each do |movie| %>
-            <%= render "shared/movie_card", movie: movie %>
+            <%= render "shared/movie_poster_view", movie: movie %>
             <br>
           <% end %>
         </div>

@@ -1,0 +1,10 @@
+        
+<div class="cinema-movie">
+  <%= link_to movie_path(movie) do %>
+    <div class="movie-poster-cinema" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url(<%= "#{movie.poster}" %>)">
+    </div>
+    <div class ="movie-title">
+      <h5><%= movie.name%></h5>
+    </div>
+  <% end %>
+</div>
