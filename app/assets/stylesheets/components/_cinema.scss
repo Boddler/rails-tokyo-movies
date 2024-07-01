@@ -19,14 +19,19 @@
 
 .movie-grid {
   display: flex;
-  justify-content: space-between;
+  // justify-content: space-between;
+  justify-content: space-around;
   margin-bottom: 30px;
+  margin-top: 12px;
+  margin-left: 40px;
+  margin-right: 40px;
   flex-wrap: wrap;
 }
 
 .cinema-movie {
   max-width: 200px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+  margin-block: 12px;
 }
 
 .movie-poster-cinema {
@@ -34,7 +39,6 @@
   width: 200px;
   border-radius: 5px;
   border: solid;
-  border-color: yellow;
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center center;
@@ -53,6 +57,6 @@
 .cinema-movie a {
   text-decoration: none;
 }
-.cinema-movie a :hover {
-  font-weight: bold;
+.movie-title :hover {
+  text-shadow: 0 0 5px darkblue;
 }
