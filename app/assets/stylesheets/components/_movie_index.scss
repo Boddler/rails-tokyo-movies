@@ -1,17 +1,19 @@
 .movie-index {
-  background: rgb(81, 48, 69);
   display: flex;
+  padding-inline: 120px;
 }
 
 .checkboxes {
-  background: white;
+  background: #44633F;
   width: 30%;
   min-width: 220px;
   max-width: 220px;
   margin: 8px;
   padding: 8px;
   text-align: right;
+  border-radius: 5px;
 }
+
 .checkboxes h5 {
   text-align: center;
   font-weight: bolder;
