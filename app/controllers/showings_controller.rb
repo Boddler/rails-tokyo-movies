@@ -4,7 +4,10 @@ class ShowingsController < ApplicationController
   def index
     @cinemas = Cinema.all
     showings = Showing.joins(:movie).where(movies: { hide: false })
-    @languages = Showing.joins(:movie).where(movies: { hide: false }).pluck("movies.language").uniq
+    @languages = Showing.joins(:movie)
+      .where(movies: { hide: false })
+      .where("showings.date >= ?", Date.today)
+      .pluck("movies.language").uniq
     @showings = []
     cinemas = []
     movie_lang = []

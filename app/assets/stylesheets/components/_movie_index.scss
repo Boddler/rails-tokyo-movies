@@ -8,7 +8,7 @@
   width: 30%;
   min-width: 220px;
   max-width: 220px;
-  margin: 8px;
+  // margin: 8px;
   padding: 8px;
   text-align: right;
   border-radius: 5px;
@@ -17,6 +17,12 @@
 .checkboxes h5 {
   text-align: center;
   font-weight: bolder;
+  width: 100%;
+  border-radius: 5px;
+  background-color: #141830;
+  padding: 4px;
+  // margin-left: -8px;
+  // margin-right: -8px;
 }
 
 .checkbox-section {

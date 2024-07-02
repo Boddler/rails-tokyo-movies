@@ -25,5 +25,10 @@ border-radius: 5px;
 }
 
 .showing-movie a {
+  text-decoration: none !important;
+  color: inherit;
+}
+
+a {
   text-decoration: none;
 }

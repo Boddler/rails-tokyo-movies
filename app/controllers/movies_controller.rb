@@ -8,6 +8,10 @@ class MoviesController < ApplicationController
   def index
     @cinemas = Cinema.all
     movies = Movie.all.select { |movie| movie.hide == false }
+    today = Date.today
+    movies = movies.reject do |movie|
+      movie.showings.all? { |showing| showing.date < today }
+    end
     @languages = movies.map(&:language)
     @movies = []
     cinemas = []
