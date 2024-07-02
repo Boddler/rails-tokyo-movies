@@ -354,7 +354,7 @@ module UpdateHelper
     integers = string.scan(/(\d+)\([^)]+\)/).flatten.map(&:to_i)
     integers.each_with_index do |day, index|
       month += 1 if day < integers[index - 1] && index.positive?
-      dates << Date.new(Date.today.year, month, day) unless day.zero?
+      dates << Date.new(Date.today.year, month, day) unless day.zero? || month.zero?
       month -= 1 if day < integers[index - 1] && index.positive?
     end
     if string.include?("～") || string.include?("〜")
