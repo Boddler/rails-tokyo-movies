@@ -1,10 +1,14 @@
-<div class="showing">
-  <%= showing.movie.name %>
-  <br>
-  <%= showing.cinema.name %>
-  <br>
-  <% showing.times.each do |time| %>
-    <%= time %>
-    <br>
-  <% end %>
-</div>
+  <%= link_to movie_path(showing.movie) do %>
+  <div class="showing-movie">
+    <h3>
+      <%= showing.movie.name %>
+    </h3>
+    <h5>
+      <%= showing.cinema.name %>
+    </h5>
+    <% showing.times.each do |time| %>
+      <%= time %>
+      <br>
+    <% end %>
+  </div>
+<% end %>
