@@ -2,9 +2,10 @@ import { Controller } from "@hotwired/stimulus"
 
 // Connects to data-controller="menu-btn"
 export default class extends Controller {
-  static targets = ["navbarMenuBtn"];
+  static targets = ["navbarMenuBoxes", "navbarMenuBtn"];
 
   toggle() {
-    this.navbarMenuBtnTarget.classList.toggle("show");
+    this.navbarMenuBoxesTarget.classList.toggle("show");
+    this.navbarMenuBtnTarget.classList.toggle("bottom");
   }
 }

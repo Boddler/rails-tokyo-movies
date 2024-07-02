@@ -21,9 +21,18 @@
   width: 100px;
   border: solid;
   padding: 4px;
-  border-radius: 5px;
   text-align: center;
   cursor: pointer;
+}
+
+.menu-button.bottom {
+  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+
+.menu-button.top {
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
 }
 
 .navbar-contents {
