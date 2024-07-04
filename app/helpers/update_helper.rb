@@ -420,6 +420,8 @@ module UpdateHelper
     results = []
     final = []
     doc.search(".schedule-content-inner").each do |box|
+      next if box.at("h2").nil?
+
       month = box.at("h2").text.strip[0].to_i
       day = 0
       box.search(".schedule-program").each do |line|
