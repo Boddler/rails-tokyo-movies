@@ -320,7 +320,7 @@ module UpdateHelper
       month -= 1 if day < integers[integers.index(day) - 1] unless index.zero?
     end
 
-    if string.include?("～")
+    if string.include?("～") && dates[1]
       date_range = (dates[0]..dates[1])
       dates = date_range.to_a
     end
