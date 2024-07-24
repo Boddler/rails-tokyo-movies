@@ -146,7 +146,8 @@ module UpdateHelper
         )
       end
     end.compact
-    Movie.import(new_movies.uniq)
+    unique_movies = new_movies.uniq(&:name)
+    unique_movies.each(&:save)
   end
 
   def blank_update(movie)
