@@ -5,9 +5,14 @@
 }
 
 .container-fluid {
-  background-color: rgb(20, 24, 48);
+  background-color: #F7F7F7;
   // background-color: #094D92;
-  color: #c8c8c8;
+  color: #141830;
+}
+
+.container-fluid h2,
+.container-fluid h4 {
+  font-weight: bolder;
 }
 
 .top-picks {

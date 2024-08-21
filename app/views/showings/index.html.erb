@@ -18,7 +18,7 @@
     </div>
     <div>
       <div class="col-6 mx-5 my-3">
-        <%= form_with url: showings_path, method: :get, class: "d-flex", data: { target: "search.form" } do |f| %>
+        <%= form_with url: showings_path, method: :get, class: "d-flex border border-primary", data: { target: "search.form" } do |f| %>
           <%= f.text_field :opening_date,
         as: :string,
         value: params[:dates],
