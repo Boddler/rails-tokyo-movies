@@ -32,6 +32,10 @@ module UpdateHelper
     when "Shin-Bungeiza"
       p_element = html.search(".schedule-program p")
       search_results = p_element.children.select { |node| node.text? }.map(&:text).reject { |str| str.strip == "" }
+    when "Kichijoji Up Link"
+      titles = html.search(".tagged-film h1")
+      titles = titles.reject { |title| title.text.nil? }
+      search_results = titles.map { |title| title.text.strip }
     end
     search_results.uniq
   end
@@ -236,6 +240,8 @@ module UpdateHelper
       search_results << [shochiku_showings(html), cinema]
     when "Shin-Bungeiza"
       search_results << [bungeiza_showings(html), cinema]
+    when "Kichijoji Up Link"
+      search_results << [kjo_showings(html), cinema]
     end
     search_results
   end
@@ -254,6 +260,12 @@ module UpdateHelper
         end
       end
     end
+  end
+
+  # Kichijoji
+
+  def kjo_showings(doc)
+    # TODO construct showings
   end
 
   # Meguro
