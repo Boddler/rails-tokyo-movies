@@ -265,7 +265,21 @@ module UpdateHelper
   # Kichijoji
 
   def kjo_showings(doc)
-    # TODO construct showings
+    result = []
+    days = doc.search(".list-calendar-wrap")
+    days.each do |day|
+      date_text = day.search(".list-calendar-header-inner").text.strip[0, 5]
+      date = Date.new(Date.today.year, date_text[0, 2].to_i, date_text[3, 2].to_i)
+      date = date.next_year if date < (Date.today << 1)
+      # Iterated through dates, now need to iterate through movie titles
+      day.search(".tagged-film").each do |movie|
+        title = movie.search(".list-calendar-heading").text.strip
+        times = []
+        movie.search(".list-calendar-date").each { |x| times << x.text.strip.split("—")[0] }
+        result << { name: title, times: times, date: date }
+      end
+    end
+    result
   end
 
   # Meguro

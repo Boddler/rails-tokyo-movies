@@ -3,6 +3,7 @@ require "json"
 require "nokogiri"
 require "net/http"
 require "dotenv/load"
+require "date"
 
 file = "new_cinema.html"
 html = Nokogiri::HTML.parse(File.open(file), nil, "UTF-8")
@@ -54,6 +55,30 @@ def cinema_dates(string)
   # end
   dates
 end
+
+#  array of days
+showings = html.search(".list-calendar-wrap")
+
+# first day
+day = showings
+
+# first film
+film = day.search(".tagged-film")[2]
+
+# title
+title = film.search(".list-calendar-heading").text.strip
+time = []
+film.search(".list-calendar-date").each { |x| time << x.text.strip.split("—")[0] }
+
+# date
+date = day.search(".list-calendar-header-inner").text.strip[0, 5]
+
+# pp title
+# pp time
+# pp date
+# pp x = Date.new(Date.today.year, date[0, 2].to_i, date[3, 2].to_i)
+# Handle Dec -> Jan
+# pp x.next_year if x < (Date.today << 1)
 
 def cinema_showings(doc)
   result = []
@@ -150,12 +175,35 @@ def movie_api_call(list)
   movie_api_call(not_found) unless found.empty?
 end
 
-movie_api_call(titles)
-# cleaned_titles = clean_titles(titles).uniq
-# bleached_titles = cleaned_titles
+# movie_api_call(titles)
+cinema_showings(titles)
 
-# pp movie_api_call(bleached_titles)
-# pp movie_api_call(bleached_titles).size
-# pp bleached_titles.size
+days = html.search(".list-calendar-wrap")
+days.each do |day|
+  date_text = day.search(".list-calendar-header-inner").text.strip[0, 5]
+  date = Date.new(Date.today.year, date_text[0, 2].to_i, date_text[3, 2].to_i)
+  date = date.next_year if date < (Date.today << 1)
+  puts date
+end
 
-# pp checking.drop(5).take(5)
+pp days.size
+
+def kjo_showings(doc)
+  result = []
+  days = doc.search(".list-calendar-wrap")
+  days.each do |day|
+    date_text = day.search(".list-calendar-header-inner").text.strip[0, 5]
+    date = Date.new(Date.today.year, date_text[0, 2].to_i, date_text[3, 2].to_i)
+    date = date.next_year if date < (Date.today << 1)
+    # Iterated through dates, now need to iterate through movie titles
+    day.search(".tagged-film").each do |movie|
+      title = movie.search(".list-calendar-heading").text.strip
+      times = []
+      movie.search(".list-calendar-date").each { |x| times << x.text.strip.split("—")[0] }
+      result << { name: title, times: times, date: date }
+    end
+  end
+  result
+end
+
+pp kjo_showings(html)
