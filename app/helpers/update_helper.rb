@@ -78,6 +78,23 @@ module UpdateHelper
     [movie_data, missing]
   end
 
+  def second_api_call(list)
+    list = list.map do |title|
+      split_title = title.split("   ")[0]
+      split_title.strip unless split_title.nil?
+    end.compact
+    first_api_call(list)
+  end
+
+
+  def third_api_call(list)
+    list = list.map do |title|
+      split_title = title.split("   ")[-1]
+      split_title.strip unless split_title.nil?
+    end.compact
+    first_api_call(list)
+  end
+
   def group_call(results)
     languages = LANGUAGES
     unknown = "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Question_mark_alternate.svg/1577px-Question_mark_alternate.svg.png"

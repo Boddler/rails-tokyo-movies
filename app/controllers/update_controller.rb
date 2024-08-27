@@ -8,10 +8,15 @@ class UpdateController < ApplicationController
     cinemas = [Cinema.find_by_name("Kichijoji Up Link")]
     titles = scrape(cinemas)
     api_results = first_api_call(titles)
+    pp api_results[1]
+    second_pass = second_api_call(api_results[1])
+    api_results[0] += second_pass[0]
+    third_pass = third_api_call(second_pass[1])
+    api_results[0] += third_pass[0]
     unsaved_models = group_call(api_results[0])
     movies_create(unsaved_models, movies)
     movies = Movie.all
-    unfound_movies(api_results[1], movies)
+    unfound_movies(third_pass[1], movies)
     movies = Movie.all
     times = showings(cinemas)
     showing_create(times, movies)
