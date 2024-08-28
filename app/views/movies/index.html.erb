@@ -20,7 +20,7 @@
       <div class="row justify-content-center mx-3">
         <div class="col-sm-8 my-3" style="min-width: 100%">
           <%= form_with url: movies_path, method: :get, class: "d-flex border border-primary", data: { target: "search.form" } do %>
-            <select id="select-gear-disabled" multiple name="query[]" placeholder="Select Movie/Director Name" data-controller="tom-select" class="form-control">
+            <select id="select-gear-disabled" multiple name="query[]" placeholder="<%= (params[:query] && !data-value.nil?) ? params[:query][0] : "Select Movie/Director Name" %>" data-controller="tom-select" class="form-control">
               <option value="">Select Movie</option>
               <optgroup label="Movies">
                 <%= @films.each do |film| %>

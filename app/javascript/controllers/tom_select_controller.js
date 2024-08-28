@@ -8,7 +8,6 @@ export default class extends Controller {
       sortField: 'text',
       create: false,
       onItemAdd: function(value, item) {
-        // Clear the input field after selecting an item
         this.setTextboxValue('');
       }
     });
