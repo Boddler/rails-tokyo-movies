@@ -1,8 +1,12 @@
 import { Controller } from "@hotwired/stimulus"
 
-// Connects to data-controller="search"
 export default class extends Controller {
 static targets = ["input", "cinema", "form"];
+
+connect() {
+  console.log("search controller connected");
+
+}
 
   cinema(event) {
     const checkbox = event.target;
