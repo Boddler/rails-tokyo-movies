@@ -7,7 +7,11 @@ class MoviesController < ApplicationController
 
   def index
     @cinemas = Cinema.all
-    movies = Movie.all.select { |movie| movie.hide == false }
+    @directors = []
+    @films = Movie.all.select { |movie| movie.hide == false }
+    Movie.all.each { |movie| @directors << movie.director }
+    @directors.uniq!
+    movies = @films
     today = Date.today
     movies = movies.reject do |movie|
       movie.showings.all? { |showing| showing.date < today }

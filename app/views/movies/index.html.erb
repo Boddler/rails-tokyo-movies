@@ -16,18 +16,24 @@
         </label><br>
       <% end %>
     </div>
-    <div>
+    <div class="w-100">
       <div class="row justify-content-center mx-3">
-        <div class="col-sm-8 my-3" style="min-width: 100%">
+        <div class="col-sm-8 my-3" style="width: 100%, max-width: 250px">
           <%= form_with url: movies_path, method: :get, class: "d-flex border border-primary", data: { target: "search.form" } do %>
-            <%= text_field_tag :query,
-              params[:query],
-              class: "form-control",
-              id: "search-box",
-              style: "min-width: 300px",
-              placeholder: "Type the name of a film or director"
-          %>
-            <%= submit_tag "Search", name: "", class: "btn btn-primary" %>
+            <select id="search-box" multiple name="query[]" placeholder="Select Movie/Director Name" data-controller="tom-select" class="form-control">
+              <option value="">Select Movie</option>
+              <optgroup label="Movies">
+                <%= @films.each do |film| %>
+                  <option value="<%= film.name %>"><%= film.name %></option>
+                <% end %>
+              </optgroup>
+              <optgroup label="Directors">
+                <%= @directors.each do |director| %>
+                  <option value="<%= director %>"><%= director %></option>
+                <% end %>
+              </optgroup>
+            </select>
+            <%= submit_tag "Search", class: "btn btn-primary ml-2" %>
           <% end %>
         </div>
       </div>
