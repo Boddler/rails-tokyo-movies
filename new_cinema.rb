@@ -6,7 +6,12 @@ require "dotenv/load"
 require "date"
 
 file = "new_cinema.html"
-html = Nokogiri::HTML.parse(File.open(file), nil, "UTF-8")
+content = File.open(file, "r:shift_jis").read
+utf8_content = content.encode("UTF-8", "Shift_JIS", invalid: :replace, undef: :replace, replace: "")
+html = Nokogiri::HTML(utf8_content)
+# html = Nokogiri::HTML.parse(html_content, nil, "shift_jis")
+# html = Nokogiri::HTML.parse(File.open(file), nil, "shift_jis")
+# html = Nokogiri::HTML.parse(File.open(file, "rb"), nil, "shift_jis")
 
 def clean_titles(list)
   list.map! do |str|
@@ -56,29 +61,15 @@ def cinema_dates(string)
   dates
 end
 
-#  array of days
-showings = html.search(".list-calendar-wrap")
+search_results = []
 
-# first day
-day = showings
+html.search(".time_title").each do |element|
+  # html.search(".date").each do |element|
+  search_results << element.text.strip unless search_results.include?(element.text.strip)
+end
+# puts html.to_html
 
-# first film
-film = day.search(".tagged-film")[2]
-
-# title
-title = film.search(".list-calendar-heading").text.strip
-time = []
-film.search(".list-calendar-date").each { |x| time << x.text.strip.split("—")[0] }
-
-# date
-date = day.search(".list-calendar-header-inner").text.strip[0, 5]
-
-# pp title
-# pp time
-# pp date
-# pp x = Date.new(Date.today.year, date[0, 2].to_i, date[3, 2].to_i)
-# Handle Dec -> Jan
-# pp x.next_year if x < (Date.today << 1)
+pp search_results
 
 def cinema_showings(doc)
   result = []
@@ -98,16 +89,6 @@ def cinema_showings(doc)
   # end
   result
 end
-
-checking = []
-
-titles = html.search(".tagged-film h1")
-
-# titles = titles.map(&:text).reject { |str| str.strip == "" }
-titles = titles.map { |title| title.text.strip }
-titles = titles.reject { |title| title.nil? }
-titles = titles.reject { |title| title == "" }
-# pp titles
 
 def movie_api_call(list)
   api_key = ENV["TMDB_API_KEY"]
@@ -175,19 +156,6 @@ def movie_api_call(list)
   movie_api_call(not_found) unless found.empty?
 end
 
-# movie_api_call(titles)
-cinema_showings(titles)
-
-days = html.search(".list-calendar-wrap")
-days.each do |day|
-  date_text = day.search(".list-calendar-header-inner").text.strip[0, 5]
-  date = Date.new(Date.today.year, date_text[0, 2].to_i, date_text[3, 2].to_i)
-  date = date.next_year if date < (Date.today << 1)
-  puts date
-end
-
-pp days.size
-
 def kjo_showings(doc)
   result = []
   days = doc.search(".list-calendar-wrap")
@@ -205,5 +173,3 @@ def kjo_showings(doc)
   end
   result
 end
-
-pp kjo_showings(html)
