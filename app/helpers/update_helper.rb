@@ -18,6 +18,9 @@ module UpdateHelper
     search_results = []
     case cinema
     when "Meguro Cinema"
+      content = URI.open(Cinema.find_by(name: "Meguro Cinema").schedule).read
+      utf8_content = content.encode("UTF-8", "Shift_JIS", invalid: :replace, undef: :replace, replace: "")
+      html = Nokogiri::HTML(utf8_content)
       html.search(".time_title").each do |element|
         search_results << element.text.strip unless search_results.include?(element.text.strip)
       end
@@ -233,6 +236,9 @@ module UpdateHelper
     search_results = []
     case cinema.name
     when "Meguro Cinema"
+      content = URI.open(Cinema.find_by(name: "Meguro Cinema").schedule).read
+      utf8_content = content.encode("UTF-8", "Shift_JIS", invalid: :replace, undef: :replace, replace: "")
+      html = Nokogiri::HTML(utf8_content)
       search_results << [meg_showings(html), cinema]
     when "Shimo-Takaido Cinema"
       search_results << [shimo_showings(html), cinema]

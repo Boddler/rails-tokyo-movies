@@ -5,7 +5,7 @@ class UpdateController < ApplicationController
   def update
     cinemas = Cinema.all
     movies = Movie.all
-    # cinemas = [Cinema.find_by_name("Kichijoji Up Link")]
+    # cinemas = [Cinema.find_by_name("Meguro Cinema")]
     titles = scrape(cinemas)
     api_results = first_api_call(titles)
     unsaved_models = group_call(api_results[0])
