@@ -7,7 +7,12 @@ module UpdateHelper
     titles_hash = {}
     cinemas.each do |cinema|
       html_content = URI.open(cinema.schedule)
-      doc = Nokogiri::HTML.parse(html_content, nil, cinema.encoding)
+      if cinema.name == "Meguro Cinema"
+        utf8_content = html_content.read.encode("UTF-8", "Shift_JIS", invalid: :replace, undef: :replace, replace: "")
+        doc = Nokogiri::HTML(utf8_content)
+      else
+        doc = Nokogiri::HTML.parse(html_content, nil, cinema.encoding)
+      end
       search_results = cinema_scrape(doc, cinema.name)
       titles_hash[cinema.name.to_sym] = clean_titles(search_results)
     end
@@ -18,9 +23,6 @@ module UpdateHelper
     search_results = []
     case cinema
     when "Meguro Cinema"
-      content = URI.open(Cinema.find_by(name: "Meguro Cinema").schedule).read
-      utf8_content = content.encode("UTF-8", "Shift_JIS", invalid: :replace, undef: :replace, replace: "")
-      html = Nokogiri::HTML(utf8_content)
       html.search(".time_title").each do |element|
         search_results << element.text.strip unless search_results.include?(element.text.strip)
       end
@@ -226,7 +228,12 @@ module UpdateHelper
     result = []
     cinemas.each do |cinema|
       html_content = URI.open(cinema.schedule)
-      doc = Nokogiri::HTML.parse(html_content, nil, cinema.encoding)
+      if cinema.name == "Meguro Cinema"
+        utf8_content = html_content.read.encode("UTF-8", "Shift_JIS", invalid: :replace, undef: :replace, replace: "")
+        doc = Nokogiri::HTML(utf8_content)
+      else
+        doc = Nokogiri::HTML.parse(html_content, nil, cinema.encoding)
+      end
       result << showing_scrape(doc, cinema)
     end
     result
