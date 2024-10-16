@@ -462,7 +462,7 @@ module UpdateHelper
     doc.search(".schedule-content-inner").each do |box|
       next if box.at("h2").nil?
 
-      month = box.at("h2").text.strip[0].to_i
+      month = box.at("h2").text.strip.split("/").first.to_i
       day = 0
       box.search(".schedule-program").each do |line|
         if line.previous_element.name == "h2"
