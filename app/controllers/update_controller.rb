@@ -3,9 +3,14 @@ class UpdateController < ApplicationController
   before_action :authenticate
 
   def update
+    # Movie.destroy_all
     cinemas = Cinema.all
     movies = Movie.all
     # cinemas = [Cinema.find_by_name("Meguro Cinema")]
+    # cinemas = [Cinema.find_by_name("Waseda Shochiku")]
+    # cinemas = [Cinema.find_by_name("Shimo-Takaido Cinema")]
+    # cinemas = [Cinema.find_by_name("Shin-Bungeiza")]
+    # cinemas = [Cinema.find_by_name("Kichijoji Up Link")]
     titles = scrape(cinemas)
     api_results = first_api_call(titles)
     unsaved_models = group_call(api_results[0])

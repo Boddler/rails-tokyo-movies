@@ -80,7 +80,8 @@ module UpdateHelper
       end
     end
     missing = movie_data.select { |array| array[0] == [] }.map { |array| array[1] }
-    [movie_data, missing]
+    movie_data = movie_data.reject { |element| element[0].empty? }
+    [movie_data, missing.uniq]
   end
 
   def group_call(results)
@@ -410,6 +411,8 @@ module UpdateHelper
       hash = {}
       title = box.search(".eiga-title").first.text.strip unless box.search(".eiga-title").first.nil?
       clean_title = clean_titles([title])[0] if title
+      next if box.search(".day").empty?
+
       date_cell = box.search(".day").first.text.strip.gsub("～(", " (")
       if date_cell.include?("\n")
         date_cell.split("\n").each do |day|
