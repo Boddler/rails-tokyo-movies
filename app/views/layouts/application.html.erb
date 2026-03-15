@@ -14,15 +14,10 @@
   </head>
   <body>
     <%= render 'shared/navbar' %>
-    <%= render "shared/flashes" %>
-    <% flash.each do |key, value| %>
-      <% if key == :notice %>
-        <div class="notice"><%= value %></div>
-      <% elsif key == :alert %>
-        <div class="alert"><%= value %></div>
-      <% end %>
-    <% end %>
-    <%= yield %>
+    <main class="container py-4">
+      <%= render "shared/flashes" %>
+      <%= yield %>
+    </main>
+    <%= render 'shared/footer' %>
   </body>
-  <%= render 'shared/footer' %>
 </html>

@@ -1,10 +1,28 @@
-        
-<div class="cinema-movie">
-  <%= link_to movie_path(movie) do %>
-    <div class="movie-poster-cinema" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url(<%= "#{movie.poster}" %>)">
+<%= link_to movie_path(movie), class: "text-decoration-none text-dark" do %>
+
+  <div class="card h-100 shadow-sm border-0">
+
+    <% if movie.poster.present? && !movie.poster.include?("Question_mark") %>
+
+      <img
+        src="<%= movie.poster %>"
+        alt="<%= movie.name %>"
+        class="card-img-top movie-poster-img">
+
+    <% else %>
+
+      <div class="movie-poster-placeholder">
+        <span><%= movie.name %></span>
+      </div>
+
+    <% end %>
+
+    <div class="card-body p-2">
+      <h6 class="card-title text-center mb-0">
+        <%= movie.name %>
+      </h6>
     </div>
-    <div class ="movie-title">
-      <h5><%= movie.name%></h5>
-    </div>
-  <% end %>
-</div>
+
+  </div>
+
+<% end %>

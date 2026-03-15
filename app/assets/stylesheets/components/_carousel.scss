@@ -1,11 +1,11 @@
-.carousel.slide {
-  max-width: 800px;
-  margin: 0 auto;
-  height: auto;
-  padding-bottom: 12px;
+.carousel-image-wrapper {
+  position: relative;
+  max-height: 420px;
+  overflow: hidden;
 }
 
-.carousel-inner {
-  border: solid;
-  border-radius: 5px;
+.carousel-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.6));
 }

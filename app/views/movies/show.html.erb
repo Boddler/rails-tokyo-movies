@@ -1,57 +1,111 @@
-<div class="container-fluid">
-  <div class="movie-show-container">
-    <div class="main-section">
-      <div class="movie-poster-show" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url(<%= "#{@movie.poster}" %>)">
-      </div>
-      <div class="search-side">
-        <div>
-          <div class="showing-movie-name">
-            <%= @movie.name %>
-          </div>
-          <%= "Year: #{@movie.year}" %></br>
-        <%= "Language: #{@movie.language}" %></br>
-      <%= "Director: #{@movie.director}" %></br>
-    <%= "Runtime: #{@movie.runtime} minutes" %></br>
-  <%= "Cast:" %></br>
-<% @movie.cast[0..5].each do |cast| %>
-  <%= "#{cast}" %></br>
-<% end %>
-</br>
-<%= "Overview: #{@movie.description}" %>
-</div>
-<% @movie.cinemas.uniq.each do |cinema| %>
-  <div class="movie-showing">
-    <%= link_to cinema_path(cinema) do %>
-      <div class="showing-cinema-name">
-        <%= cinema.name %>
-      </div>
-    <% end %>
-    <div>
-      <% @movie.showings.where(cinema_id: cinema).sort_by { |movie| movie.date }.each do |day| %>
-        <div class="showing-time-info">
-          <div class="showing-date"><%= day.date %>
-          </div>
-          <% day.times.each_with_index do |time, index| %>
-            <% if index == (day.times.to_a.size - 1) %>
-              <div class="showing-time-final">
-                <%= time %>
-              </div>
-            <% else %>
-              <div class="showing-time">
-                <%= time %>
-              </div>
-            <% end %>
-          <% end %>
+<div class="container py-4">
+
+  <div class="row g-4">
+
+    <!-- POSTER -->
+    <div class="col-lg-4">
+
+      <% if @movie.poster.present? && !@movie.poster.include?("Question_mark") %>
+
+        <img
+          src="<%= @movie.poster %>"
+          alt="<%= @movie.name %>"
+          class="img-fluid rounded shadow-sm">
+
+      <% else %>
+
+        <div class="movie-poster-placeholder rounded shadow-sm">
+          <span><%= @movie.name %></span>
         </div>
+
       <% end %>
+
     </div>
+
+
+    <!-- MOVIE INFO -->
+    <div class="col-lg-8">
+
+      <h1 class="mb-3"><%= @movie.name %></h1>
+
+      <p class="text-muted mb-3">
+        <%= @movie.year %> •
+        <%= @movie.runtime %> mins •
+        <%= @movie.language %>
+      </p>
+
+      <p><strong>Director:</strong> <%= @movie.director %></p>
+
+      <p>
+        <strong>Cast:</strong>
+        <%= @movie.cast[0..5].join(", ") %>
+      </p>
+
+      <p class="mt-3">
+        <%= @movie.description %>
+      </p>
+
+      <hr class="my-4">
+
+      <h4 class="mb-3">Cinemas Showing This Film</h4>
+
+
+      <% @movie.cinemas.uniq.each do |cinema| %>
+
+        <div class="card mb-3 shadow-sm">
+
+          <div class="card-body">
+
+            <h5 class="card-title">
+              <%= link_to cinema.name, cinema_path(cinema), class: "text-decoration-none" %>
+            </h5>
+
+            <% @movie.showings.where(cinema_id: cinema).sort_by(&:date).each do |day| %>
+
+              <div class="mb-2">
+
+                <strong><%= day.date %></strong>
+
+                <div class="mt-1">
+
+                  <% day.times.each do |time| %>
+
+                    <span class="badge bg-primary me-1 mb-1">
+                      <%= time %>
+                    </span>
+
+                  <% end %>
+
+                </div>
+
+              </div>
+
+            <% end %>
+
+          </div>
+
+        </div>
+
+      <% end %>
+
+    </div>
+
   </div>
-<% end %>
-</div>
-</div>
-<%= render "shared/carousel" if @movie.backgrounds[0] %>
-<%= link_to edit_movie_path(@movie) do %>
-  <%= image_tag "https://b5digital.dk/wp-content/uploads/2021/03/software-update.jpg", style: "border-radius: 5px; height: 80px; width: auto; margin: 24px;" %>
-<% end %>
-</div>
+
+
+  <!-- BACKGROUND CAROUSEL -->
+  <div class="mt-5">
+    <%= render "shared/carousel" if @movie.backgrounds[0] %>
+  </div>
+
+
+  <!-- EDIT LINK -->
+  <div class="mt-4">
+    <%= link_to edit_movie_path(@movie) do %>
+      <%= image_tag "https://b5digital.dk/wp-content/uploads/2021/03/software-update.jpg",
+        class: "rounded",
+        style: "height: 80px;" %>
+    <% end %>
+  </div>
+
 </div>

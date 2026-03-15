@@ -10,3 +10,54 @@
 // Your CSS partials
 @import "components/index";
 @import "pages/index";
+
+.card:hover {
+  transform: translateY(-3px);
+  transition: transform 0.15s ease;
+}
+
+.movie-poster-img {
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+}
+
+.movie-poster-placeholder {
+  aspect-ratio: 2 / 3;
+  background: #1f2933;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 1rem;
+  font-weight: 600;
+}
+
+/* Make filter checkboxes easier to see */
+.list-group-item .form-check-input {
+  transform: scale(1.2);
+  border: 2px solid #0d6efd;
+  cursor: pointer;
+}
+
+/* Stronger checked state */
+.list-group-item .form-check-input:checked {
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+}
+
+/* Slight hover feedback */
+.list-group-item:hover .form-check-input {
+  border-color: #084298;
+}
+
+.form-check-input:checked + label,
+.list-group-item:has(.form-check-input:checked) {
+  background-color: #e7f1ff;
+}
+
+.filters-sticky {
+  position: sticky;
+  top: 80px;
+  z-index: 1;
+}

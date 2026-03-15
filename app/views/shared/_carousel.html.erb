@@ -1,20 +1,33 @@
-<div id="carouselExample" class="carousel slide">
+<div id="movieCarousel" class="carousel slide carousel-fade shadow-lg rounded overflow-hidden" data-bs-ride="carousel">
+
   <div class="carousel-inner">
-    <% counter = 0 %>
+
     <% @movie.backgrounds.each_with_index do |image, index| %>
-      <% poster = JSON.parse(image.gsub("=>", ":").gsub(/\bnil\b/, "null")) %>
-      <% counter += 1 %>
-      <div class="carousel-item <%= index == 0 ? "active" : "" %>">
-        <img class="d-block w-100" src="https://www.themoviedb.org/t/p/original/<%= poster["file_path"] %>" alt="Slide <%= counter %>">
+
+      <div class="carousel-item <%= 'active' if index == 0 %>">
+
+        <div class="carousel-image-wrapper">
+
+          <%= image_tag "https://image.tmdb.org/t/p/original#{image['file_path']}",
+            class: "d-block w-100",
+            alt: "#{@movie.name} background" %>
+
+          <div class="carousel-overlay"></div>
+
+        </div>
+
       </div>
+
     <% end %>
+
   </div>
-  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
-    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-    <span class="visually-hidden">Previous</span>
+
+  <button class="carousel-control-prev" type="button" data-bs-target="#movieCarousel" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon"></span>
   </button>
-  <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
-    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-    <span class="visually-hidden">Next</span>
+
+  <button class="carousel-control-next" type="button" data-bs-target="#movieCarousel" data-bs-slide="next">
+    <span class="carousel-control-next-icon"></span>
   </button>
+
 </div>
