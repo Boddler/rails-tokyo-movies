@@ -1,28 +1,19 @@
-<%= link_to movie_path(movie), class: "text-decoration-none text-dark" do %>
-
-  <div class="card h-100 shadow-sm border-0">
-
+<%= link_to movie_path(movie), class: "text-decoration-none movie-card-link" do %>
+  <div class="movie-card">
     <% if movie.poster.present? && !movie.poster.include?("Question_mark") %>
-
       <img
         src="<%= movie.poster %>"
         alt="<%= movie.name %>"
-        class="card-img-top movie-poster-img">
-
-    <% else %>
-
-      <div class="movie-poster-placeholder">
-        <span><%= movie.name %></span>
+        class="movie-poster-img">
+      <% else %>
+        <div class="movie-poster-placeholder">
+          <span><%= movie.name %></span>
+        </div>
+      <% end %>
+      <div class="poster-overlay">
+        <div class="poster-title">
+          <%= movie.name %>
+        </div>
       </div>
-
-    <% end %>
-
-    <div class="card-body p-2">
-      <h6 class="card-title text-center mb-0">
-        <%= movie.name %>
-      </h6>
     </div>
-
-  </div>
-
-<% end %>
+  <% end %>

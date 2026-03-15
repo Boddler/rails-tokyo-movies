@@ -1,14 +1,31 @@
-  <%= link_to movie_path(showing.movie) do %>
-  <div class="showing-movie">
-    <h3>
-      <%= showing.movie.name %>
-    </h3>
-    <h5>
-      <%= showing.cinema.name %>
-    </h5>
-    <% showing.times.each do |time| %>
-      <%= time %>
-      <br>
-    <% end %>
+<div class="card mb-3 shadow-sm">
+  <div class="row g-0 align-items-center">
+    <!-- Poster -->
+    <div class="col-auto">
+      <% if showing.movie.poster.present? && !showing.movie.poster.include?("Question_mark") %>
+        <img src="<%= showing.movie.poster %>"
+             alt="<%= showing.movie.name %>"
+             class="img-fluid rounded"
+             style="width: 120px; height: 180px; object-fit: cover;">
+      <% else %>
+        <div class="d-flex align-items-center justify-content-center rounded bg-secondary text-white"
+             style="width: 120px; height: 180px; text-align: center; font-weight: 600; padding: 0.5rem;">
+          <%= showing.movie.name %>
+        </div>
+      <% end %>
+    </div>
+    <!-- Details -->
+    <div class="col ms-3">
+      <h6 class="mb-1"><%= link_to showing.movie.name, movie_path(showing.movie), class: "text-decoration-none" %></h6>
+      <p class="mb-1 text-muted">
+        <%= "Cinema: #{showing.cinema.name}" %><br>
+        <%= "Language: #{showing.movie.language}" %>
+      </p>
+      <div class="d-flex flex-wrap gap-2">
+        <% showing.times.each do |time| %>
+          <span class="badge bg-primary"><%= time %></span>
+        <% end %>
+      </div>
+    </div>
   </div>
-<% end %>
+</div>

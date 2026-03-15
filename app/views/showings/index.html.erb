@@ -1,51 +1,50 @@
-<div class="container-fluid">
-  <div class="movie-index"  data-controller="showing-search">
-    <div class="checkboxes">
-      <h5>Cinemas</h5>
-      <div class="checkbox-section">
-        <% @cinemas.each do |cinema| %>
-          <input class="hide-checkbox" id="<%=cinema.name%>" type="checkbox" data-action="click->showing-search#cinema" data-cinema="<%= cinema.name %>" name="filter_cinema" value="<%= cinema.name %>">
-          <label for= "<%=cinema.name%>" ><%= cinema.name %>
-          </label>
-        <% end %>
-      </div>
-      <h5>Languages</h5>
-      <% @languages.uniq.sort_by(&:to_s).each do |language| %>
-        <input class="hide-checkbox" id="<%= language %>" type="checkbox" data-action="click->showing-search#cinema" data-language="<%=language%>" name="filter_language" value="<%=language%>">
-        <label for="<%= language %>"><%= language%>
-        </label><br>
-      <% end %>
-    </div>
-    <div>
-      <div class="col-6 mx-5 my-3">
-        <%= form_with url: showings_path, method: :get, class: "d-flex border border-primary", data: { target: "search.form" } do |f| %>
-          <%= f.text_field :opening_date,
-        as: :string,
-        value: params[:dates],
-        data: { controller: "datepicker"},
-        placeholder: "Select dates",
-        class: "form-control",
-        id: "dates"
-      %>
-          <%= submit_tag "Search", name: "", class: "d-none" %>
-        <% end %>
-      </div>
-      <div id="search-results">
-        <div class="search">
-          <% previous_date = nil %>
-          <% @showings.each do |showing| %>
-            <% if showing.date != previous_date %>
-              <%= render "shared/showing_date", date: showing.date %>
-              <% previous_date = showing.date %>
-            <% end %>
-            <%= render "shared/movie_showing", showing: showing %>
-            <br>
+<div class="container-fluid" data-controller="showing-search">
+  <div class="row g-4">
+    <!-- FILTER SIDEBAR -->
+    <aside class="col-lg-3">
+      <%= render "shared/filters",
+             cinemas: @cinemas,
+             languages: @languages,
+             controller_name: "showing-search" %>
+    </aside>
+    <!-- MAIN CONTENT -->
+    <section class="col-lg-9">
+      <!-- DATE SEARCH -->
+      <div class="card shadow-sm mb-4">
+        <div class="card-body">
+          <%= form_with url: showings_path,
+                        method: :get,
+                        class: "d-flex",
+                        data: { target: "showing-search.form" } do |f| %>
+            <%= f.text_field :opening_date,
+                  value: params[:dates],
+                  placeholder: "Select dates",
+                  class: "form-control me-2",
+                  data: { controller: "datepicker" },
+                  id: "dates" %>
+            <%= submit_tag "Search", class: "btn btn-primary d-none" %>
           <% end %>
         </div>
-        <div class="pagy">
-          <%== pagy_bootstrap_nav(@pagy) if @pagy.pages > 1  %>
-        </div>
       </div>
-    </div>
+      <!-- SHOWINGS GRID -->
+      <div id="search-results" class="row row-cols-1 row-cols-md-2 g-4">
+        <% previous_date = nil %>
+        <% @showings.each do |showing| %>
+          <% if showing.date != previous_date %>
+            <div class="col-12">
+              <%= render "shared/showing_date", date: showing.date %>
+            </div>
+            <% previous_date = showing.date %>
+          <% end %>
+          <div class="col">
+            <%= render "shared/movie_showing", showing: showing %>
+          </div>
+        <% end %>
+      </div>
+      <!-- PAGINATION -->
+      <div class="d-flex justify-content-center mt-4">
+        <%== pagy_bootstrap_nav(@pagy) if @pagy.pages > 1 %>
+      </div>
+    </section>
   </div>
 </div>

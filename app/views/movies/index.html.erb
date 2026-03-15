@@ -1,158 +1,59 @@
 <div data-controller="search">
-
   <div class="row g-4">
-
     <!-- FILTER SIDEBAR -->
-<aside class="col-lg-3">
-  <div class="filters-sticky">
-
-    <div class="card shadow-sm mb-4">
-      <div class="card-header fw-bold">
-        Filters
-      </div>
-
-      <div class="card-body">
-
-        <h6 class="text-muted mb-2">Cinemas</h6>
-
-        <div class="list-group mb-3">
-
-          <% @cinemas.each do |cinema| %>
-
-            <label class="list-group-item d-flex align-items-center">
-
-              <input
-                class="form-check-input me-2"
-                id="<%= cinema.name %>"
-                type="checkbox"
-                data-action="click->search#cinema"
-                data-cinema="<%= cinema.name %>"
-                name="filter_cinema"
-                value="<%= cinema.name %>">
-
-              <%= cinema.name %>
-
-            </label>
-
-          <% end %>
-
-        </div>
-
-
-        <h6 class="text-muted mb-2">Languages</h6>
-
-        <div class="list-group">
-
-          <% @languages.uniq.sort.each do |language| %>
-
-            <label class="list-group-item d-flex justify-content-between align-items-center">
-
-              <div>
-                <input
-                  class="form-check-input me-2"
-                  id="<%= language %>"
-                  type="checkbox"
-                  data-action="click->search#cinema"
-                  data-language="<%= language %>"
-                  name="filter_language"
-                  value="<%= language %>">
-
-                <%= language %>
-              </div>
-
-              <span class="badge bg-secondary">
-                <%= @languages.count { |lang| lang == language } %>
-              </span>
-
-            </label>
-
-          <% end %>
-
-        </div>
-
-      </div>
-    </div>
-  </div>
-
-</aside>
-
-
+    <aside class="col-lg-3">
+      <%= render "shared/filters",
+             cinemas: @cinemas,
+             languages: @languages,
+             controller_name: "search" %>
+    </aside>
     <!-- MAIN CONTENT -->
     <section class="col-lg-9">
-
       <!-- SEARCH -->
       <div class="card shadow-sm mb-4">
-
         <div class="card-body">
-
           <%= form_with url: movies_path,
                         method: :get,
                         class: "row g-2 align-items-center",
                         data: { target: "search.form" } do %>
-
             <div class="col-md-9">
-
               <select id="search-box"
                       multiple
                       name="query[]"
                       placeholder="Select Movie/Director Name"
                       data-controller="tom-select"
                       class="form-select">
-
                 <option value="">Select Movie</option>
-
                 <optgroup label="Movies">
                   <% @films.each do |film| %>
                     <option value="<%= film.name %>"><%= film.name %></option>
                   <% end %>
                 </optgroup>
-
                 <optgroup label="Directors">
                   <% @directors.each do |director| %>
                     <option value="<%= director %>"><%= director %></option>
                   <% end %>
                 </optgroup>
-
               </select>
-
             </div>
-
             <div class="col-md-3 d-grid">
               <%= submit_tag "Search", class: "btn btn-primary" %>
             </div>
-
           <% end %>
-
         </div>
-
       </div>
-
-
       <!-- MOVIES GRID -->
       <div id="search-results">
-
-        <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-4">
-
+        <div class="movie-grid">
           <% @movies.each do |movie| %>
-
-            <div class="col">
-              <%= render "shared/movie_poster_view", movie: movie %>
-            </div>
-
+            <%= render "shared/movie_poster_view", movie: movie %>
           <% end %>
-
         </div>
-
-
         <!-- PAGINATION -->
         <div class="d-flex justify-content-center mt-4">
           <%== pagy_bootstrap_nav(@pagy) if @pagy.pages > 1 %>
         </div>
-
       </div>
-
     </section>
-
   </div>
-
 </div>
