@@ -5,14 +5,14 @@
     <% cards = [
       { img: "https://static.wixstatic.com/media/7fe4e3_0681efdc476f4ddc995c9f0141164789~mv2.jpg/v1/fill/w_640,h_426,al_c,q_80,usm_0.66_1.00_0.01,enc_auto/7fe4e3_0681efdc476f4ddc995c9f0141164789~mv2.jpg", title: "10+ Languages!", text: "Don't miss the chance to see a movie in your language!" },
       { img: "https://image.tmdb.org/t/p/original/roG0HIkYU9hjULjdifeO7If00rZ.jpg", title: "Classic movies", text: "See classic movies the way they were meant to be seen!" },
-      { img: "https://www.gotokyo.org/en/spot/885/images/885_0789_1_1400x1100.jpg", title: "Cinemas with style!", text: "Support old cinemas and help keep Tokyo's vibrant cinema scene alive!" }
+      { img: "https://media.timeout.com/images/105771947/750/562/image.jpg", title: "Cinemas with style!", text: "Support old cinemas and help keep Tokyo's vibrant cinema scene alive!" }
     ] %>
     <% cards.each do |card| %>
-      <div class="col-sm-6 col-md-4">
-        <div class="card h-100 shadow-sm rounded index-card hover-lift">
+      <div class="col-sm-6 col-md-4 col-lg-3">
+        <div class="card movie-card h-100 shadow-sm border-0 hover-lift">
           <div class="poster-wrapper">
             <img src="<%= card[:img] %>"
-                 class="card-img-top movie-poster-img"
+                 class="movie-poster-img rounded"
                  alt="<%= card[:title] %>">
           </div>
           <div class="card-body text-center">

@@ -1,16 +1,25 @@
 <% if @movie && @movie.backgrounds[0] %>
   <% background_data = JSON.parse(@movie.backgrounds[0].gsub("=>", ":").gsub(/\bnil\b/, "null")) %>
-  <div class="banner" style="background-image: linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.4)),
+  <div class="banner position-relative" style="background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
     url(https://www.themoviedb.org/t/p/original/<%= background_data["file_path"] %>);">
+    <div class="banner-content text-center text-white">
+      <h1 class="display-4 fw-bold"><%= @movie.name %></h1>
+      <% if @movie.year %>
+        <p class="lead mb-2">Released: <%= @movie.year %></p>
+      <% end %>
+      <% if @movie.language %>
+        <p class="mb-2">Language: <%= @movie.language %></p>
+      <% end %>
+      <a class="btn btn-primary btn-lg mt-3" href="<%= movie_path(@movie) %>">View Movie</a>
+    </div>
   </div>
 <% else %>
-  <div class="banner" style="background-image: linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.4)),
+  <div class="banner position-relative" style="background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
       url(https://www.themoviedb.org/t/p/original/bm2pU9rfFOhuHrzMciV6NlfcSeO.jpg);">
-    <div class="banner-content">
-      <h1>Kanto Movies</h1>
-      <p class="banner-text">Find the movies playing in your neighbourhood, in your language</p>
-      <br>
-      <a class="btn btn-primary" href="movies">Movie Search</a>
+    <div class="banner-content text-center text-white">
+      <h1 class="display-4 fw-bold">Kanto Movies</h1>
+      <p class="lead mb-3">Find the movies playing in your neighbourhood, in your language</p>
+      <a class="btn btn-primary btn-lg" href="movies">Movie Search</a>
     </div>
   </div>
 <% end %>

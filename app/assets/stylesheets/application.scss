@@ -261,3 +261,33 @@
 .index-card:hover .movie-poster-img {
   transform: scale(1.05);
 }
+
+.banner {
+  background-size: cover;
+  background-position: center;
+  height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+  margin-bottom: 2rem;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.banner:hover {
+  transform: scale(1.02);
+}
+
+.banner-content {
+  position: relative;
+  z-index: 2;
+}
+
+.banner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.6), rgba(0,0,0,0.2));
+  z-index: 1;
+}

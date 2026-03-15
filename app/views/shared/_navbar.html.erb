@@ -1,16 +1,31 @@
-<div class="navbar navbar-expand-sm navbar-lewagon">
-  <div class="navbar-contents">
-    <%= link_to root_path, class: 'navbar-brand' do %>
-      <%= image_tag "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQErDTZupeGgnZUdFfsWHpvko8o3-sFir9TJg&usqp=CAU" %>
+<nav class="navbar navbar-expand-sm shadow-sm py-2" style="background-color: #2c3e50 !important;">
+  <div class="container-fluid" style="background: none;">
+    <!-- Brand -->
+    <%= link_to root_path, class: "navbar-brand" do %>
+      <%= image_tag "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQErDTZupeGgnZUdFfsWHpvko8o3-sFir9TJg&usqp=CAU",
+          class: "img-fluid", style: "max-height: 50px;" %>
     <% end %>
-    <div class="menu-dropdown" data-controller="menu-btn">
-      <div class="menu-button top bottom" data-menu-btn-target="navbarMenuBtn" data-action="click->menu-btn#toggle">Menu</div>
-      <div class="dropdown-content" data-menu-btn-target="navbarMenuBoxes">
-        <a href="/movies" class="menu-button">Movies</a>
-        <a href="/showings" class="menu-button">Movie Start Times</a>
-        <a href="/about" class="menu-button">About</a>
-        <a href="/" class="menu-button bottom">Home</a>
-      </div>
+    <!-- Toggler -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu"
+            aria-controls="navbarMenu" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon" style="filter: invert(1);"></span>
+    </button>
+    <!-- Links -->
+    <div class="collapse navbar-collapse" id="navbarMenu">
+      <ul class="navbar-nav ms-auto mb-2 mb-sm-0">
+        <li class="nav-item">
+          <%= link_to "Movies", movies_path, class: "nav-link text-white" %>
+        </li>
+        <li class="nav-item">
+          <%= link_to "Movie Start Times", showings_path, class: "nav-link text-white" %>
+        </li>
+        <li class="nav-item">
+          <%= link_to "About", about_path, class: "nav-link text-white" %>
+        </li>
+        <li class="nav-item">
+          <%= link_to "Home", root_path, class: "nav-link text-white" %>
+        </li>
+      </ul>
     </div>
   </div>
-</div>
+</nav>
