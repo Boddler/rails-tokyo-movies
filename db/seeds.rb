@@ -7,58 +7,58 @@
 # # html_content = URI.open("http://www.okura-movie.co.jp/meguro_cinema/now_showing.html")
 # # doc = Nokogiri::HTML.parse(html_content, nil, "shift-JIS")
 
-# Movie.destroy_all
-# puts "Movies deleted"
-# Cinema.destroy_all
-# puts "Cinemas deleted"
-# Showing.destroy_all
-# puts "Showings deleted"
+Movie.destroy_all
+puts "Movies deleted"
+Cinema.destroy_all
+puts "Cinemas deleted"
+Showing.destroy_all
+puts "Showings deleted"
 
-# cinema = Cinema.new(
-#   name: "Meguro Cinema",
-#   location: "〒141-0021 東京都品川区上大崎２丁目２４−１５ 朝日建物株式会社 目黒西口ビル B1",
-#   url: "http://www.okura-movie.co.jp/meguro_cinema/now_showing.html",
-#   schedule: "http://www.okura-movie.co.jp/meguro_cinema/now_showing.html",
-#   description: "A small, single screen cinema showing old and new movies.",
-#   encoding: "shift-JIS",
-#   map: "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3278.5069178227864!2d139.71336906447036!3d35.634574030623185!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x60188b19055c8655%3A0xaba33b9365f206fe!2sMeguro%20Cinema!5e0!3m2!1sen!2sjp!4v1705662015979!5m2!1sen!2sjp",
-# )
-# cinema.save
+cinema = Cinema.new(
+  name: "Meguro Cinema",
+  location: "〒141-0021 東京都品川区上大崎２丁目２４−１５ 朝日建物株式会社 目黒西口ビル B1",
+  url: "http://www.okura-movie.co.jp/meguro_cinema/now_showing.html",
+  schedule: "http://www.okura-movie.co.jp/meguro_cinema/now_showing.html",
+  description: "A small, single screen cinema showing old and new movies.",
+  encoding: "shift-JIS",
+  map: "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3278.5069178227864!2d139.71336906447036!3d35.634574030623185!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x60188b19055c8655%3A0xaba33b9365f206fe!2sMeguro%20Cinema!5e0!3m2!1sen!2sjp!4v1705662015979!5m2!1sen!2sjp",
+)
+cinema.save
 
-# cinema = Cinema.new(
-#   name: "Waseda Shochiku",
-#   location: "〒169-0075 新宿区高田馬場1-5-16",
-#   url: "http://wasedashochiku.co.jp/",
-#   schedule: "http://wasedashochiku.co.jp/",
-#   description: "Waseda Shochiku is a cinema in Takadanobaba.
-#   Waseda Shochiku screens movies that have finished their roadshows
-#   and past masterpieces in double features.",
-#   encoding: "utf-8",
-#   map: "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d6479.1860777786615!2d139.708209!3d35.711631!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x60188d3c44e28145%3A0x7d13a0b5b4274512!2sWaseda%20Sh%C5%8Dchiku!5e0!3m2!1sen!2sus!4v1711435923714!5m2!1sen!2sus",
-# )
-# cinema.save
+cinema = Cinema.new(
+  name: "Waseda Shochiku",
+  location: "〒169-0075 新宿区高田馬場1-5-16",
+  url: "http://wasedashochiku.co.jp/",
+  schedule: "http://wasedashochiku.co.jp/",
+  description: "Waseda Shochiku is a cinema in Takadanobaba.
+  Waseda Shochiku screens movies that have finished their roadshows
+  and past masterpieces in double features.",
+  encoding: "utf-8",
+  map: "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d6479.1860777786615!2d139.708209!3d35.711631!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x60188d3c44e28145%3A0x7d13a0b5b4274512!2sWaseda%20Sh%C5%8Dchiku!5e0!3m2!1sen!2sus!4v1711435923714!5m2!1sen!2sus",
+)
+cinema.save
 
-# cinema = Cinema.new(
-#   name: "Shimo-Takaido Cinema",
-#   location: "〒156-0043 世田谷区松原 3-27-26-2F",
-#   url: "http://www.shimotakaidocinema.com/index.html",
-#   schedule: "http://www.shimotakaidocinema.com/schedule/schedule.html",
-#   description: "A cinema in Shimo Takaido with no discernable about section on its website...",
-#   encoding: "utf-8",
-#   map: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3241.449792322695!2d139.6401235760827!3d35.665925272592126!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6018f3af070c47bb%3A0xb940ca5acadedabb!2sShimo-Takaido%20Cinema!5e0!3m2!1sen!2sjp!4v1711627245141!5m2!1sen!2sjp",
-# )
-# cinema.save
+cinema = Cinema.new(
+  name: "Shimo-Takaido Cinema",
+  location: "〒156-0043 世田谷区松原 3-27-26-2F",
+  url: "http://www.shimotakaidocinema.com/index.html",
+  schedule: "http://www.shimotakaidocinema.com/schedule/schedule.html",
+  description: "A cinema in Shimo Takaido with no discernable about section on its website...",
+  encoding: "utf-8",
+  map: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3241.449792322695!2d139.6401235760827!3d35.665925272592126!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6018f3af070c47bb%3A0xb940ca5acadedabb!2sShimo-Takaido%20Cinema!5e0!3m2!1sen!2sjp!4v1711627245141!5m2!1sen!2sjp",
+)
+cinema.save
 
-# cinema = Cinema.new(
-#   name: "Shin-Bungeiza",
-#   location: "〒170-0013 東京都豊島区東池袋1-43-5 マルハン池袋ビル3F",
-#   url: "https://www.shin-bungeiza.com/",
-#   schedule: "https://www.shin-bungeiza.com/schedule",
-#   description: "A cinema in Ikebukuro with no discernable about section on its website...",
-#   encoding: "utf-8",
-#   map: "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d6477.660774182871!2d139.7109076!3d35.7303897!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x60188d67188625bd%3A0x72bec5cfc1d19bb!2sShin-Bungeiza!5e0!3m2!1sen!2sjp!4v1712543096694!5m2!1sen!2sjp",
-# )
-# cinema.save
+cinema = Cinema.new(
+  name: "Shin-Bungeiza",
+  location: "〒170-0013 東京都豊島区東池袋1-43-5 マルハン池袋ビル3F",
+  url: "https://www.shin-bungeiza.com/",
+  schedule: "https://www.shin-bungeiza.com/schedule",
+  description: "A cinema in Ikebukuro with no discernable about section on its website...",
+  encoding: "utf-8",
+  map: "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d6477.660774182871!2d139.7109076!3d35.7303897!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x60188d67188625bd%3A0x72bec5cfc1d19bb!2sShin-Bungeiza!5e0!3m2!1sen!2sjp!4v1712543096694!5m2!1sen!2sjp",
+)
+cinema.save
 
 cinema = Cinema.new(
   name: "Kichijoji Up Link",
